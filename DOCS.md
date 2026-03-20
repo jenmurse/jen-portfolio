@@ -59,7 +59,7 @@ All type is controlled via CSS custom properties on `html {}`.
 /* Hero header (large bio text) */
 --h-scale: 0.95       /* multiplier against clamp(1.5rem, 2.6vw, 3rem) */
 --h-tracking: -0.02em
---h-weight: 400
+--h-weight: 450
 --h-lh: 1.15
 
 /* Hero subhead (personal bio) */
