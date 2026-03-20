@@ -272,6 +272,11 @@ footer span {
 }
 
 /* ── MOBILE ─────────────────────────────────────────── */
+@media (pointer: coarse) {
+  #cursor { display: none; }
+  body { cursor: auto; }
+}
+
 @media (max-width: 680px) {
   .page { padding: 28px 28px 48px; }
   .hero-grid {
@@ -280,7 +285,7 @@ footer span {
     margin-bottom: 42px;
   }
   .hero-secondary {
-    font-size: calc(1.05rem * var(--s-scale) * 0.85);
+    font-size: calc(1.05rem * var(--s-scale) * 0.77);
     line-height: 1.35;
   }
   .list-grid { grid-template-columns: 1fr; gap: 40px 0; }
