@@ -14,7 +14,7 @@ Single-page portfolio site. Text-led, no CMS. Hosted on Vercel, auto-deploys fro
 ```
 /
 ├── index.html              # Main page
-├── index-with-work.html    # Alt layout with Select Work 3rd column
+├── README.md               # Public-facing: what this is, stack, how to run
 ├── styles.css              # All global styles (shared across pages)
 ├── main.js                 # Cursor + video controls (shared across pages)
 ├── favicon.svg             # Orange circle
@@ -24,7 +24,7 @@ Single-page portfolio site. Text-led, no CMS. Hosted on Vercel, auto-deploys fro
 │   ├── Satoshi/
 │   ├── DM_Sans/
 │   └── DM_Mono/
-└── .gitignore              # Ignores: work/, mockups/, .DS_Store, OG_image.ai
+└── .gitignore              # Ignores: work/, mockups/, Portfolio - OLD/, .DS_Store, *.ai
 ```
 
 ---
