@@ -26,11 +26,29 @@
 
 /* ── THEME ───────────────────────────────────────────── */
 :root {
-  --bg:     #fff6f5;
+  --bg:     #fdf8f5;
   --text:   #111111;
   --accent: #ff4f00;
   --sub:    rgba(17,17,17,0.4);
   --border: rgba(17,17,17,0.12);
+  --media-bg: #000;
+
+  /* spacing: one scale for every page, each step about 1.4× the last. Use these, never a loose px value */
+  --space-4:   4px;
+  --space-8:   8px;
+  --space-12:  12px;
+  --space-16:  16px;
+  --space-20:  20px;
+  --space-28:  28px;
+  --space-40:  40px;
+  --space-56:  56px;
+  --space-80:  80px;
+  --space-120: 120px;
+
+  /* the two-column grid every page hangs on: a label column, a gap, then the content */
+  --col-left: 240px;
+  --col-gap:  var(--space-80);
+  --measure:  62ch;
 }
 
 /* ── RESET ──────────────────────────────────────────── */
@@ -56,6 +74,14 @@ html {
   --label-scale:  1;
   --label-weight: 500;
   --copy-weight:  300;
+
+  /* type sizes: every piece of text uses one of these */
+  --fs-label: calc(0.58rem * var(--label-scale));   /* mono labels, numbers, footer */
+  --fs-mono:  calc(0.7rem * var(--label-scale));    /* mono controls and arrows */
+  --fs-list:  calc(0.85rem * var(--list-scale));    /* list items, captions, small copy */
+  --fs-secondary: calc(1.05rem * var(--s-scale));
+  --fs-primary:   calc(clamp(1.5rem, 2.6vw, 3rem) * var(--h-scale));
+  --mono-tracking: 0.12em;
 }
 
 body {
@@ -69,6 +95,9 @@ body {
 }
 
 a { color: inherit; text-decoration: none; }
+
+/* one focus ring everywhere, shown for the keyboard only */
+:focus-visible { outline: 1px solid var(--text); outline-offset: var(--space-4); }
 
 /* ── CURSOR ─────────────────────────────────────────── */
 #cursor {
@@ -91,21 +120,21 @@ a { color: inherit; text-decoration: none; }
 .page {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 56px 40px 32px;
+  padding: var(--space-56) var(--space-40) var(--space-28);
 }
 
 /* ── HERO GRID ──────────────────────────────────────── */
 .hero-grid {
   display: grid;
-  grid-template-columns: 240px 1fr;
-  gap: 0 80px;
+  grid-template-columns: var(--col-left) 1fr;
+  gap: 0 var(--col-gap);
   align-items: start;
-  margin-bottom: 80px;
+  margin-bottom: var(--space-80);
 }
 
 .hero-left { padding-top: 0.1em; }
 
-.wordmark {
+.wordmark, .crumb {
   font-size: calc(0.85rem * var(--w-scale));
   font-weight: var(--w-weight);
   letter-spacing: var(--w-tracking);
@@ -116,25 +145,28 @@ a { color: inherit; text-decoration: none; }
 .hero-right {
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: var(--space-28);
 }
 
+/* a title with its one-line subtitle, held closer together than the paragraphs around them */
+.hero-title { display: flex; flex-direction: column; gap: var(--space-12); }
+
 .hero-primary {
-  font-size: calc(clamp(1.5rem, 2.6vw, 3rem) * var(--h-scale));
+  font-size: var(--fs-primary);
   font-weight: var(--h-weight);
   line-height: var(--h-lh);
   letter-spacing: var(--h-tracking);
 }
 
-.hero-secondary {
-  font-size: calc(1.05rem * var(--s-scale));
+.hero-secondary, .prose p {
+  font-size: var(--fs-secondary);
   font-weight: var(--s-weight);
   line-height: var(--s-lh);
   letter-spacing: var(--s-tracking);
 }
 
 /* ── VIDEO (full-bleed) ─────────────────────────────── */
-.vid-block { margin-top: 56px; }
+.vid-block { margin-top: var(--space-56); }
 
 .vid-wrap {
   position: relative;
@@ -156,12 +188,12 @@ a { color: inherit; text-decoration: none; }
   top: 50%; left: 50%;
   transform: translate(-50%, -50%);
   font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.12em;
+  font-size: var(--fs-mono);
+  letter-spacing: var(--mono-tracking);
   text-transform: uppercase;
   color: #fff;
   background: rgba(0,0,0,0.35);
-  padding: 6px 12px;
+  padding: var(--space-8) var(--space-12);
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.25s;
@@ -171,11 +203,11 @@ a { color: inherit; text-decoration: none; }
 
 .vid-controls {
   position: absolute;
-  bottom: 20px;
-  right: 20px;
+  bottom: var(--space-20);
+  right: var(--space-20);
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-8);
   opacity: 0;
   transition: opacity 0.25s;
   z-index: 3;
@@ -184,13 +216,13 @@ a { color: inherit; text-decoration: none; }
 
 .vid-btn {
   font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.12em;
+  font-size: var(--fs-mono);
+  letter-spacing: var(--mono-tracking);
   text-transform: uppercase;
   color: #fff;
   background: rgba(0,0,0,0.4);
   border: none;
-  padding: 5px 10px;
+  padding: var(--space-4) var(--space-8);
   cursor: pointer;
   transition: background 0.15s;
   line-height: 1;
@@ -201,18 +233,18 @@ a { color: inherit; text-decoration: none; }
 .list-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0 120px;
+  gap: 0 var(--space-120);
   align-items: start;
 }
 
 .list-label {
   font-family: var(--font-mono);
-  font-size: calc(0.58rem * var(--label-scale));
+  font-size: var(--fs-label);
   font-weight: var(--label-weight);
-  letter-spacing: 0.13em;
+  letter-spacing: var(--mono-tracking);
   text-transform: uppercase;
   color: var(--accent);
-  margin-bottom: 10px;
+  margin-bottom: var(--space-8);
 }
 
 hr.div {
@@ -224,22 +256,22 @@ hr.div {
 .li {
   display: flex;
   align-items: baseline;
-  gap: 12px;
-  padding: 8px 0;
+  gap: var(--space-12);
+  padding: var(--space-8) 0;
   border-bottom: 1px solid var(--border);
 }
 
 .n {
   font-family: var(--font-mono);
-  font-size: calc(0.57rem * var(--label-scale));
+  font-size: var(--fs-label);
   color: var(--accent);
-  min-width: 16px;
+  min-width: var(--space-16);
   flex-shrink: 0;
   transition: opacity 0.12s;
 }
 
 .t {
-  font-size: calc(0.85rem * var(--list-scale));
+  font-size: var(--fs-list);
   font-weight: var(--list-weight);
   flex: 1;
   transition: opacity 0.12s;
@@ -247,7 +279,7 @@ hr.div {
 
 .s {
   font-family: var(--font-mono);
-  font-size: calc(0.7rem * var(--label-scale));
+  font-size: var(--fs-mono);
   color: var(--accent);
   flex-shrink: 0;
 }
@@ -258,15 +290,15 @@ a.li:hover .s { opacity: 0.6; }
 
 /* ── FOOTER ─────────────────────────────────────────── */
 footer {
-  margin-top: 28px;
+  margin-top: var(--space-28);
   display: flex;
 }
 
 footer span {
   font-family: var(--font-mono);
-  font-size: calc(0.58rem * var(--label-scale));
+  font-size: var(--fs-label);
   font-weight: var(--copy-weight);
-  letter-spacing: 0.13em;
+  letter-spacing: var(--mono-tracking);
   text-transform: uppercase;
   color: var(--text);
 }
@@ -278,19 +310,17 @@ footer span {
 }
 
 @media (max-width: 680px) {
-  .page { padding: 28px 28px 48px; }
+  html { --fs-secondary: calc(1.05rem * var(--s-scale) * 0.77); }
+  .page { padding: var(--space-28) var(--space-28) var(--space-40); }
   .hero-grid {
     grid-template-columns: 1fr;
-    gap: 40px 0;
-    margin-bottom: 42px;
+    gap: var(--space-40) 0;
+    margin-bottom: var(--space-40);
   }
-  .hero-secondary {
-    font-size: calc(1.05rem * var(--s-scale) * 0.77);
-    line-height: 1.35;
-  }
-  .list-grid { grid-template-columns: 1fr; gap: 40px 0; }
+  .hero-secondary, .prose p { line-height: 1.35; }
+  .list-grid { grid-template-columns: 1fr; gap: var(--space-40) 0; }
   .below-hero { display: flex; flex-direction: column; }
   .vid-block { order: -1; margin-top: 0; }
-  .list-grid { margin-top: 36px; }
-  footer { margin-top: 44px; }
+  .list-grid { margin-top: var(--space-40); }
+  footer { margin-top: var(--space-40); }
 }

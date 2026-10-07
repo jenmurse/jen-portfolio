@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cobo Visuals — Jen Murse</title>
-  <meta name="description" content="Two hours of generative visuals for Cobo's DJ set.">
+  <meta name="description" content="Two hours of generative visuals for James Cobo's DJ set.">
   <meta property="og:title" content="Cobo Visuals — Jen Murse">
-  <meta property="og:description" content="Two hours of generative visuals for Cobo's DJ set.">
+  <meta property="og:description" content="Two hours of generative visuals for James Cobo's DJ set.">
   <meta property="og:type" content="article">
   <meta property="og:image" content="https://jenmurse.com/playground/cobo-visuals/15.jpg">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -17,92 +17,64 @@
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/playground.css">
   <style>
-    /* ── CASE STUDY ─────────────────────────────────────── */
+    /* the header carries the facts, and the first section supplies the space below it */
     .cs-title { margin-bottom: 0; }
-    .hero-right .subtitle { margin-top: -14px; color: var(--sub); }
-    /* the small labels on the left line up with the top of the text beside them: every first line is trimmed to
-       its capital height, so the tops of the letters meet regardless of size */
-
-    .meta {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 0 40px;
-      margin-top: 56px;
-    }
-    .meta div { border-top: 1px solid var(--border); padding-top: 10px; }
-    .meta dt { margin-bottom: 6px; }
-    .meta dd { font-size: calc(0.85rem * var(--list-scale)); font-weight: var(--list-weight); line-height: 1.4; }
-
-    .cs-section {
-      display: grid;
-      grid-template-columns: 240px 1fr;
-      gap: 0 80px;
-      margin-top: 96px;
-    }
-    .cs-section .body { display: flex; flex-direction: column; gap: 22px; }
-    .cs-section .body p {
-      font-size: calc(1.05rem * var(--s-scale));
-      font-weight: var(--s-weight);
-      line-height: var(--s-lh);
-      letter-spacing: var(--s-tracking);
-      max-width: 62ch;
-    }
-
-    /* the sequence: every clip plays only while it is on screen, from a still until then */
-    .seq {
-      list-style: none;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 36px 24px;
-      margin-top: 32px;
-    }
-    .seq figure { margin: 0; }
-    .seq video {
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      display: block;
-      background: #000;
-      object-fit: cover;
-    }
-    .seq video:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-    .seq figcaption {
-      display: flex;
-      align-items: baseline;
-      gap: 12px;
-      padding: 0;
-      margin-top: 12px;
-    }
-
-
-    /* the full set, drawn live */
-    .setplayer { margin: 32px 0 0; }
-    .setplayer canvas { width: 100%; aspect-ratio: 16 / 9; display: block; background: #000; }
-    .setplayer .bar {
-      display: flex; align-items: center; gap: 12px 16px; flex-wrap: wrap;
-      margin-top: 12px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
-    }
-    .setplayer button, .setplayer select {
-      font: inherit; color: var(--text); background: transparent; border: 1px solid var(--border);
-      padding: 6px 12px; cursor: pointer; text-transform: uppercase;
-    }
-    .setplayer button { border-color: var(--accent); color: var(--accent); min-width: 7em; }
-    .setplayer button:hover, .setplayer select:hover { border-color: var(--text); }
-    .setplayer input[type=range] { flex: 1 1 240px; accent-color: var(--accent); }
-    .setplayer output { min-width: 6ch; font-variant-numeric: tabular-nums; }
-    .setplayer .spd { display: flex; align-items: center; gap: 8px; color: var(--sub); }
-    .setplayer :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-
 
     @media (prefers-reduced-motion: reduce) {
-      .seq video { cursor: pointer; }
+      .media-grid video { cursor: pointer; }
     }
 
-    @media (max-width: 680px) {
-      .meta { grid-template-columns: 1fr 1fr; gap: 24px 24px; margin-top: 40px; }
-      .cs-section { grid-template-columns: 1fr; gap: 20px 0; margin-top: 64px; }
-      .cs-section .body p { font-size: calc(1.05rem * var(--s-scale) * 0.77); line-height: 1.45; }
-      .seq { grid-template-columns: 1fr; gap: 32px 0; }
+    /* ── THE FULL SET PLAYER ── mono controls in the page's label type, built from the shared tokens */
+    .player-bar {
+      display: flex; align-items: center; gap: var(--space-12) var(--space-16); flex-wrap: wrap;
+      margin-top: var(--space-12);
+      font-family: var(--font-mono); font-size: var(--fs-mono); letter-spacing: var(--mono-tracking); text-transform: uppercase;
     }
+    .player-bar button {
+      font: inherit; color: var(--text); background: transparent; border: 1px solid var(--border);
+      padding: var(--space-8) var(--space-12); min-width: 7em; cursor: pointer; text-transform: uppercase;
+    }
+    .player-bar #setplay { border-color: var(--accent); color: var(--accent); }
+    .player-bar button:hover { border-color: var(--text); }
+    .player-bar output { min-width: 6ch; font-variant-numeric: tabular-nums; }
+    .player-bar .spd { display: flex; align-items: center; gap: var(--space-8); }
+
+    /* the scrubber: a flat block track that fills orange as the set plays, and a square handle */
+    .player-bar input[type=range] {
+      --p: 0%; --track: var(--space-8); --handle: var(--space-20);
+      flex: 1 1 var(--col-left); height: var(--space-28); margin: 0; background: transparent; cursor: pointer;
+      -webkit-appearance: none; appearance: none;
+    }
+    .player-bar input[type=range]::-webkit-slider-runnable-track {
+      height: var(--track); border: 0; border-radius: 0;
+      background: linear-gradient(to right, var(--accent) var(--p), var(--border) var(--p));
+    }
+    .player-bar input[type=range]::-moz-range-track { height: var(--track); border: 0; border-radius: 0; background: var(--border); }
+    .player-bar input[type=range]::-moz-range-progress { height: var(--track); background: var(--accent); }
+    .player-bar input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none; width: var(--space-12); height: var(--handle);
+      margin-top: calc((var(--track) - var(--handle)) / 2); border: 0; border-radius: 0; background: var(--text);
+    }
+    .player-bar input[type=range]::-moz-range-thumb { width: var(--space-12); height: var(--handle); border: 0; border-radius: 0; background: var(--text); }
+
+    /* the speed menu: a square box that opens a list in the page's own type, not the system menu */
+    .speed { position: relative; }
+    .speed > button { display: flex; align-items: center; justify-content: space-between; gap: var(--space-12); }
+    .speed > button::after {
+      content: ""; width: var(--space-4); height: var(--space-4); margin-bottom: var(--space-4);
+      border-right: 1px solid currentColor; border-bottom: 1px solid currentColor; transform: rotate(45deg);
+    }
+    .speed > button[aria-expanded="true"] { border-color: var(--text); }
+    .speed > button[aria-expanded="true"]::after { transform: rotate(-135deg); margin: var(--space-4) 0 0; }
+    .speed ul {
+      position: absolute; left: 0; right: 0; bottom: calc(100% - 1px); z-index: 5; list-style: none;
+      background: var(--bg); border: 1px solid var(--text);
+    }
+    .speed ul[hidden] { display: none; }
+    .speed li { padding: var(--space-8) var(--space-12); cursor: pointer; display: flex; align-items: center; justify-content: space-between; }
+    .speed li[aria-selected="true"] { color: var(--accent); }
+    .speed li[aria-selected="true"]::after { content: ""; width: var(--space-4); height: var(--space-4); background: currentColor; }
+    .speed li.active { background: var(--text); color: var(--bg); }
   </style>
 </head>
 <body>
@@ -117,79 +89,84 @@
         <a href="/playground/" class="crumb">Playground</a>
       </div>
       <div class="hero-right">
-        <h1 class="hero-primary">Cobo Visuals</h1>
-        <p class="hero-secondary subtitle">Two hours of generative visuals for Cobo's DJ set</p>
+        <div class="hero-title">
+          <h1 class="hero-primary">Cobo Visuals</h1>
+          <p class="hero-secondary">Two hours of generative visuals for James Cobo's DJ set</p>
+        </div>
         <dl class="meta">
           <div><dt class="list-label">For</dt><dd>James Cobo's DJ set</dd></div>
           <div><dt class="list-label">Role</dt><dd>Design, direction, and build</dd></div>
-          <div><dt class="list-label">Length</dt><dd>2 hours, continuous</dd></div>
+          <div><dt class="list-label">Length</dt><dd>2 hrs</dd></div>
           <div><dt class="list-label">Medium</dt><dd>Real-time shaders in Resolume</dd></div>
         </dl>
       </div>
     </header>
 
 
-    <section class="cs-section pg-row" aria-labelledby="h-brief">
+    <section class="section" aria-labelledby="h-brief">
       <h2 class="list-label" id="h-brief">The brief</h2>
-      <div class="body">
+      <div class="prose">
         <p>Create two hours of visuals for Cobo's DJ set, segmented into five parts that follow the musical arc. Open on space and momentum, then turn more organic to fill the room. Go dark and spacey for a ravey stretch. Transition to a salsa section driven by the hi-hats and bursts of color. End on disco, building to a visual peak that lands with the final musical high before the set winds down.</p>
       </div>
     </section>
 
 
-    <section class="cs-section pg-row" aria-labelledby="h-seq">
+    <section class="section" aria-labelledby="h-seq">
       <h2 class="list-label" id="h-seq">The sequence</h2>
-      <div class="body">
-        <p>Sixteen moments from the set.</p>
+      <div class="prose">
+        <p>Sixteen moments from the set, in the order they played. Together they trace the night from deep space to the final disco peak.</p>
       </div>
     </section>
 
-    <ol class="seq" aria-label="The sequence, in order">
-      <li><figure><video data-src="/playground/cobo-visuals/01.mp4" poster="/playground/cobo-visuals/01.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="Drifting into the galaxy"></video><figcaption><span class="t">Drifting into the galaxy</span></figcaption></figure></li>
-      <li><figure><video data-src="/playground/cobo-visuals/02.mp4" poster="/playground/cobo-visuals/02.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="Knots of light bloom into feathers"></video><figcaption><span class="t">Knots of light bloom into feathers</span></figcaption></figure></li>
-      <li><figure><video data-src="/playground/cobo-visuals/03.mp4" poster="/playground/cobo-visuals/03.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="Color rides out along the waves"></video><figcaption><span class="t">Color rides out along the waves</span></figcaption></figure></li>
-      <li><figure><video data-src="/playground/cobo-visuals/04.mp4" poster="/playground/cobo-visuals/04.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="Soft shapes glow and swell until color fills the frame"></video><figcaption><span class="t">Soft shapes glow and swell until color fills the frame</span></figcaption></figure></li>
-      <li><figure><video data-src="/playground/cobo-visuals/05.mp4" poster="/playground/cobo-visuals/05.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="Glowing shapes smear into fine lines, then fade to black, white, and red"></video><figcaption><span class="t">Glowing shapes smear into fine lines, then fade to black, white, and red</span></figcaption></figure></li>
-      <li><figure><video data-src="/playground/cobo-visuals/06.mp4" poster="/playground/cobo-visuals/06.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="A circle ripples through the lines"></video><figcaption><span class="t">A circle ripples through the lines</span></figcaption></figure></li>
-      <li><figure><video data-src="/playground/cobo-visuals/07.mp4" poster="/playground/cobo-visuals/07.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="Stripes break into bars that rise and fall like a beat"></video><figcaption><span class="t">Stripes break into bars that rise and fall like a beat</span></figcaption></figure></li>
-      <li><figure><video data-src="/playground/cobo-visuals/08.mp4" poster="/playground/cobo-visuals/08.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="A sound wave pulses around a ring, its echo spreading outward"></video><figcaption><span class="t">A sound wave pulses around a ring, its echo spreading outward</span></figcaption></figure></li>
-      <li><figure><video data-src="/playground/cobo-visuals/09.mp4" poster="/playground/cobo-visuals/09.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="Color arrives one column at a time, building to a riot"></video><figcaption><span class="t">Color arrives one column at a time, building to a riot</span></figcaption></figure></li>
-      <li><figure><video data-src="/playground/cobo-visuals/10.mp4" poster="/playground/cobo-visuals/10.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="A red circle widens into a sphere of light, then dissolves into the first bloom of ink"></video><figcaption><span class="t">A red circle widens into a sphere of light, then dissolves into the first bloom of ink</span></figcaption></figure></li>
-      <li><figure><video data-src="/playground/cobo-visuals/11.mp4" poster="/playground/cobo-visuals/11.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="Blooms of ink in ribbons of color"></video><figcaption><span class="t">Blooms of ink in ribbons of color</span></figcaption></figure></li>
-      <li><figure><video data-src="/playground/cobo-visuals/12.mp4" poster="/playground/cobo-visuals/12.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="An iridescent ground rises"></video><figcaption><span class="t">An iridescent ground rises</span></figcaption></figure></li>
-      <li><figure><video data-src="/playground/cobo-visuals/13.mp4" poster="/playground/cobo-visuals/13.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="Haze recedes to a point, where a flare of light opens into domes"></video><figcaption><span class="t">Haze recedes to a point, where a flare of light opens into domes</span></figcaption></figure></li>
-      <li><figure><video data-src="/playground/cobo-visuals/14.mp4" poster="/playground/cobo-visuals/14.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="Columns of light rise and twist into soft ribbons"></video><figcaption><span class="t">Columns of light rise and twist into soft ribbons</span></figcaption></figure></li>
-      <li><figure><video data-src="/playground/cobo-visuals/15.mp4" poster="/playground/cobo-visuals/15.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="Rays sharpen into the disco tunnel"></video><figcaption><span class="t">Rays sharpen into the disco tunnel</span></figcaption></figure></li>
-      <li><figure><video data-src="/playground/cobo-visuals/16.mp4" poster="/playground/cobo-visuals/16.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="Soft light drifts and slows as the night winds down"></video><figcaption><span class="t">Soft light drifts and slows as the night winds down</span></figcaption></figure></li>
+    <ol class="media-grid" aria-label="The sequence, in order">
+      <li><figure><video data-src="/playground/cobo-visuals/01.mp4" poster="/playground/cobo-visuals/01.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="Drifting into the galaxy"></video><figcaption class="caption"><span class="t">Drifting into the galaxy</span></figcaption></figure></li>
+      <li><figure><video data-src="/playground/cobo-visuals/02.mp4" poster="/playground/cobo-visuals/02.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="Knots of light bloom into feathers"></video><figcaption class="caption"><span class="t">Knots of light bloom into feathers</span></figcaption></figure></li>
+      <li><figure><video data-src="/playground/cobo-visuals/03.mp4" poster="/playground/cobo-visuals/03.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="Color rides out along the waves"></video><figcaption class="caption"><span class="t">Color rides out along the waves</span></figcaption></figure></li>
+      <li><figure><video data-src="/playground/cobo-visuals/04.mp4" poster="/playground/cobo-visuals/04.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="Soft shapes glow and swell until color fills the frame"></video><figcaption class="caption"><span class="t">Soft shapes glow and swell until color fills the frame</span></figcaption></figure></li>
+      <li><figure><video data-src="/playground/cobo-visuals/05.mp4" poster="/playground/cobo-visuals/05.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="Glowing shapes smear into fine lines, then fade to black, white, and red"></video><figcaption class="caption"><span class="t">Glowing shapes smear into fine lines, then fade to black, white, and red</span></figcaption></figure></li>
+      <li><figure><video data-src="/playground/cobo-visuals/06.mp4" poster="/playground/cobo-visuals/06.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="A circle ripples through the lines"></video><figcaption class="caption"><span class="t">A circle ripples through the lines</span></figcaption></figure></li>
+      <li><figure><video data-src="/playground/cobo-visuals/07.mp4" poster="/playground/cobo-visuals/07.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="Stripes break into bars that rise and fall like a beat"></video><figcaption class="caption"><span class="t">Stripes break into bars that rise and fall like a beat</span></figcaption></figure></li>
+      <li><figure><video data-src="/playground/cobo-visuals/08.mp4" poster="/playground/cobo-visuals/08.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="A sound wave pulses around a ring, its echo spreading outward"></video><figcaption class="caption"><span class="t">A sound wave pulses around a ring, its echo spreading outward</span></figcaption></figure></li>
+      <li><figure><video data-src="/playground/cobo-visuals/09.mp4" poster="/playground/cobo-visuals/09.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="Color arrives one column at a time, building to a riot"></video><figcaption class="caption"><span class="t">Color arrives one column at a time, building to a riot</span></figcaption></figure></li>
+      <li><figure><video data-src="/playground/cobo-visuals/10.mp4" poster="/playground/cobo-visuals/10.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="A red circle widens into a sphere of light, then dissolves into the first bloom of ink"></video><figcaption class="caption"><span class="t">A red circle widens into a sphere of light, then dissolves into the first bloom of ink</span></figcaption></figure></li>
+      <li><figure><video data-src="/playground/cobo-visuals/11.mp4" poster="/playground/cobo-visuals/11.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="Blooms of ink in ribbons of color"></video><figcaption class="caption"><span class="t">Blooms of ink in ribbons of color</span></figcaption></figure></li>
+      <li><figure><video data-src="/playground/cobo-visuals/12.mp4" poster="/playground/cobo-visuals/12.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="An iridescent ground rises"></video><figcaption class="caption"><span class="t">An iridescent ground rises</span></figcaption></figure></li>
+      <li><figure><video data-src="/playground/cobo-visuals/13.mp4" poster="/playground/cobo-visuals/13.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="Haze recedes to a point, where a flare of light opens into domes"></video><figcaption class="caption"><span class="t">Haze recedes to a point, where a flare of light opens into domes</span></figcaption></figure></li>
+      <li><figure><video data-src="/playground/cobo-visuals/14.mp4" poster="/playground/cobo-visuals/14.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="Columns of light rise and twist into soft ribbons"></video><figcaption class="caption"><span class="t">Columns of light rise and twist into soft ribbons</span></figcaption></figure></li>
+      <li><figure><video data-src="/playground/cobo-visuals/15.mp4" poster="/playground/cobo-visuals/15.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="Rays sharpen into the disco tunnel"></video><figcaption class="caption"><span class="t">Rays sharpen into the disco tunnel</span></figcaption></figure></li>
+      <li><figure><video data-src="/playground/cobo-visuals/16.mp4" poster="/playground/cobo-visuals/16.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="Soft light drifts and slows as the night winds down"></video><figcaption class="caption"><span class="t">Soft light drifts and slows as the night winds down</span></figcaption></figure></li>
     </ol>
 
 
-    <section class="cs-section pg-row" aria-labelledby="h-made">
+    <section class="section" aria-labelledby="h-made">
       <h2 class="list-label" id="h-made">How it was made</h2>
-      <div class="body">
+      <div class="prose">
         <p>I turned each of the five parts into one generative visual that evolves on its own for its whole length. Each track gets its own look, and each big moment lands where Cobo placed it in the set. Every section ends exactly where the next one begins. Each new look grows out of what's already on screen, so the two hours play as one continuous piece.</p>
         <p>I designed every section and built it with Claude Code, giving it direction and iterating until a scene felt right. Every frame is drawn live, so nothing repeats, and every clip on this page is rendered straight from the same code.</p>
       </div>
     </section>
 
-    <section class="cs-section pg-row" aria-labelledby="h-set">
+    <section class="section" aria-labelledby="h-set">
       <h2 class="list-label" id="h-set">The full set</h2>
-      <div class="body">
+      <div class="prose">
         <p>All two hours, drawn live in your browser.</p>
       </div>
     </section>
 
-    <figure class="setplayer">
+    <figure class="media-wide">
       <canvas id="setcv" width="1280" height="720" role="img" aria-label="The full set, drawn live"></canvas>
-      <div class="bar" role="group" aria-label="Full set player">
+      <div class="player-bar" role="group" aria-label="Full set player">
         <button type="button" id="setplay">Play</button>
         <input id="setscrub" type="range" min="0" max="7200" step="1" value="0" aria-label="Position in the set">
         <output id="setclock" for="setscrub">0:00:00</output>
-        <label class="spd">Speed
-          <select id="setspeed" aria-label="Playback speed">
-            <option value="1" selected>1×</option><option value="4">4×</option><option value="10">10×</option><option value="30">30×</option><option value="60">60×</option>
-          </select>
-        </label>
+        <div class="spd"><span id="setspeed-label">Speed</span>
+          <div class="speed">
+            <button type="button" id="setspeed" data-value="1" aria-haspopup="listbox" aria-expanded="false" aria-controls="setspeed-list" aria-labelledby="setspeed-label setspeed">1×</button>
+            <ul id="setspeed-list" role="listbox" aria-labelledby="setspeed-label" tabindex="-1" hidden>
+              <li role="option" id="spd-1" data-value="1" aria-selected="true">1×</li><li role="option" id="spd-4" data-value="4" aria-selected="false">4×</li><li role="option" id="spd-10" data-value="10" aria-selected="false">10×</li><li role="option" id="spd-30" data-value="30" aria-selected="false">30×</li><li role="option" id="spd-60" data-value="60" aria-selected="false">60×</li>
+            </ul>
+          </div>
+        </div>
       </div>
     </figure>
 
@@ -204,7 +181,7 @@
     // Each clip loads and plays only while it is on screen, so the page never decodes sixteen videos at once.
     // With reduced motion nothing plays by itself: click a clip, or focus it and press Enter or Space.
     const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const clips = document.querySelectorAll('.seq video');
+    const clips = document.querySelectorAll('.media-grid video');
     const load = v => { if (!v.src) v.src = v.dataset.src; };
     const toggle = v => { load(v); v.paused ? v.play().catch(() => {}) : v.pause(); };
     if (!still) {
@@ -252,6 +229,7 @@
         let i = SH.length - 1; for (let k = 0; k < SH.length; k++) if (T < START[k + 1]) { i = k; break; }
         const shown = poster ? 0 : T;
         $('setscrub').value = shown; $('setclock').textContent = fmt(shown); $('setscrub').setAttribute('aria-valuetext', fmt(shown));
+        $('setscrub').style.setProperty('--p', shown / END * 100 + '%');
         const p = prog(i); if (!p) return;
         gl.useProgram(p); gl.viewport(0, 0, cv.width, cv.height);
         gl.uniform1f(gl.getUniformLocation(p, 'TIME'), Math.min(T, END) - START[i]);
@@ -262,7 +240,7 @@
       function setPlaying(v) { playing = v; $('setplay').textContent = v ? 'Pause' : 'Play'; if (v) { last = performance.now(); requestAnimationFrame(tick); } }
       function tick(now) {
         if (!playing || !visible) return;
-        T += (now - last) / 1000 * parseFloat($('setspeed').value); last = now;
+        T += (now - last) / 1000 * parseFloat($('setspeed').dataset.value); last = now;
         if (T >= END) { T = END; draw(); setPlaying(false); return; }
         draw(); requestAnimationFrame(tick);
       }
@@ -272,6 +250,39 @@
         const was = visible; visible = e.isIntersecting;
         if (visible && !was) { if (!progs.length) draw(); if (playing) { last = performance.now(); requestAnimationFrame(tick); } }
       }), { threshold: 0.1 }).observe(cv);
+    })();
+
+    // The speed menu: a button that opens a listbox. Arrows move, Enter or Space picks, Escape or a click outside closes.
+    (() => {
+      const btn = document.getElementById('setspeed'), list = document.getElementById('setspeed-list');
+      const opts = [...list.children], cur = document.getElementById('cursor');
+      let at = 0;
+      const mark = i => { at = (i + opts.length) % opts.length; opts.forEach((o, k) => o.classList.toggle('active', k === at)); list.setAttribute('aria-activedescendant', opts[at].id); };
+      const open = () => { list.hidden = false; btn.setAttribute('aria-expanded', 'true'); mark(opts.findIndex(o => o.getAttribute('aria-selected') === 'true')); list.focus(); };
+      const close = (refocus = true) => { list.hidden = true; btn.setAttribute('aria-expanded', 'false'); if (refocus) btn.focus(); };
+      const pick = i => {
+        opts.forEach((o, k) => o.setAttribute('aria-selected', k === i));
+        btn.dataset.value = opts[i].dataset.value; btn.textContent = opts[i].textContent; close();
+      };
+      btn.addEventListener('click', () => list.hidden ? open() : close());
+      btn.addEventListener('keydown', e => { if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); open(); } });
+      list.addEventListener('keydown', e => {
+        if (e.key === 'ArrowDown') mark(at + 1);
+        else if (e.key === 'ArrowUp') mark(at - 1);
+        else if (e.key === 'Home') mark(0);
+        else if (e.key === 'End') mark(opts.length - 1);
+        else if (e.key === 'Enter' || e.key === ' ') pick(at);
+        else if (e.key === 'Escape') close();
+        else if (e.key === 'Tab') { close(false); return; }
+        else return;
+        e.preventDefault();
+      });
+      opts.forEach((o, i) => {
+        o.addEventListener('click', () => pick(i));
+        o.addEventListener('mouseenter', () => { mark(i); cur.className = 'on-link'; });
+        o.addEventListener('mouseleave', () => cur.className = '');
+      });
+      document.addEventListener('pointerdown', e => { if (!list.hidden && !e.target.closest('.speed')) close(false); });
     })();
   </script>
 </body>

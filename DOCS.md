@@ -39,10 +39,11 @@ Single-page portfolio site. Text-led, no CMS. Hosted on Vercel, auto-deploys fro
 ### Colors
 | Token | Value | Usage |
 |---|---|---|
-| `--bg` | `#fff6f5` | Page background |
+| `--bg` | `#fdf8f5` | Page background (blush cream, hue leaned toward the sizzle reel's red) |
 | `--text` | `#111111` | Body text, wordmark |
 | `--accent` | `#ff4f00` | Labels, numbers, arrows, cursor hover |
-| `--sub` | `rgba(17,17,17,0.4)` | Dimmed/unlinked list items |
+| `--sub` | `rgba(17,17,17,0.4)` | Dimmed/unlinked list items (Playground sets it to `--text`: no grey text there) |
+| `--media-bg` | `#000` | Behind videos and canvases while they load |
 | `--border` | `rgba(17,17,17,0.12)` | Dividers |
 
 ### Typography
@@ -83,14 +84,27 @@ All type is controlled via CSS custom properties on `html {}`.
 
 /* Copyright */
 --copy-weight: 300
+
+/* Sizes: every piece of text uses one of these */
+--fs-label      /* mono labels, numbers, footer */
+--fs-mono       /* mono controls and arrows */
+--fs-list       /* list items, captions, small copy */
+--fs-secondary  /* subheads and prose */
+--fs-primary    /* hero and page titles */
+--mono-tracking: 0.12em
 ```
+
+### Spacing
+One scale on `:root`, used by every page. Never a loose px value: pick the nearest step.
+`--space-4 · 8 · 12 · 16 · 20 · 28 · 40 · 56 · 80 · 120` (each step about 1.4× the last)
 
 ### Layout
 - Max content width: **1200px**
-- Desktop padding: `56px 40px 32px`
+- Desktop padding: `56 40 28`
 - Mobile breakpoint: **680px**
-- Mobile padding: `28px 28px 48px`
-- Hero grid: `240px left column | 1fr right column`, `80px gap`
+- Mobile padding: `28 28 40`
+- Hero grid: `--col-left` (240px) label column, `--col-gap` (80px), then content. Playground sections repeat the same grid
+- Playground pages load `playground.css` on top: breadcrumb, sections, facts row, media grid
 - List grid: `1fr 1fr` (2 col) or `1fr 1fr 1fr` (3 col with Select Work)
 
 ### Cursor

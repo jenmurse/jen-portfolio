@@ -3,8 +3,8 @@
   "configurations": [
     {
       "name": "portfolio-mockup",
-      "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "3456"],
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["-y", "http-server", "-p", "3456", "-c-1", "--silent"],
       "port": 3456
     }
   ]

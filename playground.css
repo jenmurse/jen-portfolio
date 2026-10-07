@@ -1,6 +1,11 @@
-/* ── PLAYGROUND THEME ──────────────────────────────────
-   Playground pages load this after styles.css: the same layout and type, on black.
-   Everything else (cursor, lists, footer) picks the colours up from these tokens. */
+/* ── PLAYGROUND ────────────────────────────────────────
+   Playground pages load this after styles.css. Every size and space here comes from the tokens in styles.css,
+   so these pages and the homepage share one system; nothing is set by hand. */
+
+/* no grey text in the Playground: secondary text runs in the main text colour */
+:root { --sub: var(--text); }
+
+/* TRYING: the main site background instead of black — uncomment both blocks to go back
 :root {
   --bg:     #0a0a0a;
   --text:   #f2efe9;
@@ -9,31 +14,70 @@
   --border: rgba(242,239,233,0.14);
 }
 
-/* on black, multiply would swallow the cursor's hover dot */
+/* on black, multiply would swallow the cursor's hover dot *\/
 #cursor.on-link { mix-blend-mode: screen; }
+*/
 
-/* where you are: the wordmark and the section on one line, JEN MURSE / PLAYGROUND, both links home and up */
-.hero-left { display: flex; align-items: baseline; gap: 0 0.6em; flex-wrap: wrap; }
-.crumb {
-  font-size: calc(0.85rem * var(--w-scale));
-  font-weight: var(--w-weight);
-  letter-spacing: var(--w-tracking);
-  line-height: var(--w-lh);
-  text-transform: uppercase;
-  color: var(--accent);
-}
+/* where you are: JEN MURSE / PLAYGROUND on one line, set in the wordmark's type (styles.css).
+   The left column stays a plain block like the homepage's, so the wordmark sits on exactly the same line */
+.crumb { margin-left: 0.6em; color: var(--accent); }
 .crumb::before { content: "/"; color: var(--sub); margin-right: 0.6em; }
 a.crumb:hover { opacity: 0.7; }
 
 /* the footer sits at the foot of the window on a short page, and after the content on a long one */
 .page { min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; }
-footer { margin-top: auto; padding-top: 96px; }
+footer { margin-top: auto; padding-top: var(--space-80); }
 
-/* labels on the left line up with the top of the text on the right: each first line is trimmed to its capital
-   height, so the tops of the capitals meet whatever their sizes (text-box: Safari 18.2+, Chrome 133+; elsewhere
-   the old line-box alignment, a few pixels apart) */
-.hero-grid, .pg-row { align-items: start; }
-.hero-left { padding-top: 0; }
-.wordmark, .crumb, .hero-right > :first-child, .pg-row > :first-child, .pg-row .body > :first-child {
-  text-box: trim-start cap alphabetic;
+/* ── SECTIONS ── a label in the left column, prose on the right: the hero's grid, repeated down the page.
+   Labels line up with the top of the text beside them: each first line is trimmed to its capital height
+   (text-box: Safari 18.2+, Chrome 133+; elsewhere the old line-box alignment, a few pixels apart) */
+.section {
+  display: grid;
+  grid-template-columns: var(--col-left) 1fr;
+  gap: 0 var(--col-gap);
+  align-items: start;
+  margin-top: var(--space-80);
+}
+.section > :first-child, .section .prose > :first-child { text-box: trim-start cap alphabetic; }
+.prose { display: flex; flex-direction: column; gap: var(--space-28); }
+.prose p { max-width: var(--measure); }
+
+/* ── FACTS ── For / Role / Length / Medium: the homepage's list label, rule, and list type */
+.meta {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0 var(--space-40);
+  margin-top: var(--space-56);
+}
+.meta div { border-top: 1px solid var(--border); padding-top: var(--space-8); }
+.meta dd { font-size: var(--fs-list); font-weight: var(--list-weight); }
+
+/* ── MEDIA GRID ── project tiles and the sequence share one grid, one frame, one caption */
+.media-grid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-40) var(--space-20);
+  margin-top: var(--space-28);
+}
+.media-grid figure { margin: 0; }
+.frame, .media-grid video, .media-wide canvas {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  display: block;
+  object-fit: cover;
+  background: var(--media-bg);
+  overflow: hidden;
+}
+.frame img, .frame video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.caption { display: flex; align-items: baseline; gap: var(--space-12); margin-top: var(--space-12); }
+.caption-line { margin-top: var(--space-4); font-size: var(--fs-list); color: var(--sub); }
+
+/* a single wide piece after a section: same frame, same gap above it */
+.media-wide { margin: var(--space-28) 0 0; }
+
+@media (max-width: 680px) {
+  .section { grid-template-columns: 1fr; gap: var(--space-20) 0; margin-top: var(--space-56); }
+  .meta { grid-template-columns: 1fr 1fr; gap: var(--space-20); margin-top: var(--space-40); }
+  .media-grid { grid-template-columns: 1fr; gap: var(--space-40) 0; }
 }
