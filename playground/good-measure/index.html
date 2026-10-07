@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Good Measure — Jen Murse</title>
+  <meta name="description" content="A nutrition tracker and meal planner for people who cook, built for friends and family.">
+  <meta property="og:title" content="Good Measure — Jen Murse">
+  <meta property="og:description" content="A nutrition tracker and meal planner for people who cook, built for friends and family.">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="https://jenmurse.com/playground/good-measure/recipe.jpg">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,700&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/playground.css">
+  <style>
+    /* app screens are shot at 16:10 */
+    :root { --frame-ratio: 16 / 10; }
+
+    /* the header carries the facts, and the first section supplies the space below it */
+    .cs-title { margin-bottom: 0; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .media-grid video { cursor: pointer; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="cursor" aria-hidden="true"></div>
+
+  <div class="page">
+
+    <header class="hero-grid cs-title">
+      <div class="hero-left">
+        <a href="/" class="wordmark" aria-label="Jen Murse — home">Jen Murse</a>
+        <a href="/playground/" class="crumb">Playground</a>
+      </div>
+      <div class="hero-right">
+        <div class="hero-title">
+          <h1 class="hero-primary">Good Measure</h1>
+          <p class="hero-secondary">A nutrition tracker and meal planner for people who cook.</p>
+        </div>
+        <dl class="meta">
+          <div><dt class="list-label">For</dt><dd>Friends and family</dd></div>
+          <div><dt class="list-label">Role</dt><dd>Design and build</dd></div>
+          <div><dt class="list-label">URL</dt><dd><a href="https://withgoodmeasure.com" target="_blank" rel="noopener">withgoodmeasure.com <span class="s" aria-hidden="true">↗</span><span class="visually-hidden"> (opens in a new tab)</span></a></dd></div>
+          <div><dt class="list-label">Medium</dt><dd>Web app with MCP</dd></div>
+        </dl>
+      </div>
+    </header>
+
+
+    <section class="section" aria-labelledby="h-why">
+      <h2 class="list-label" id="h-why">Why</h2>
+      <div class="prose">
+        <p>Calorie apps are built for packaged food and barcode scanners. If you cook from scratch, there's no good way to see the nutrition of what you actually make, or to plan a week of real meals against your goals. Good Measure is for that, with a shared pantry, recipes with live nutrition, and a weekly plan for each person in the house against their own targets.</p>
+      </div>
+    </section>
+
+
+    <section class="section" aria-labelledby="h-how">
+      <h2 class="list-label" id="h-how">How it works</h2>
+      <div class="prose">
+        <p>Six moments from a week of planning, in the order you would use it. Start from the day at a glance, build the week, and dial in a recipe. Then let the numbers fix a day, save it as a template, and turn the week into a shopping list.</p>
+      </div>
+    </section>
+
+    <ol class="media-grid" aria-label="How it works, in order">
+      <li><figure><img src="/playground/good-measure/dashboard.jpg" alt="The dashboard, with a greeting and the day's calories, protein and fiber against goals" loading="lazy"><figcaption class="caption"><span class="t">The day at a glance, measured against each person's goals</span></figcaption></figure></li>
+      <li><figure><img src="/playground/good-measure/week.jpg" alt="The week planner, with every meal of the week and each day's nutrition totals below" loading="lazy"><figcaption class="caption"><span class="t">A week of meals, with each day's totals underneath</span></figcaption></figure></li>
+      <li><figure><img src="/playground/good-measure/recipe.jpg" alt="A recipe for miso-glazed tofu, with its nutrition per serving measured against goals" loading="lazy"><figcaption class="caption"><span class="t">A recipe, with its nutrition worked out as you build it</span></figcaption></figure></li>
+      <li><figure><video data-src="/playground/good-measure/optimizer.mp4" poster="/playground/good-measure/optimizer.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="Optimizing a day by picking the targets, then choosing from three ways to hit them"></video><figcaption class="caption"><span class="t">Optimize a day by picking the targets, then choosing from three ways to hit them</span></figcaption></figure></li>
+      <li><figure><video data-src="/playground/good-measure/template.mp4" poster="/playground/good-measure/template.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="Saving a day that worked as a template"></video><figcaption class="caption"><span class="t">Save a day that worked as a template, and reuse it</span></figcaption></figure></li>
+      <li><figure><video data-src="/playground/good-measure/shopping.mp4" poster="/playground/good-measure/shopping.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="A week of meals turned into one shopping list"></video><figcaption class="caption"><span class="t">A week of meals becomes one shopping list, grouped by aisle</span></figcaption></figure></li>
+    </ol>
+
+
+    <section class="section" aria-labelledby="h-made">
+      <h2 class="list-label" id="h-made">How it was made</h2>
+      <div class="prose">
+        <p>I designed it and built it with Claude Code. The optimizer is plain math, not AI. It suggests swaps to bring a day onto its targets, the same answer every time, at no cost.</p>
+        <p>The app has no AI of its own. Instead, you bring the assistant you already use, like Claude or ChatGPT, and connect it over MCP. From there it can read your recipes, plan your week, and log your meals.</p>
+        <p>I've kept it small on purpose. Good Measure is invite-only, for my friends and family.</p>
+      </div>
+    </section>
+
+    <dialog class="lightbox" id="lightbox" aria-label="Enlarged view">
+      <div class="veil" id="lightbox-veil"></div>
+      <figure class="piece" id="lightbox-piece">
+        <div class="stage" id="lightbox-stage"></div>
+        <figcaption class="caption"><span class="t" id="lightbox-caption"></span></figcaption>
+      </figure>
+      <button type="button" class="close" id="lightbox-close" aria-label="Close"></button>
+    </dialog>
+
+    <footer>
+      <span>© 2026 Jen Murse</span>
+    </footer>
+
+  </div>
+
+  <script src="/main.js"></script>
+  <script>
+    // Each clip loads and plays only while it is on screen.
+    // With reduced motion nothing plays by itself: click a clip, or focus it and press Enter or Space.
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const clips = document.querySelectorAll('.media-grid video');
+    const load = v => { if (!v.src) v.src = v.dataset.src; };
+    const toggle = v => { load(v); v.paused ? v.play().catch(() => {}) : v.pause(); };
+    if (!still) {
+      const io = new IntersectionObserver(es => es.forEach(e => {
+        const v = e.target;
+        if (e.isIntersecting) { load(v); v.play().catch(() => {}); } else v.pause();
+      }), { threshold: 0.3 });
+      clips.forEach(v => io.observe(v));
+    }
+    clips.forEach(v => {
+      v.addEventListener('mouseenter', () => document.getElementById('cursor').className = 'on-link');
+      v.addEventListener('mouseleave', () => document.getElementById('cursor').className = '');
+    });
+
+    // The lightbox: click a piece, or focus it and press Enter or Space, and it grows out of its place on the page to
+    // fill the window; closing sends it back. A clip carries on from where it was. Reduced motion swaps the move for a fade.
+    (() => {
+      const box = document.getElementById('lightbox'), stage = document.getElementById('lightbox-stage');
+      const veil = document.getElementById('lightbox-veil'), cap = document.getElementById('lightbox-caption');
+      const piece = document.getElementById('lightbox-piece'), btn = document.getElementById('lightbox-close');
+      const ease = 'cubic-bezier(0.2, 0, 0, 1)';
+      let from = null, big = null, busy = false;
+
+      // the transform that puts the large piece exactly over the small one
+      const fromThumb = () => {
+        const a = from.getBoundingClientRect(), b = big.getBoundingClientRect();
+        return `translate(${a.left - b.left}px, ${a.top - b.top}px) scale(${a.width / b.width}, ${a.height / b.height})`;
+      };
+      const fade = (el, on, ms, delay = 0) => el.animate([{ opacity: on ? 0 : 1 }, { opacity: on ? 1 : 0 }], { duration: ms, delay, easing: ease, fill: 'both' });
+
+      const open = m => {
+        if (busy || box.open) return;
+        from = m;
+        if (m.tagName === 'IMG') big = Object.assign(new Image(), { src: m.src, alt: m.alt });
+        else {
+          big = document.createElement('video');
+          Object.assign(big, { src: m.currentSrc || m.dataset.src, poster: m.poster, muted: true, loop: true, playsInline: true });
+          big.setAttribute('aria-label', m.dataset.label);
+          if (still) big.controls = true;
+          else big.addEventListener('loadedmetadata', () => { big.currentTime = m.currentTime || 0; big.play().catch(() => {}); }, { once: true });
+        }
+        stage.replaceChildren(big);
+        cap.textContent = m.closest('figure').querySelector('figcaption').textContent;
+        box.showModal();
+        fade(veil, true, 360);
+        fade(btn, true, 360);
+        fade(cap.parentElement, true, 360, still ? 0 : 160);   // the caption follows a beat behind
+        if (still) fade(big, true, 240);
+        else big.animate([{ transform: fromThumb() }, { transform: 'none' }], { duration: 480, easing: ease });
+      };
+
+      const close = async () => {
+        if (busy || !box.open) return;
+        busy = true;
+        const ms = 380;
+        fade(veil, false, ms); fade(btn, false, ms * 0.6); fade(cap.parentElement, false, ms * 0.5);
+        await (still ? fade(big, false, 200) : big.animate([{ transform: 'none' }, { transform: fromThumb() }], { duration: ms, easing: ease, fill: 'forwards' })).finished;
+        box.close();
+        busy = false;
+      };
+
+      box.addEventListener('cancel', e => { e.preventDefault(); close(); });   // Escape
+      box.addEventListener('close', () => { stage.replaceChildren(); [veil, btn, cap.parentElement].forEach(el => el.getAnimations().forEach(a => a.cancel())); if (from) from.focus({ preventScroll: true }); });
+      veil.addEventListener('click', close);
+      btn.addEventListener('click', close);
+      document.querySelectorAll('.media-grid img, .media-grid video').forEach(m => {
+        m.dataset.label = m.alt || m.getAttribute('aria-label');
+        m.classList.add('zoomable');
+        m.tabIndex = 0;
+        m.setAttribute('role', 'button');
+        m.setAttribute('aria-haspopup', 'dialog');
+        m.setAttribute('aria-label', 'Enlarge: ' + m.dataset.label);
+        m.addEventListener('click', () => open(m));
+        m.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(m); } });
+      });
+    })();
+  </script>
+</body>
+</html>
