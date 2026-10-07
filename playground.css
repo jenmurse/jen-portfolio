@@ -5,19 +5,6 @@
 /* no grey text in the Playground: secondary text runs in the main text colour */
 :root { --sub: var(--text); }
 
-/* TRYING: the main site background instead of black — uncomment both blocks to go back
-:root {
-  --bg:     #0a0a0a;
-  --text:   #f2efe9;
-  --accent: #ff4f00;
-  --sub:    rgba(242,239,233,0.45);
-  --border: rgba(242,239,233,0.14);
-}
-
-/* on black, multiply would swallow the cursor's hover dot *\/
-#cursor.on-link { mix-blend-mode: screen; }
-*/
-
 /* where you are: JEN MURSE / PLAYGROUND on one line, set in the wordmark's type (styles.css).
    The left column stays a plain block like the homepage's, so the wordmark sits on exactly the same line */
 .crumb { margin-left: 0.6em; color: var(--accent); }
