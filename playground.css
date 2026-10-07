@@ -1,0 +1,39 @@
+/* ── PLAYGROUND THEME ──────────────────────────────────
+   Playground pages load this after styles.css: the same layout and type, on black.
+   Everything else (cursor, lists, footer) picks the colours up from these tokens. */
+:root {
+  --bg:     #0a0a0a;
+  --text:   #f2efe9;
+  --accent: #ff4f00;
+  --sub:    rgba(242,239,233,0.45);
+  --border: rgba(242,239,233,0.14);
+}
+
+/* on black, multiply would swallow the cursor's hover dot */
+#cursor.on-link { mix-blend-mode: screen; }
+
+/* where you are: the wordmark and the section on one line, JEN MURSE / PLAYGROUND, both links home and up */
+.hero-left { display: flex; align-items: baseline; gap: 0 0.6em; flex-wrap: wrap; }
+.crumb {
+  font-size: calc(0.85rem * var(--w-scale));
+  font-weight: var(--w-weight);
+  letter-spacing: var(--w-tracking);
+  line-height: var(--w-lh);
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.crumb::before { content: "/"; color: var(--sub); margin-right: 0.6em; }
+a.crumb:hover { opacity: 0.7; }
+
+/* the footer sits at the foot of the window on a short page, and after the content on a long one */
+.page { min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; }
+footer { margin-top: auto; padding-top: 96px; }
+
+/* labels on the left line up with the top of the text on the right: each first line is trimmed to its capital
+   height, so the tops of the capitals meet whatever their sizes (text-box: Safari 18.2+, Chrome 133+; elsewhere
+   the old line-box alignment, a few pixels apart) */
+.hero-grid, .pg-row { align-items: start; }
+.hero-left { padding-top: 0; }
+.wordmark, .crumb, .hero-right > :first-child, .pg-row > :first-child, .pg-row .body > :first-child {
+  text-box: trim-start cap alphabetic;
+}

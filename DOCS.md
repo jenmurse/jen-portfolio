@@ -20,6 +20,11 @@ Single-page portfolio site. Text-led, no CMS. Hosted on Vercel, auto-deploys fro
 ├── favicon.svg             # Orange circle
 ├── OG_image_jen_murse.png  # 1200×630 social share image
 ├── jen-sizzle-2026.mp4     # Sizzle reel (1920×1080, 16:9, ~1min, silent loop)
+├── playground.css          # Playground theme: black background, breadcrumb, footer at the foot of short pages
+├── playground/
+│   ├── index.html          # Playground index
+│   └── cobo-visuals/       # Case study: index.html, 16 clips (NN.mp4 + NN.jpg), set.js (the whole-set player's
+│                           #   shaders, written by tools/site_player.py in the Cobo Visuals project)
 ├── fonts/                  # Local font fallbacks
 │   ├── Satoshi/
 │   ├── DM_Sans/
@@ -128,6 +133,11 @@ Currently the video is committed to the GitHub repo (82MB, under GitHub's 100MB 
 Keep as-is unless the file exceeds 100MB or you start adding more videos. At that point, Git LFS is the lowest-friction upgrade.
 
 ---
+
+## Playground Pages
+Load `styles.css` then `playground.css`. Header: `.hero-left` holds the wordmark and `<a class="crumb" href="/playground/">Playground</a>`;
+the title is an `h1.hero-primary` with a `p.hero-secondary.subtitle` under it. Rows of label + text use `.pg-row` so each label
+lines up with the top of its text. The 16 Cobo clips are about 110 MB in the repo; Git LFS is the next step if more video lands.
 
 ## Adding a New Page
 1. Create `pagename.html` in root
