@@ -20,6 +20,10 @@
     /* the header carries the facts, and the first section supplies the space below it */
     .cs-title { margin-bottom: 0; }
 
+    /* the night's footage takes the home page video's restart and pause, shown on hover or keyboard focus */
+    .night-wrap { position: relative; }
+    .night-wrap:hover .vid-controls, .night-wrap:focus-within .vid-controls { opacity: 1; }
+
     @media (prefers-reduced-motion: reduce) {
       .media-grid video { cursor: pointer; }
     }
@@ -146,7 +150,14 @@
     </section>
 
     <figure class="media-wide">
-      <video data-src="/playground/cobo-visuals/night.mp4" poster="/playground/cobo-visuals/night.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="Phone footage from the night: Cobo at the decks in the middle, the dance floor on either side"></video>
+      <div class="night-wrap">
+        <video id="night" data-src="/playground/cobo-visuals/night.mp4" poster="/playground/cobo-visuals/night.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="Phone footage from the night: Cobo at the decks in the middle, the dance floor on either side"></video>
+        <span class="vid-icon" id="night-icon" aria-hidden="true"></span>
+        <div class="vid-controls" role="group" aria-label="Video controls">
+          <button type="button" class="vid-btn" id="night-restart" aria-label="Restart video">↺ restart</button>
+          <button type="button" class="vid-btn" id="night-pause" aria-label="Pause video">pause</button>
+        </div>
+      </div>
     </figure>
 
 
@@ -199,17 +210,49 @@
     if (!still) {
       const io = new IntersectionObserver(es => es.forEach(e => {
         const v = e.target;
-        if (e.isIntersecting) { load(v); v.play().catch(() => {}); } else v.pause();
+        if (e.isIntersecting) { if (!v.dataset.held) { load(v); v.play().catch(() => {}); } } else v.pause();
       }), { threshold: 0.3 });
       clips.forEach(v => io.observe(v));
     } else {
     }
     clips.forEach(v => {
-      v.addEventListener('click', () => toggle(v));
-      v.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(v); } });
       v.addEventListener('mouseenter', () => document.getElementById('cursor').className = 'on-link');
       v.addEventListener('mouseleave', () => document.getElementById('cursor').className = '');
+      if (v.id === 'night') return;                                     // the night's footage has its own controls, below
+      v.addEventListener('click', () => toggle(v));
+      v.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(v); } });
     });
+
+    // The night's footage works like the home page video: click it, or use restart and pause, and a label flashes.
+    // A pause the viewer chose holds when it scrolls away and back.
+    (() => {
+      const v = document.getElementById('night'), icon = document.getElementById('night-icon');
+      const pauseBtn = document.getElementById('night-pause'), restartBtn = document.getElementById('night-restart');
+      let timer;
+      const flash = label => {
+        icon.textContent = label; clearTimeout(timer); icon.classList.add('flash');
+        timer = setTimeout(() => icon.classList.remove('flash'), 900);
+      };
+      const sync = () => {
+        pauseBtn.textContent = v.paused ? 'play' : 'pause';
+        pauseBtn.setAttribute('aria-label', v.paused ? 'Play video' : 'Pause video');
+      };
+      const flip = () => {
+        load(v);
+        if (v.paused) { delete v.dataset.held; v.play().catch(() => {}); flash('play'); }
+        else          { v.dataset.held = '1'; v.pause(); flash('pause'); }
+      };
+      v.addEventListener('play', sync);
+      v.addEventListener('pause', sync);
+      v.addEventListener('click', flip);
+      v.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flip(); } });
+      pauseBtn.addEventListener('click', e => { e.stopPropagation(); flip(); });
+      restartBtn.addEventListener('click', e => {
+        e.stopPropagation(); load(v); delete v.dataset.held;
+        v.currentTime = 0; v.play().catch(() => {}); flash('restart');
+      });
+      sync();
+    })();
   </script>
   <script src="/playground/cobo-visuals/set.js"></script>
   <script>
