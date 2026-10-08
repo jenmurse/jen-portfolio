@@ -6,6 +6,12 @@
       "runtimeExecutable": "npx",
       "runtimeArgs": ["-y", "http-server", "-p", "3456", "-c-1", "--silent"],
       "port": 3456
+    },
+    {
+      "name": "good-measure",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "/Users/jenyfur/Design Work/Mer So/good-measure", "run", "dev"],
+      "port": 3006
     }
   ]
 }
