@@ -31,6 +31,8 @@ footer { margin-top: auto; padding-top: var(--space-80); }
 .section > :first-child, .section .prose > :first-child { text-box: trim-start cap alphabetic; }
 .prose { display: flex; flex-direction: column; gap: var(--space-28); }
 .prose p { max-width: var(--measure); }
+.prose a { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+.prose a:hover, .prose a:focus-visible { color: var(--accent); }
 
 /* ── FACTS ── For / Role / Length / Medium: the homepage's list label, rule, and list type */
 .meta {
@@ -52,7 +54,7 @@ footer { margin-top: auto; padding-top: var(--space-80); }
   margin-top: var(--space-28);
 }
 .media-grid figure { margin: 0; }
-.frame, .media-grid video, .media-grid img, .media-wide canvas {
+.frame, .media-grid video, .media-grid img, .media-wide canvas, .media-wide video {
   width: 100%;
   aspect-ratio: var(--frame-ratio);
   display: block;

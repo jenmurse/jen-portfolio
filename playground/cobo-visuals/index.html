@@ -138,11 +138,23 @@
     </ol>
 
 
+    <section class="section" aria-labelledby="h-night">
+      <h2 class="list-label" id="h-night">On the night</h2>
+      <div class="prose">
+        <p>Cobo on the decks with the visuals behind him and everyone grooving on our <a href="https://www.tigertownlab.com/disco-dancefloor.html">disco dance floor</a> in front.</p>
+      </div>
+    </section>
+
+    <figure class="media-wide">
+      <video data-src="/playground/cobo-visuals/night.mp4" poster="/playground/cobo-visuals/night.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="Phone footage from the night: Cobo at the decks in the middle, the dance floor on either side"></video>
+    </figure>
+
+
     <section class="section" aria-labelledby="h-made">
       <h2 class="list-label" id="h-made">How it was made</h2>
       <div class="prose">
-        <p>I turned each of the five parts into one generative visual that evolves on its own for its whole length. Each track gets its own look, and each big moment lands where Cobo placed it in the set. Every section ends exactly where the next one begins. Each new look grows out of what's already on screen, so the two hours play as one continuous piece.</p>
-        <p>I designed every section and built it with Claude Code, giving it direction and iterating until a scene felt right. Every frame is drawn live, so nothing repeats, and every clip on this page is rendered straight from the same code.</p>
+        <p>I turned each of the five parts into one generative visual that evolved on its own for its whole length. Each track got its own look, and each big moment landed where Cobo placed it in the set. Every section ended exactly where the next one began. Each new look grew out of what was already on screen, so the two hours played as one continuous piece.</p>
+        <p>I designed every section and built it with Claude Code, giving it direction and iterating until a scene felt right. Every frame was drawn live, so nothing repeated, and every clip on this page was rendered straight from the same code.</p>
       </div>
     </section>
 
@@ -178,10 +190,10 @@
 
   <script src="/main.js"></script>
   <script>
-    // Each clip loads and plays only while it is on screen, so the page never decodes sixteen videos at once.
+    // Each clip loads and plays only while it is on screen, so the page never decodes every video at once.
     // With reduced motion nothing plays by itself: click a clip, or focus it and press Enter or Space.
     const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const clips = document.querySelectorAll('.media-grid video');
+    const clips = document.querySelectorAll('.media-grid video, .media-wide video');
     const load = v => { if (!v.src) v.src = v.dataset.src; };
     const toggle = v => { load(v); v.paused ? v.play().catch(() => {}) : v.pause(); };
     if (!still) {

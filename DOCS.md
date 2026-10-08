@@ -23,7 +23,7 @@ Single-page portfolio site. Text-led, no CMS. Hosted on Vercel, auto-deploys fro
 ├── playground.css          # Playground theme: black background, breadcrumb, footer at the foot of short pages
 ├── playground/
 │   ├── index.html          # Playground index
-│   └── cobo-visuals/       # Case study: index.html, 16 clips (NN.mp4 + NN.jpg), set.js (the whole-set player's
+│   └── cobo-visuals/       # Case study: index.html, 16 clips (NN.mp4 + NN.jpg), night.mp4 + night.jpg (phone triptych), set.js (the whole-set player's
 │                           #   shaders, written by tools/site_player.py in the Cobo Visuals project)
 ├── fonts/                  # Local font fallbacks
 │   ├── Satoshi/
