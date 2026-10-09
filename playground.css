@@ -76,14 +76,14 @@ footer { margin-top: auto; padding-top: var(--space-80); }
 
 /* ── LIGHTBOX ── a piece grows out of its place on the page to fill the window, with its caption beneath it;
    Escape, the × or a click outside sends it back */
-.zoomable { cursor: zoom-in; }
+/* no system zoom cursor: the site's own dot grows over a piece, as it does over a link */
 .lightbox {
   --lb-reserve: calc(var(--space-80) + var(--space-56));   /* room above and below the piece for the × and caption */
   position: fixed; inset: 0; width: 100vw; height: 100vh; max-width: none; max-height: none;
   margin: 0; padding: 0; border: 0; background: transparent; color: var(--text); overflow: hidden;
 }
 .lightbox::backdrop { background: transparent; }
-.lightbox .veil { position: absolute; inset: 0; background: var(--bg); cursor: zoom-out; }
+.lightbox .veil { position: absolute; inset: 0; background: var(--bg); }
 .lightbox .piece {
   position: absolute; inset: 0; margin: auto; height: fit-content;
   width: min(100vw - 2 * var(--space-40), (100vh - var(--lb-reserve)) * var(--frame-ratio));
@@ -96,7 +96,7 @@ footer { margin-top: auto; padding-top: var(--space-80); }
 .lightbox .caption { margin-top: var(--space-12); }
 .lightbox .close {
   position: absolute; top: var(--space-20); right: var(--space-20);
-  width: var(--space-28); height: var(--space-28); padding: 0; border: 1px solid var(--border); background: transparent; color: var(--text); cursor: pointer;
+  width: var(--space-28); height: var(--space-28); padding: 0; border: 1px solid var(--border); background: transparent; color: var(--text); cursor: inherit;
 }
 .lightbox .close::before, .lightbox .close::after {
   content: ""; position: absolute; left: var(--space-8); right: var(--space-8); top: calc(50% - 0.5px); border-top: 1px solid currentColor;

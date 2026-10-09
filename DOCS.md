@@ -110,7 +110,8 @@ One scale on `:root`, used by every page. Never a loose px value: pick the neare
 ### Cursor
 Custom cursor replaces system cursor sitewide.
 - **Default:** 11px black dot
-- **On hover (links, video):** 32px accent-colored dot, `mix-blend-mode: multiply` — creates see-through effect over page content
+- **On hover (links, video, Playground pieces):** 32px accent-colored dot, `mix-blend-mode: multiply` — creates see-through effect over page content
+- No system cursor anywhere on desktop, links and buttons included (`cursor: inherit`); the lightbox carries the dot into its top layer while open
 - On mobile: system cursor, `cursor: none` not applied
 
 ### Video

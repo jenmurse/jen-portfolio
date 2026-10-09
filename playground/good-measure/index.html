@@ -65,13 +65,15 @@
     <section class="section" aria-labelledby="h-how">
       <h2 class="list-label" id="h-how">How it works</h2>
       <div class="prose">
-        <p>Six moments from a week of planning, in the order you would use it. Start from the day at a glance, build the week, and dial in a recipe. Then let the numbers fix a day, save it as a template, and turn the week into a shopping list.</p>
+        <p>Eight moments from a week of planning, in the order you would use them. Start from the day at a glance and build the week. Bring in a recipe from a link, add anything the pantry is missing straight from the USDA database, and dial the recipe in. Then let the numbers fix a day, save it as a template, and turn the week into a shopping list.</p>
       </div>
     </section>
 
     <ol class="media-grid" aria-label="How it works, in order">
       <li><figure><img src="/playground/good-measure/dashboard.jpg" alt="The dashboard, with a greeting and the day's calories, protein and fiber against goals" loading="lazy"><figcaption class="caption"><span class="t">The day at a glance, measured against each person's goals</span></figcaption></figure></li>
       <li><figure><img src="/playground/good-measure/week.jpg" alt="The week planner, with every meal of the week and each day's nutrition totals below" loading="lazy"><figcaption class="caption"><span class="t">A week of meals, with each day's totals underneath</span></figcaption></figure></li>
+      <li><figure><video data-src="/playground/good-measure/import.mp4" poster="/playground/good-measure/import.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="Importing a recipe from a link: it arrives with its photo and its ingredients matched to the pantry"></video><figcaption class="caption"><span class="t">Paste a recipe's link, and it arrives with its ingredients matched to the pantry</span></figcaption></figure></li>
+      <li><figure><video data-src="/playground/good-measure/pantry.mp4" poster="/playground/good-measure/pantry.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="Adding an ingredient from the USDA database, its nutrition filling in by itself"></video><figcaption class="caption"><span class="t">Add an ingredient from the USDA database, and its nutrition fills itself in</span></figcaption></figure></li>
       <li><figure><img src="/playground/good-measure/recipe.jpg" alt="A recipe for miso-glazed tofu, with its nutrition per serving measured against goals" loading="lazy"><figcaption class="caption"><span class="t">A recipe, with its nutrition worked out as you build it</span></figcaption></figure></li>
       <li><figure><video data-src="/playground/good-measure/optimizer.mp4" poster="/playground/good-measure/optimizer.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="Optimizing a day by picking the targets, then choosing from three ways to hit them"></video><figcaption class="caption"><span class="t">Optimize a day by picking the targets, then choosing from three ways to hit them</span></figcaption></figure></li>
       <li><figure><video data-src="/playground/good-measure/template.mp4" poster="/playground/good-measure/template.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="Saving a day that worked as a template"></video><figcaption class="caption"><span class="t">Save a day that worked as a template, and reuse it</span></figcaption></figure></li>
@@ -118,9 +120,10 @@
       }), { threshold: 0.3 });
       clips.forEach(v => io.observe(v));
     }
-    clips.forEach(v => {
-      v.addEventListener('mouseenter', () => document.getElementById('cursor').className = 'on-link');
-      v.addEventListener('mouseleave', () => document.getElementById('cursor').className = '');
+    // Every piece opens the lightbox, so stills and clips both grow the cursor dot.
+    document.querySelectorAll('.media-grid img, .media-grid video').forEach(m => {
+      m.addEventListener('mouseenter', () => document.getElementById('cursor').className = 'on-link');
+      m.addEventListener('mouseleave', () => document.getElementById('cursor').className = '');
     });
 
     // The lightbox: click a piece, or focus it and press Enter or Space, and it grows out of its place on the page to
@@ -153,6 +156,10 @@
         stage.replaceChildren(big);
         cap.textContent = m.closest('figure').querySelector('figcaption').textContent;
         box.showModal();
+        // The dialog sits in the top layer, above the page's cursor dot; carry the dot inside while it is open.
+        const dot = document.getElementById('cursor');
+        dot.className = '';
+        box.appendChild(dot);
         fade(veil, true, 360);
         fade(btn, true, 360);
         fade(cap.parentElement, true, 360, still ? 0 : 160);   // the caption follows a beat behind
@@ -171,7 +178,7 @@
       };
 
       box.addEventListener('cancel', e => { e.preventDefault(); close(); });   // Escape
-      box.addEventListener('close', () => { stage.replaceChildren(); [veil, btn, cap.parentElement].forEach(el => el.getAnimations().forEach(a => a.cancel())); if (from) from.focus({ preventScroll: true }); });
+      box.addEventListener('close', () => { const dot = document.getElementById('cursor'); dot.className = ''; document.body.prepend(dot); stage.replaceChildren(); [veil, btn, cap.parentElement].forEach(el => el.getAnimations().forEach(a => a.cancel())); if (from) from.focus({ preventScroll: true }); });
       veil.addEventListener('click', close);
       btn.addEventListener('click', close);
       document.querySelectorAll('.media-grid img, .media-grid video').forEach(m => {
