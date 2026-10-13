@@ -57,7 +57,7 @@
       <li class="project">
         <a href="/playground/good-measure/">
           <div class="frame">
-            <img src="/playground/good-measure/tile.jpg" alt="" loading="lazy">
+            <video src="/playground/good-measure/tile.mp4" poster="/playground/good-measure/tile.jpg" muted loop playsinline preload="none" aria-hidden="true"></video>
           </div>
           <div class="caption"><span class="n">01</span><span class="t">Good Measure</span></div>
           <p class="caption-line">A nutrition tracker and meal planner for people who cook</p>
@@ -91,16 +91,15 @@
 
   <script src="/main.js"></script>
   <script>
-    // a project's preview plays while the pointer is over it (never with reduced motion)
+    // a project's preview plays by itself while it is on screen (never with reduced motion: then it rests on its poster)
     const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    document.querySelectorAll('.projects a').forEach(a => {
-      const v = a.querySelector('video');
-      if (!v || still) return;
-      a.addEventListener('mouseenter', () => v.play().catch(() => {}));
-      a.addEventListener('mouseleave', () => v.pause());
-      a.addEventListener('focus', () => v.play().catch(() => {}));
-      a.addEventListener('blur', () => v.pause());
-    });
+    const previews = document.querySelectorAll('.projects video');
+    if (!still) {
+      const io = new IntersectionObserver(es => es.forEach(e => {
+        e.isIntersecting ? e.target.play().catch(() => {}) : e.target.pause();
+      }), { threshold: 0.3 });
+      previews.forEach(v => io.observe(v));
+    }
   </script>
 </body>
 </html>
