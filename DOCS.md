@@ -197,6 +197,8 @@ def squircle(w, h, r, s=0.6, x0=0, y0=0):
 
 iPhone 16 Pro Max: screen 440 x 956pt, display corner 62, bezel 11 (body path: 462 x 978, corner 73).
 
+**Known risk: black flash in Chrome.** On quietsurface.app (fixed 2026-10-13), Chrome blanked the phone screen to black for the length of each fade, because the screen was clipped by a squircle `mask`. This frame uses the same mask. If a page ever fades the phone, or swaps what's inside it (poster to video counts), rebuild it the way the Quiet Surface landing page now does: no mask on the screen (a plain `border-radius` + `overflow: hidden`, sized just inside the squircle hole, about 15% of the screen width); one static `::after` on `.iphone` that draws the shadow, the bezel (body path with the screen squircle as an `evenodd` hole, drawn once only) and a faint rim; no `will-change` inside the frame. Check at Retina density with headless Chrome at 2x (`--force-device-scale-factor=2`), not in a preview pane. Reference: `Mer So/quiet-surface/design/site/quiet-surface-landing-snap.html`, the `.sc-stage::after` and `.sc-screen` rules (commit 8a27b8a).
+
 ## Adding a New Page
 1. Create `pagename.html` in root
 2. Link `styles.css` and `main.js` in the `<head>` / before `</body>`
