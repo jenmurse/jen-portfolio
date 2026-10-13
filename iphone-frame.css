@@ -1,0 +1,58 @@
+/* ── iPhone frame ── a phone around a screen recording or a hand-built screen.
+   From the Quiet Surface landing page (2026-10-13), redrawn to iPhone 16 Pro
+   Max geometry so it fits the Playground's 1320 x 2868 recordings: a 440 x 956pt
+   screen, a 62pt display corner, an 11pt bezel, the 126 x 37pt Dynamic Island.
+
+   Why paths: Apple's corners are continuous (a squircle), not circular. A
+   border-radius at a phone's radius is a circular arc and reads as blobby.
+   The screen and body are figma-squircle paths (smoothing 0.6, generator in
+   DOCS.md), used as an aspect-locked mask and background, so the frame scales
+   to any width with no script and stays exact. The body, rim and shadow are one
+   static image: nothing in the frame repaints while a video plays.
+
+   Use:
+     <figure class="iphone">
+       <div class="iphone__screen"><video …></video></div>
+     </figure>
+   Size it by width (`width: 300px`, or inside .moment it fills the column).
+   Simulator recordings carry the status bar and home indicator but not the
+   island, so the island is drawn by default; `.iphone--no-island` turns it off.
+   For a hand-built screen, add <div class="iphone__status"><span>9:41</span></div>
+   and <div class="iphone__home"></div> inside .iphone__screen. */
+.iphone {
+  position: relative; width: 100%; aspect-ratio: 462 / 978;
+  margin: 0;
+}
+.iphone::before {
+  content: ''; position: absolute; pointer-events: none;
+  left: -17.316%; top: -5.1125%; width: 134.632%; height: 114.3149%;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-80 -50 622 1118' preserveAspectRatio='none'%3E%3Cdefs%3E%3Cfilter id='s' x='-40%' y='-40%' width='180%' height='180%'%3E%3CfeGaussianBlur stdDeviation='30'/%3E%3C/filter%3E%3C/defs%3E%3Cpath d='M345.2 0c40.88 0 61.33 0 76.94 7.96a73 73 0 0 1 31.9 31.9c7.96 15.62 7.96 36.06 7.96 76.94L462 861.2c0 40.88 0 61.33 -7.96 76.94a73 73 0 0 1 -31.9 31.9c-15.62 7.96 -36.06 7.96 -76.94 7.96L116.8 978c-40.88 0 -61.33 0 -76.94 -7.96a73 73 0 0 1 -31.9 -31.9c-7.96 -15.62 -7.96 -36.06 -7.96 -76.94L0 116.8c0 -40.88 0 -61.33 7.96 -76.94a73 73 0 0 1 31.9 -31.9c15.62 -7.96 36.06 -7.96 76.94 -7.96Z' transform='translate(0 38)' fill='%23000' opacity='.45' filter='url(%23s)'/%3E%3Cpath d='M345.2 0c40.88 0 61.33 0 76.94 7.96a73 73 0 0 1 31.9 31.9c7.96 15.62 7.96 36.06 7.96 76.94L462 861.2c0 40.88 0 61.33 -7.96 76.94a73 73 0 0 1 -31.9 31.9c-15.62 7.96 -36.06 7.96 -76.94 7.96L116.8 978c-40.88 0 -61.33 0 -76.94 -7.96a73 73 0 0 1 -31.9 -31.9c-7.96 -15.62 -7.96 -36.06 -7.96 -76.94L0 116.8c0 -40.88 0 -61.33 7.96 -76.94a73 73 0 0 1 31.9 -31.9c15.62 -7.96 36.06 -7.96 76.94 -7.96Z' fill='%230B0B0C'/%3E%3Cpath d='M345.2 0c40.88 0 61.33 0 76.94 7.96a73 73 0 0 1 31.9 31.9c7.96 15.62 7.96 36.06 7.96 76.94L462 861.2c0 40.88 0 61.33 -7.96 76.94a73 73 0 0 1 -31.9 31.9c-15.62 7.96 -36.06 7.96 -76.94 7.96L116.8 978c-40.88 0 -61.33 0 -76.94 -7.96a73 73 0 0 1 -31.9 -31.9c-7.96 -15.62 -7.96 -36.06 -7.96 -76.94L0 116.8c0 -40.88 0 -61.33 7.96 -76.94a73 73 0 0 1 31.9 -31.9c15.62 -7.96 36.06 -7.96 76.94 -7.96Z' fill='none' stroke='%23fff' stroke-opacity='.14' stroke-width='1.8'/%3E%3C/svg%3E") no-repeat; background-size: 100% 100%;
+}
+.iphone__screen {
+  position: absolute; left: 2.381%; top: 1.1247%; width: 95.2381%; height: 97.7505%;
+  overflow: hidden; background: #000; container-type: inline-size;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 440 956' preserveAspectRatio='none'%3E%3Cpath d='M340.8 0c34.72 0 52.08 0 65.35 6.76a62 62 0 0 1 27.09 27.09c6.76 13.26 6.76 30.62 6.76 65.35L440 856.8c0 34.72 0 52.08 -6.76 65.35a62 62 0 0 1 -27.09 27.09c-13.26 6.76 -30.62 6.76 -65.35 6.76L99.2 956c-34.72 0 -52.08 0 -65.35 -6.76a62 62 0 0 1 -27.09 -27.09c-6.76 -13.26 -6.76 -30.62 -6.76 -65.35L0 99.2c0 -34.72 0 -52.08 6.76 -65.35a62 62 0 0 1 27.09 -27.09c13.26 -6.76 30.62 -6.76 65.35 -6.76Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 440 956' preserveAspectRatio='none'%3E%3Cpath d='M340.8 0c34.72 0 52.08 0 65.35 6.76a62 62 0 0 1 27.09 27.09c6.76 13.26 6.76 30.62 6.76 65.35L440 856.8c0 34.72 0 52.08 -6.76 65.35a62 62 0 0 1 -27.09 27.09c-13.26 6.76 -30.62 6.76 -65.35 6.76L99.2 956c-34.72 0 -52.08 0 -65.35 -6.76a62 62 0 0 1 -27.09 -27.09c-6.76 -13.26 -6.76 -30.62 -6.76 -65.35L0 99.2c0 -34.72 0 -52.08 6.76 -65.35a62 62 0 0 1 27.09 -27.09c13.26 -6.76 30.62 -6.76 65.35 -6.76Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+}
+/* the island: 126 x 37pt, 11pt below the top of the screen */
+.iphone__screen::after {
+  content: ''; position: absolute; left: 50%; top: 1.1506%; width: 28.6364%; height: 3.8703%;
+  transform: translateX(-50%); border-radius: 999px; background: #000; pointer-events: none;
+}
+.iphone--no-island .iphone__screen::after { display: none; }
+/* whatever is inside fills the screen; undoes the Playground's frame styling */
+.iphone__screen > img, .iphone__screen > video {
+  display: block; width: 100%; height: 100%; object-fit: cover; object-position: top;
+  aspect-ratio: auto; border: 0; border-radius: 0; background: #000;
+}
+/* optional chrome for hand-built screens, in points of the 440pt screen (1pt = 100cqw / 440) */
+.iphone__status {
+  position: absolute; top: 0; left: 0; right: 0; height: calc(100cqw * 54 / 440); z-index: 1;
+  display: flex; align-items: center; padding: 0 calc(100cqw * 30 / 440) 0 calc(100cqw * 52 / 440);
+  font: 600 calc(100cqw * 17 / 440) / 1 -apple-system, 'SF Pro Text', system-ui, sans-serif; letter-spacing: -0.01em;
+  color: var(--iphone-ink, #1C1C1E); pointer-events: none;
+}
+.iphone__home {
+  position: absolute; left: 50%; bottom: calc(100cqw * 8 / 440); width: calc(100cqw * 140 / 440); height: calc(100cqw * 5 / 440);
+  transform: translateX(-50%); border-radius: 999px; background: var(--iphone-ink, #1C1C1E); z-index: 1; pointer-events: none;
+}

@@ -154,6 +154,48 @@ Load `styles.css` then `playground.css`. Header: `.hero-left` holds the wordmark
 the title is an `h1.hero-primary` with a `p.hero-secondary.subtitle` under it. Rows of label + text use `.pg-row` so each label
 lines up with the top of its text. The 16 Cobo clips are about 110 MB in the repo; Git LFS is the next step if more video lands.
 
+### iPhone frame (`iphone-frame.css`)
+A phone around a screen recording or a hand-built screen: bezel, Apple's continuous (squircle) corners, the Dynamic Island, and optional status bar and home indicator. Drawn to iPhone 16 Pro Max geometry so it fits the 1320 x 2868 recordings (Uniform's). Not used by any page yet. Load it after `playground.css` and wrap the existing media:
+
+```html
+<figure class="iphone"><div class="iphone__screen"><video …></video></div></figure>
+```
+
+It sizes by width (inside `.moment` it fills the column; `--frame-radius` is no longer needed there). `.iphone--no-island` drops the island for media that already shows one. A local demo is `mockups/iphone-frame.html` (ignored by git). It came from the Quiet Surface landing page, 2026-10-13.
+
+The corners are SVG paths, not `border-radius`: a circular arc at a phone's radius reads as blobby. To redraw for another device (different screen size, radius or bezel), generate new paths with this (figma-squircle, smoothing 0.6) and replace the `mask` and `background` data URIs:
+
+```python
+import math, sys
+def f(x): return f"{x:.2f}".rstrip('0').rstrip('.')
+def squircle(w, h, r, s=0.6, x0=0, y0=0):
+    m = min(w, h) / 2
+    r = min(r, m)
+    p = min((1 + s) * r, m)
+    s = min(s, p / r - 1)
+    arc_m = 90 * (1 - s)
+    arc = math.sin(math.radians(arc_m / 2)) * r * math.sqrt(2)
+    alpha = (90 - arc_m) / 2
+    p34 = r * math.tan(math.radians(alpha / 2))
+    beta = 45 * s
+    c = p34 * math.cos(math.radians(beta))
+    d = c * math.tan(math.radians(beta))
+    b = (p - arc - c - d) / 3
+    a = 2 * b
+    A, B, C, D, R, L = map(f, (a, a + b, a + b + c, d, r, arc))
+    bc = f(b + c)
+    return (f"M{f(x0 + w - p)} {f(y0)}"
+            f"c{A} 0 {B} 0 {C} {D}a{R} {R} 0 0 1 {L} {L}c{D} {f(c)} {D} {bc} {D} {C}"
+            f"L{f(x0 + w)} {f(y0 + h - p)}"
+            f"c0 {A} 0 {B} -{D} {C}a{R} {R} 0 0 1 -{L} {L}c-{f(c)} {D} -{bc} {D} -{C} {D}"
+            f"L{f(x0 + p)} {f(y0 + h)}"
+            f"c-{A} 0 -{B} 0 -{C} -{D}a{R} {R} 0 0 1 -{L} -{L}c-{D} -{f(c)} -{D} -{bc} -{D} -{C}"
+            f"L{f(x0)} {f(y0 + p)}"
+            f"c0 -{A} 0 -{B} {D} -{C}a{R} {R} 0 0 1 {L} -{L}c{f(c)} -{D} {bc} -{D} {C} -{D}Z")
+```
+
+iPhone 16 Pro Max: screen 440 x 956pt, display corner 62, bezel 11 (body path: 462 x 978, corner 73).
+
 ## Adding a New Page
 1. Create `pagename.html` in root
 2. Link `styles.css` and `main.js` in the `<head>` / before `</body>`
