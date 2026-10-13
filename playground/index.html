@@ -17,11 +17,21 @@
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/playground.css">
   <style>
-    /* the projects start where the title does: past the label column and its gap */
-    .projects { margin: 0 0 0 calc(var(--col-left) + var(--col-gap)); }
-    .projects a { display: block; }
+    /* the projects start where the title does: past the label column and its gap.
+       One project per row, the thumbnail beside its name and line, like the moments on a project page */
+    .projects { margin: 0 0 0 calc(var(--col-left) + var(--col-gap)); grid-template-columns: 1fr; gap: var(--space-56) 0; }
+    .projects a { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: var(--space-8) var(--space-56); }
+    .projects .frame { grid-row: 1 / span 2; }
+    .projects .caption { align-self: end; margin-top: 0; }
+    .projects .caption-line { align-self: start; max-width: 24ch; }
     .projects a:hover .t, .projects a:hover .n { opacity: 0.6; }
-    @media (max-width: 680px) { .projects { margin-left: 0; } }
+    @media (max-width: 1080px) {
+      .projects a { grid-template-columns: 1fr; gap: 0; }
+      .projects .frame { grid-row: auto; }
+      .projects .caption { margin-top: var(--space-12); }
+      .projects .caption-line { max-width: none; }
+    }
+    @media (max-width: 680px) { .projects { margin-left: 0; gap: var(--space-40) 0; } }
   </style>
 </head>
 <body>
@@ -38,28 +48,37 @@
       <div class="hero-right">
         <div class="hero-title">
           <h1 class="hero-primary">Playground</h1>
-          <p class="hero-secondary">Experiments and side projects to learn new mediums and tools.</p>
+          <p class="hero-secondary">Experiments and side projects to learn new mediums and tools</p>
         </div>
       </div>
     </header>
 
     <ol class="media-grid projects" aria-label="Projects">
       <li class="project">
-        <a href="/playground/cobo-visuals/">
-          <div class="frame">
-            <video src="/playground/cobo-visuals/12.mp4" poster="/playground/cobo-visuals/12.jpg" muted loop playsinline preload="none" aria-hidden="true"></video>
-          </div>
-          <div class="caption"><span class="n">01</span><span class="t">Cobo Visuals</span></div>
-          <p class="caption-line">Two hours of generative visuals for James Cobo's DJ set</p>
-        </a>
-      </li>
-      <li class="project">
         <a href="/playground/good-measure/">
           <div class="frame">
             <img src="/playground/good-measure/tile.jpg" alt="" loading="lazy">
           </div>
-          <div class="caption"><span class="n">02</span><span class="t">Good Measure</span></div>
+          <div class="caption"><span class="n">01</span><span class="t">Good Measure</span></div>
           <p class="caption-line">A nutrition tracker and meal planner for people who cook</p>
+        </a>
+      </li>
+      <li class="project">
+        <a href="/playground/uniform/">
+          <div class="frame">
+            <img src="/playground/uniform/tile.jpg" alt="" loading="lazy">
+          </div>
+          <div class="caption"><span class="n">02</span><span class="t">Uniform</span></div>
+          <p class="caption-line">A closet app for wearing what you own and buying what you'll wear</p>
+        </a>
+      </li>
+      <li class="project">
+        <a href="/playground/cobo-visuals/">
+          <div class="frame">
+            <video src="/playground/cobo-visuals/12.mp4" poster="/playground/cobo-visuals/12.jpg" muted loop playsinline preload="none" aria-hidden="true"></video>
+          </div>
+          <div class="caption"><span class="n">03</span><span class="t">Cobo Visuals</span></div>
+          <p class="caption-line">Two hours of generative visuals for James Cobo's DJ set</p>
         </a>
       </li>
     </ol>

@@ -5,6 +5,10 @@
 /* no grey text in the Playground: secondary text runs in the main text colour */
 :root { --sub: var(--text); }
 
+/* body copy on a project page runs a step below the homepage subhead: long prose at subhead size reads heavy */
+:root { --fs-prose: calc(0.9rem * var(--s-scale)); }
+.prose p, .hero-secondary { font-size: var(--fs-prose); }   /* the subhead under a page title runs at the same size as the copy */
+
 /* the shape of every frame; a page whose media is shot at another ratio sets it once (16 / 10 for app screens) */
 :root { --frame-ratio: 16 / 9; }
 
@@ -50,7 +54,7 @@ footer { margin-top: auto; padding-top: var(--space-80); }
   list-style: none;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--space-40) var(--space-20);
+  gap: var(--space-56) var(--space-40);
   margin-top: var(--space-28);
 }
 .media-grid figure { margin: 0; }
@@ -60,8 +64,8 @@ footer { margin-top: auto; padding-top: var(--space-80); }
   display: block;
   object-fit: cover;
   background: var(--media-bg);
-  border: 1px solid var(--hairline);   /* so light screens keep their edge on the page */
-  background-clip: padding-box;        /* keep the black backing out from under the see-through hairline */
+  border: 1px solid var(--hairline);   /* transparent on stone; kept so a frame can take an edge again from one token */
+  background-clip: padding-box;        /* keep the black backing out from under the border */
   overflow: hidden;
 }
 .frame img, .frame video { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; border: 0; }
@@ -73,6 +77,31 @@ footer { margin-top: auto; padding-top: var(--space-80); }
 
 /* a single wide piece after a section: same frame, same gap above it */
 .media-wide { margin: var(--space-28) 0 0; }
+
+/* ── MOMENTS ── app pages: one moment per row, the screen beside its text, in the prose column.
+   A phone screen sits at a fixed width; a wide screen (.wide) takes the larger share of the row */
+.moments {
+  list-style: none;
+  display: flex; flex-direction: column; gap: var(--space-80);
+  margin: var(--space-56) 0 0 calc(var(--col-left) + var(--col-gap));
+}
+.moment { display: grid; grid-template-columns: var(--moment-media, 300px) minmax(0, 1fr); gap: 0 var(--space-56); align-items: center; }
+.moments.wide .moment { --moment-media: minmax(0, 3fr); grid-template-columns: var(--moment-media) minmax(0, 2fr); }
+.moment figure { margin: 0; }
+.moment img, .moment video {
+  width: 100%; aspect-ratio: var(--frame-ratio); display: block; object-fit: cover;
+  background: var(--media-bg); border: 1px solid var(--hairline); background-clip: padding-box;
+  border-radius: var(--frame-radius, 0);   /* a phone page sets this to the screen's own corner */
+}
+.moment-text { display: flex; flex-direction: column; gap: var(--space-8); max-width: 24ch; }
+.moment-text h3 { display: flex; align-items: baseline; gap: var(--space-12); font-size: var(--fs-list); font-weight: var(--list-weight); }
+/* the note beside a screen sits a step below the prose: it's a caption, not a paragraph */
+.moment-text p { font-size: var(--fs-list); font-weight: var(--s-weight); line-height: var(--s-lh); text-wrap: pretty; }
+@media (max-width: 1080px) {
+  .moment, .moments.wide .moment { grid-template-columns: 1fr; gap: var(--space-20) 0; }
+  .moments:not(.wide) .moment figure { width: min(100%, 300px); }
+  .moment-text { max-width: var(--measure); }
+}
 
 /* ── LIGHTBOX ── a piece grows out of its place on the page to fill the window, with its caption beneath it;
    Escape, the × or a click outside sends it back */
@@ -91,6 +120,7 @@ footer { margin-top: auto; padding-top: var(--space-80); }
 .lightbox .stage > * {
   display: block; width: 100%; aspect-ratio: var(--frame-ratio); object-fit: cover;
   border: 1px solid var(--hairline); background: var(--media-bg); background-clip: padding-box;
+  border-radius: var(--frame-radius, 0);
   transform-origin: top left; will-change: transform;
 }
 .lightbox .caption { margin-top: var(--space-12); }
@@ -108,5 +138,9 @@ footer { margin-top: auto; padding-top: var(--space-80); }
 @media (max-width: 680px) {
   .section { grid-template-columns: 1fr; gap: var(--space-20) 0; margin-top: var(--space-56); }
   .meta { grid-template-columns: 1fr 1fr; gap: var(--space-20); margin-top: var(--space-40); }
+  :root { --fs-prose: calc(0.9rem * var(--s-scale) * 0.85); }
   .media-grid { grid-template-columns: 1fr; gap: var(--space-40) 0; }
+  .moments { margin-left: 0; gap: var(--space-56); margin-top: var(--space-40); }
+  .moment { grid-template-columns: 1fr; gap: var(--space-20) 0; }
+  .moment figure { max-width: var(--moment-phone-max, 100%); }
 }

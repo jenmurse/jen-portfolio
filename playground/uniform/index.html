@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Uniform — Jen Murse</title>
+  <meta name="description" content="An iPhone app that checks a piece against your closet and the looks you save, before you buy it.">
+  <meta property="og:title" content="Uniform — Jen Murse">
+  <meta property="og:description" content="An iPhone app that checks a piece against your closet and the looks you save, before you buy it.">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="https://jenmurse.com/playground/uniform/tile.jpg">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,700&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/playground.css">
+  <style>
+    /* phone screens are shot at 1320 × 2868; on a phone they stay narrower than the column so a screen fits the window.
+       The frame takes the iPhone screen's own corner (measured from the simulator's display mask), so the rounded
+       corners the clips show mid-transition sit inside a rounded screen, not a square box */
+    :root { --frame-ratio: 1320 / 2868; --moment-phone-max: 260px; --frame-radius: 13.6% / 6.3%; }
+
+    /* the header carries the facts, and the first section supplies the space below it */
+    .cs-title { margin-bottom: 0; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .moments video { cursor: pointer; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="cursor" aria-hidden="true"></div>
+
+  <div class="page">
+
+    <header class="hero-grid cs-title">
+      <div class="hero-left">
+        <a href="/" class="wordmark" aria-label="Jen Murse — home">Jen Murse</a>
+        <a href="/playground/" class="crumb">Playground</a>
+      </div>
+      <div class="hero-right">
+        <div class="hero-title">
+          <h1 class="hero-primary">Uniform</h1>
+          <p class="hero-secondary">A closet app for wearing what you own and buying what you'll wear</p>
+        </div>
+        <dl class="meta">
+          <div><dt class="list-label">For</dt><dd>Myself</dd></div>
+          <div><dt class="list-label">Role</dt><dd>Design and build</dd></div>
+          <div><dt class="list-label">Development</dt><dd>One-shot with iterations</dd></div>
+          <div><dt class="list-label">Medium</dt><dd>iOS app</dd></div>
+        </dl>
+      </div>
+    </header>
+
+
+    <section class="section" aria-labelledby="h-why">
+      <h2 class="list-label" id="h-why">Why</h2>
+      <div class="prose">
+        <p>I save a lot of outfit inspiration, and my closet never quite catches up to it. The looks I save drift one way and the clothes I buy drift another, and the result is a closet full of things that felt right in the store and never get worn.</p>
+        <p>Closet apps catalogue what you own. Inspiration apps collect what you like. Shopping apps want you to buy more. None of them meets you at the moment that matters, which is right before you buy. Uniform is built for that moment, and its promise runs the other way from a shopping app: stop buying clothes you'll never wear.</p>
+      </div>
+    </section>
+
+
+    <section class="section" aria-labelledby="h-how">
+      <h2 class="list-label" id="h-how">How it works</h2>
+      <div class="prose">
+        <p>Build the closet, save what inspires you, and check a piece before you buy it. The app, from the first photo to the verdict.</p>
+      </div>
+    </section>
+
+    <ol class="moments" aria-label="How it works, in order">
+      <li class="moment"><figure><video data-src="/playground/uniform/add.mp4" poster="/playground/uniform/add.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="A shop photo of palm-print trousers becomes a clean cutout, filed as wide-leg trousers with its colours"></video></figure><div class="moment-text"><h3><span class="n">01</span>Add a piece</h3><p>One photo of something you own, even a quick one on the bed. The background comes off and the type and colours fill themselves in, so the closet builds as you go.</p></div></li>
+      <li class="moment"><figure><video data-src="/playground/uniform/inspo.mp4" poster="/playground/uniform/inspo.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="Saving an outfit photo, then opening it to see the trousers and jacket found in it"></video></figure><div class="moment-text"><h3><span class="n">02</span>Save a look</h3><p>Inspiration comes in from wherever you save it. Each look is broken into the pieces in it, so the app knows the wide-leg trousers and the jacket, not just a photo.</p></div></li>
+      <li class="moment"><figure><img src="/playground/uniform/missing.jpg" alt="What's missing: black tank tops run through five saved looks and the closet has none, with those looks shown beside it" loading="lazy"></figure><div class="moment-text"><h3><span class="n">03</span>What's missing</h3><p>Across everything you save, the pieces that keep coming back that you don't own, or own too few of. Every gap shows the looks behind it.</p></div></li>
+      <li class="moment"><figure><video data-src="/playground/uniform/dress.mp4" poster="/playground/uniform/dress.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="From a saved look, outfits built only from clothes already owned"></video></figure><div class="moment-text"><h3><span class="n">04</span>Dress from a look</h3><p>Pick a saved look and get outfits built only from clothes you already own, matched to its palette.</p></div></li>
+      <li class="moment"><figure><video data-src="/playground/uniform/fitting.mp4" poster="/playground/uniform/fitting.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="The fitting room: black trousers get a verdict, you own one close to this but it runs through eight saved looks, then the closest pieces owned and what to wear it with"></video></figure><div class="moment-text"><h3><span class="n">05</span>The fitting room</h3><p>Before you buy something, photograph it or paste its link. You get a verdict, the saved looks it's reaching toward, the closest things you own, and what you'd wear it with.</p></div></li>
+      <li class="moment"><figure><img src="/playground/uniform/letting-go.jpg" alt="Consider letting go: the pieces that sit furthest from the saved looks, each with its taste fit" loading="lazy"></figure><div class="moment-text"><h3><span class="n">06</span>Consider letting go</h3><p>The other half of the promise: the pieces that sit furthest from the taste you keep saving, and the ones that never make it into an outfit.</p></div></li>
+    </ol>
+
+
+    <section class="section" aria-labelledby="h-decisions">
+      <h2 class="list-label" id="h-decisions">Decisions</h2>
+      <div class="prose">
+        <p>Your taste, not the app's. Every verdict is measured against your own saved looks and closet, not a stylist's idea of good.</p>
+        <p>Never ask for the whole closet. One photo does the work and pieces arrive as you go, because cataloguing is where closet apps lose people.</p>
+        <p>The verdict counts what you own. Owning one black sweater isn't a reason not to buy a second if they run through a third of the looks you save. Owning five is.</p>
+        <p>Two worlds you can tell apart. What you own always appears as a cutout on pale grey, and what inspires you always appears as a full photograph.</p>
+      </div>
+    </section>
+
+
+    <section class="section" aria-labelledby="h-made">
+      <h2 class="list-label" id="h-made">How it was made</h2>
+      <div class="prose">
+        <p>I designed and built it with Claude Code as a one-shot, to see how well Fable could execute my detailed vision. I then refined it against my own closet and the looks I'd saved.</p>
+        <p>Everything runs on the phone. Small image models cut each piece out, name it and read its colours, then compare it with your closet and your saved looks, so nothing leaves the device and there's no account.</p>
+      </div>
+    </section>
+
+    <dialog class="lightbox" id="lightbox" aria-label="Enlarged view">
+      <div class="veil" id="lightbox-veil"></div>
+      <figure class="piece" id="lightbox-piece">
+        <div class="stage" id="lightbox-stage"></div>
+        <figcaption class="caption"><span class="t" id="lightbox-caption"></span></figcaption>
+      </figure>
+      <button type="button" class="close" id="lightbox-close" aria-label="Close"></button>
+    </dialog>
+
+    <footer>
+      <span>© 2026 Jen Murse</span>
+    </footer>
+
+  </div>
+
+  <script src="/main.js"></script>
+  <script>
+    // Each clip loads and plays only while it is on screen.
+    // With reduced motion nothing plays by itself: click a clip, or focus it and press Enter or Space.
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const clips = document.querySelectorAll('.moments video');
+    const load = v => { if (!v.src) v.src = v.dataset.src; };
+    if (!still) {
+      const io = new IntersectionObserver(es => es.forEach(e => {
+        const v = e.target;
+        if (e.isIntersecting) { load(v); v.play().catch(() => {}); } else v.pause();
+      }), { threshold: 0.3 });
+      clips.forEach(v => io.observe(v));
+    }
+    // Every piece opens the lightbox, so stills and clips both grow the cursor dot.
+    document.querySelectorAll('.moments img, .moments video').forEach(m => {
+      m.addEventListener('mouseenter', () => document.getElementById('cursor').className = 'on-link');
+      m.addEventListener('mouseleave', () => document.getElementById('cursor').className = '');
+    });
+
+    // The lightbox: click a piece, or focus it and press Enter or Space, and it grows out of its place on the page to
+    // fill the window; closing sends it back. A clip carries on from where it was. Reduced motion swaps the move for a fade.
+    (() => {
+      const box = document.getElementById('lightbox'), stage = document.getElementById('lightbox-stage');
+      const veil = document.getElementById('lightbox-veil'), cap = document.getElementById('lightbox-caption');
+      const btn = document.getElementById('lightbox-close');
+      const ease = 'cubic-bezier(0.2, 0, 0, 1)';
+      let from = null, big = null, busy = false;
+
+      // the transform that puts the large piece exactly over the small one
+      const fromThumb = () => {
+        const a = from.getBoundingClientRect(), b = big.getBoundingClientRect();
+        return `translate(${a.left - b.left}px, ${a.top - b.top}px) scale(${a.width / b.width}, ${a.height / b.height})`;
+      };
+      const fade = (el, on, ms, delay = 0) => el.animate([{ opacity: on ? 0 : 1 }, { opacity: on ? 1 : 0 }], { duration: ms, delay, easing: ease, fill: 'both' });
+
+      const open = m => {
+        if (busy || box.open) return;
+        from = m;
+        if (m.tagName === 'IMG') big = Object.assign(new Image(), { src: m.src, alt: m.alt });
+        else {
+          big = document.createElement('video');
+          Object.assign(big, { src: m.currentSrc || m.dataset.src, poster: m.poster, muted: true, loop: true, playsInline: true });
+          big.setAttribute('aria-label', m.dataset.label);
+          if (still) big.controls = true;
+          else big.addEventListener('loadedmetadata', () => { big.currentTime = m.currentTime || 0; big.play().catch(() => {}); }, { once: true });
+        }
+        stage.replaceChildren(big);
+        cap.textContent = m.closest('li').querySelector('h3').lastChild.textContent;
+        box.showModal();
+        // The dialog sits in the top layer, above the page's cursor dot; carry the dot inside while it is open.
+        const dot = document.getElementById('cursor');
+        dot.className = '';
+        box.appendChild(dot);
+        fade(veil, true, 360);
+        fade(btn, true, 360);
+        fade(cap.parentElement, true, 360, still ? 0 : 160);   // the caption follows a beat behind
+        if (still) fade(big, true, 240);
+        else big.animate([{ transform: fromThumb() }, { transform: 'none' }], { duration: 480, easing: ease });
+      };
+
+      const close = async () => {
+        if (busy || !box.open) return;
+        busy = true;
+        const ms = 380;
+        fade(veil, false, ms); fade(btn, false, ms * 0.6); fade(cap.parentElement, false, ms * 0.5);
+        await (still ? fade(big, false, 200) : big.animate([{ transform: 'none' }, { transform: fromThumb() }], { duration: ms, easing: ease, fill: 'forwards' })).finished;
+        box.close();
+        busy = false;
+      };
+
+      box.addEventListener('cancel', e => { e.preventDefault(); close(); });   // Escape
+      box.addEventListener('close', () => { const dot = document.getElementById('cursor'); dot.className = ''; document.body.prepend(dot); stage.replaceChildren(); [veil, btn, cap.parentElement].forEach(el => el.getAnimations().forEach(a => a.cancel())); if (from) from.focus({ preventScroll: true }); });
+      veil.addEventListener('click', close);
+      btn.addEventListener('click', close);
+      document.querySelectorAll('.moments img, .moments video').forEach(m => {
+        m.dataset.label = m.alt || m.getAttribute('aria-label');
+        m.classList.add('zoomable');
+        m.tabIndex = 0;
+        m.setAttribute('role', 'button');
+        m.setAttribute('aria-haspopup', 'dialog');
+        m.setAttribute('aria-label', 'Enlarge: ' + m.dataset.label);
+        m.addEventListener('click', () => open(m));
+        m.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(m); } });
+      });
+    })();
+  </script>
+</body>
+</html>

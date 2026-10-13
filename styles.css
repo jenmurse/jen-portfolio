@@ -26,12 +26,12 @@
 
 /* ── THEME ───────────────────────────────────────────── */
 :root {
-  --bg:     #fdf8f5;
+  --bg:     #f4f4f2;   /* stone: the same neutral as mersostudio.com */
   --text:   #111111;
-  --accent: #ff4f00;
+  --accent: #2961F6;   /* the Mer So blue: one accent across both sites */
   --sub:    rgba(17,17,17,0.4);
   --border: rgba(17,17,17,0.12);
-  --hairline: rgba(17,17,17,0.06);   /* fainter than --border: the edge around media frames */
+  --hairline: transparent;   /* media frames carry no outline: the screens hold their own edge on stone */
   --media-bg: #000;
 
   /* spacing: one scale for every page, each step about 1.4× the last. Use these, never a loose px value */
