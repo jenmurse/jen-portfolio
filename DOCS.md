@@ -17,7 +17,7 @@ Single-page portfolio site. Text-led, no CMS. Hosted on Vercel, auto-deploys fro
 ├── README.md               # Public-facing: what this is, stack, how to run
 ├── styles.css              # All global styles (shared across pages)
 ├── main.js                 # Cursor + video controls (shared across pages)
-├── favicon.svg             # Orange circle
+├── favicon.svg             # Blue circle (the Mer So blue)
 ├── OG_image_jen_murse.png  # 1200×630 social share image
 ├── jen-sizzle-2026.mp4     # Sizzle reel (1920×1080, 16:9, ~1min, silent loop)
 ├── playground.css          # Playground theme: black background, breadcrumb, footer at the foot of short pages
@@ -39,12 +39,13 @@ Single-page portfolio site. Text-led, no CMS. Hosted on Vercel, auto-deploys fro
 ### Colors
 | Token | Value | Usage |
 |---|---|---|
-| `--bg` | `#fdf8f5` | Page background (blush cream, hue leaned toward the sizzle reel's red) |
+| `--bg` | `#f4f4f2` | Page background (stone, shared with mersostudio.com) |
 | `--text` | `#111111` | Body text, wordmark |
-| `--accent` | `#ff4f00` | Labels, numbers, arrows, cursor hover |
+| `--accent` | `#2961F6` | Labels, numbers, arrows, cursor hover (the Mer So blue, shared with mersostudio.com) |
 | `--sub` | `rgba(17,17,17,0.4)` | Dimmed/unlinked list items (Playground sets it to `--text`: no grey text there) |
 | `--media-bg` | `#000` | Behind videos and canvases while they load |
 | `--border` | `rgba(17,17,17,0.12)` | Dividers |
+| `--hairline` | `transparent` | Edge around media frames; off on stone, kept as one token to turn back on |
 
 ### Typography
 All type is controlled via CSS custom properties on `html {}`.
