@@ -17,22 +17,92 @@
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/playground.css">
   <style>
-    /* the projects take the title's nine columns, one per row: the thumbnail on the first five, its name and line on the last four */
-    .projects { grid-template-columns: var(--grid); gap: var(--space-56) var(--gutter); margin-top: 0; }
-    .projects > li { grid-column: 4 / -1; }
-    .projects a { display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); gap: var(--space-8) var(--gutter); }
-    .projects .frame { grid-column: 1 / 6; grid-row: 1 / span 2; }
-    .projects .caption, .projects .caption-line { grid-column: 6 / -1; }
-    .projects .caption { align-self: end; margin-top: 0; }
-    .projects .caption-line { align-self: start; max-width: 24ch; }
-    .projects a:hover .t, .projects a:hover .n { opacity: 0.6; }
-    @media (max-width: 1080px) {
-      .projects a { grid-template-columns: 1fr; gap: 0; }
-      .projects .frame, .projects .caption, .projects .caption-line { grid-column: 1 / -1; grid-row: auto; }
-      .projects .caption { margin-top: var(--space-12); }
-      .projects .caption-line { max-width: none; }
+    /* A type-led index. Every project is its name in big type, one row each; the smaller experiments follow in
+       smaller type. Point at a name and its live piece comes out and follows the cursor. No boxes on the page itself */
+    .top-nav { margin-bottom: 0; }
+    /* the header steps back: the crumb names the page, the sentence is the headline on the names' left edge, an arrow points into the list */
+    .play-top { display: grid; grid-template-columns: var(--grid); column-gap: var(--gutter); margin-top: var(--space-56); }
+    .play-title { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }   /* for screen readers; the crumb shows it */
+    .play-arrow, .play-intro { grid-row: 1; font-size: calc(clamp(1.9rem, 3.6vw, 3.4rem) * var(--h-scale)); font-weight: var(--h-weight); line-height: 1.05; letter-spacing: -0.03em; }
+    .play-arrow { grid-column: 1 / 3; color: var(--accent); }
+    .play-intro { grid-column: 3 / 11; max-width: 22ch; text-wrap: pretty; }
+
+    /* ── THE LIST ── */
+    .index { list-style: none; margin-top: var(--space-80); }
+    .index-label { margin: var(--space-80) 0 var(--space-12); }
+    .row a { display: grid; grid-template-columns: var(--grid); column-gap: var(--gutter); align-items: baseline; color: inherit;
+      border-top: 1px solid var(--border); padding: var(--space-12) 0 var(--space-20); transition: opacity .3s; }
+    .row:last-child a { border-bottom: 1px solid var(--border); }
+    .row .side { grid-column: 1 / 3; grid-row: 1; display: flex; flex-direction: column; gap: 0; align-self: start; padding-top: var(--space-12); }
+    .row h2 { grid-column: 3 / -1; grid-row: 1; font-size: calc(clamp(3.2rem, 9vw, 8.5rem) * var(--h-scale)); font-weight: var(--h-weight); line-height: 0.95; letter-spacing: -0.045em;
+      transition: transform .5s cubic-bezier(.2,0,0,1); }
+    .row .n { font-family: var(--font-mono); font-size: var(--fs-label); letter-spacing: var(--mono-tracking); color: var(--accent); line-height: 1.6; }   /* the same line as the labels under it, so the three sit evenly */
+    .row .kind { font-family: var(--font-mono); font-size: var(--fs-label); letter-spacing: var(--mono-tracking); text-transform: uppercase; color: var(--sub); line-height: 1.6; }
+    .row.small h2 { font-size: calc(clamp(1.8rem, 4.2vw, 3.8rem) * var(--h-scale)); }
+    /* pointing at one name quiets the rest and nudges it along */
+    .index:hover .row a { opacity: 0.22; }
+    .index:hover .row a:hover, .index .row a:focus-visible { opacity: 1; }
+    .row a:hover h2, .row a:focus-visible h2 { transform: translateX(var(--space-28)); }
+    .row a:focus-visible { outline: none; }
+    .row a:focus-visible h2 { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.12em; }
+
+    /* the piece that follows the cursor: one stage, its content swapped per row */
+    .peek { position: fixed; left: 0; top: 0; z-index: 30; pointer-events: none; opacity: 0; transform: translate(-50%, -50%) scale(0.85) rotate(var(--r, -4deg)); transition: opacity .25s, transform .4s cubic-bezier(.2,0,0,1); }
+    .peek.on { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(var(--r, -4deg)); }
+    .peek > * { display: none; }
+    .peek > .on { display: block; }
+    /* each piece is a small version of what its page opens on */
+    .pk-cobo { width: min(30vw, 440px); background: #0b0b0c; padding: 6px; box-shadow: 0 24px 50px rgba(0,0,0,0.3); position: relative; }
+    .pk-cobo canvas { width: 100%; aspect-ratio: 16 / 9; display: block; }
+    .pk-tag { position: absolute; left: 14px; bottom: 12px; font-family: var(--font-mono); font-size: var(--fs-label); letter-spacing: var(--mono-tracking); text-transform: uppercase; color: #b9a4ff; }
+    .pk-un { position: relative; width: min(24vw, 340px); aspect-ratio: 1 / 0.9; }
+    .pk-un img { position: absolute; transform: translate(-50%, -50%) rotate(var(--t)); filter: drop-shadow(0 10px 14px rgba(0,0,0,0.14)); opacity: 0; }
+    .pk-un.on img { animation: drop .5s cubic-bezier(.2,0,0,1) forwards; }
+    .pk-un.on img:nth-child(2) { animation-delay: .08s; } .pk-un.on img:nth-child(3) { animation-delay: .16s; } .pk-un.on img:nth-child(4) { animation-delay: .24s; } .pk-un.on img:nth-child(5) { animation-delay: .32s; }
+    @keyframes drop { from { opacity: 0; transform: translate(-50%, -110%) rotate(calc(var(--t) * -1)); } to { opacity: 1; transform: translate(-50%, -50%) rotate(var(--t)); } }
+    .pk-gm { width: min(24vw, 330px); background: #fff; padding: 18px 20px; box-shadow: 0 24px 50px rgba(0,0,0,0.16); color: #0A0A0A; }
+    .g-k { font-family: var(--font-mono); font-size: var(--fs-label); letter-spacing: var(--mono-tracking); text-transform: uppercase; color: #2F8B33; }
+    .g-t { font-size: calc(var(--fs-list) * 1.2); margin: 2px 0 10px; transition: color .3s; }
+    .g-t.ok { color: #2F8B33; }
+    .g-row { display: grid; grid-template-columns: auto 1fr auto; gap: 8px; align-items: baseline; padding: 6px 0; border-top: 1px solid #E6E6E3; }
+    .g-row b { font-size: 1.9rem; font-weight: var(--h-weight); letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+    .g-row span { font-size: var(--fs-label); color: #6E6E6E; }
+    .st { font-style: normal; font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: var(--mono-tracking); text-transform: uppercase; padding: 2px 7px; border-radius: 99px; transition: background .3s, color .3s; }
+    .st.short { color: #C97A1A; background: #F8E5C8; } .st.ok { color: #2F8B33; background: #D8E8D5; }
+    .row a:hover::before, .row a:focus-visible::before { width: 100%; }
+    /* also tried: a plain list, the year, the name, what it is */
+    .also { display: grid; grid-template-columns: var(--grid); column-gap: var(--gutter); margin-top: var(--space-120); }
+    .also > h2 { grid-column: 1 / 3; }
+    .log { grid-column: 3 / -1; list-style: none; }   /* starts where the big names do */
+    .log li { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); column-gap: var(--gutter); padding: var(--space-12) 0; border-top: 1px solid var(--border); align-items: baseline; }
+    .log li:last-child { border-bottom: 1px solid var(--border); }
+    .log .when { grid-column: 1 / 2; font-family: var(--font-mono); font-size: var(--fs-mono); letter-spacing: var(--mono-tracking); }
+    .log .nm { grid-column: 2 / 5; font-size: var(--fs-list); }
+    .log .what { grid-column: 5 / -1; font-family: var(--font-mono); font-size: var(--fs-label); letter-spacing: var(--mono-tracking); text-transform: uppercase; color: var(--sub); }
+
+
+    .row .inline { display: none; }
+    .row .inline video, .row .inline img { width: 100%; display: block; }
+    @media (hover: none), (max-width: 680px) {
+      .inline-piece.pk-un { width: 100%; } .inline-piece.pk-gm { width: 100%; box-shadow: none; } .inline-piece.pk-cobo { box-shadow: none; }
+      .also { grid-template-columns: 1fr; row-gap: var(--space-20); } .also > h2, .log { grid-column: 1 / -1; }
+      .also { margin-top: var(--space-80); }
+      .log li { grid-template-columns: 1fr auto; row-gap: 4px; } .log .nm { grid-column: 1; grid-row: 1; } .log .when { grid-column: 2; grid-row: 1; color: var(--sub); }
+      .log .nm { font-size: var(--fs-secondary); }
+      .log .what { grid-column: 1 / -1; font-family: inherit; font-size: var(--fs-list); letter-spacing: 0; text-transform: none; line-height: 1.45; }
+      .peek { display: none; }
+      .play-top { grid-template-columns: 1fr; }
+      .play-arrow, .play-intro { grid-column: 1 / -1; grid-row: auto; } .play-intro { margin-top: var(--space-8); max-width: none; }
+      .row a { grid-template-columns: 1fr auto; row-gap: var(--space-8); }
+      .row .side { grid-column: 1 / -1; flex-direction: row; gap: var(--space-12); padding: 0; } .row .side .n { margin-right: auto; }
+      .row h2 { grid-column: 1 / -1; grid-row: 2; }
+      .row h2 { position: relative; z-index: 1; }
+      .row .inline { display: block; grid-column: 1 / -1; width: 100%; margin-top: var(--space-20); }
+      .row[data-peek="un"] .inline { width: 88%; justify-self: center; }
+            .inline-piece.pk-cobo { display: block; width: 100%; }
+      .index:hover .row a { opacity: 1; }
     }
-    @media (max-width: 680px) { .projects { grid-template-columns: 1fr; gap: var(--space-40) 0; } .projects > li { grid-column: 1 / -1; } }
+
   </style>
 </head>
 <body>
@@ -41,48 +111,42 @@
 
   <div class="page">
 
-    <header class="hero-grid">
+    <header class="hero-grid top-nav">
       <div class="hero-left">
         <a href="/" class="wordmark" aria-label="Jen Murse — home">Jen Murse</a>
         <span class="crumb" aria-current="page">Playground</span>
       </div>
-      <div class="hero-right">
-        <div class="hero-title">
-          <h1 class="hero-primary">Playground</h1>
-          <p class="hero-secondary">Experiments and side projects to learn new mediums and tools</p>
-        </div>
-      </div>
     </header>
 
-    <ol class="media-grid projects" aria-label="Projects">
-      <li class="project">
-        <a href="/playground/good-measure/">
-          <div class="frame">
-            <video src="/playground/good-measure/tile.mp4" poster="/playground/good-measure/tile.jpg" muted loop playsinline preload="none" aria-hidden="true"></video>
-          </div>
-          <div class="caption"><span class="n">01</span><span class="t">Good Measure</span></div>
-          <p class="caption-line">A nutrition tracker and meal planner for people who cook</p>
-        </a>
-      </li>
-      <li class="project">
-        <a href="/playground/uniform/">
-          <div class="frame">
-            <img src="/playground/uniform/tile.jpg" alt="" loading="lazy">
-          </div>
-          <div class="caption"><span class="n">02</span><span class="t">Uniform</span></div>
-          <p class="caption-line">A closet app for wearing what you own and buying what you'll wear</p>
-        </a>
-      </li>
-      <li class="project">
-        <a href="/playground/cobo-visuals/">
-          <div class="frame">
-            <video src="/playground/cobo-visuals/12.mp4" poster="/playground/cobo-visuals/12.jpg" muted loop playsinline preload="none" aria-hidden="true"></video>
-          </div>
-          <div class="caption"><span class="n">03</span><span class="t">Cobo Visuals</span></div>
-          <p class="caption-line">Two hours of generative visuals for James Cobo's DJ set</p>
-        </a>
-      </li>
+    <section class="play-top" aria-labelledby="play-title">
+      <h1 class="play-title" id="play-title">Playground</h1>
+      <div class="play-arrow" aria-hidden="true">↘</div>
+      <p class="play-intro">Experiments and side projects to learn new mediums and tools.</p>
+    </section>
+
+    <ol class="index" aria-label="Projects">
+      <li class="row" data-peek="cobo"><a href="/playground/cobo-visuals/">
+        <div class="side"><span class="n">01</span><span class="kind">Real-time shaders</span><span class="kind">2026</span></div><h2>Cobo Visuals</h2>
+        <div class="inline" aria-hidden="true"></div>
+      </a></li>
+      <li class="row" data-peek="un"><a href="/playground/uniform/">
+        <div class="side"><span class="n">02</span><span class="kind">iOS app</span><span class="kind">2026</span></div><h2>Uniform</h2>
+        <div class="inline" aria-hidden="true"><img src="/playground/uniform/tile.jpg" alt=""></div>
+      </a></li>
+      <li class="row" data-peek="gm"><a href="/playground/good-measure/">
+        <div class="side"><span class="n">03</span><span class="kind">Web app</span><span class="kind">2026</span></div><h2>Good Measure</h2>
+        <div class="inline" aria-hidden="true"><video src="/playground/good-measure/tile.mp4" poster="/playground/good-measure/tile.jpg" muted loop playsinline preload="none"></video></div>
+      </a></li>
     </ol>
+
+    <section class="also" aria-labelledby="h-also">
+      <h2 class="list-label" id="h-also">Smaller builds</h2>
+      <ol class="log">
+        <li><span class="when">2026</span><span class="nm">Dieline Tool</span><span class="what">Browser tool · a box’s size in, a cut-ready dieline and a 3D fold out</span></li>
+        <li><span class="when">2026</span><span class="nm">Booth Planner</span><span class="what">iOS app, one-shot · a maker’s fair season, down to the booth plan</span></li>
+        <li><span class="when">2026</span><span class="nm">HQ App</span><span class="what">Local web app · one screen for running my studio</span></li>
+      </ol>
+    </section>
 
     <footer>
       <span>© 2026 Jen Murse</span>
@@ -90,17 +154,125 @@
 
   </div>
 
+  <div class="peek" aria-hidden="true">
+    <div class="pk-cobo" data-k="cobo"><canvas id="pk-cv" width="640" height="360"></canvas><span class="pk-tag" aria-hidden="true">Disco · live</span></div>
+    <div class="pk-un" data-k="un">
+      <img src="/playground/uniform/closet/tops__249a164a596ae007449d9750dd787c61.png" alt="" style="left:30%; top:20%; width:30%; --t:-8deg">
+      <img src="/playground/uniform/closet/bottoms__b8ecf1047ea87c49825beb8abcc9b512.png" alt="" style="left:70%; top:42%; width:24%; --t:6deg">
+      <img src="/playground/uniform/closet/shoes__f3145f012e57be31123b1b321132e3dd.png" alt="" style="left:26%; top:78%; width:26%; --t:-16deg">
+      <img src="/playground/uniform/closet/tops__ccb91492541a70d8291c6ce2595c469e.png" alt="" style="left:58%; top:84%; width:26%; --t:10deg">
+      <img src="/playground/uniform/closet/bottoms__5a1ac27f2dc56a70efdf9a3cf5260c10.png" alt="" style="left:46%; top:50%; width:22%; --t:-3deg">
+    </div>
+    <div class="pk-gm" data-k="gm">
+      <p class="g-k">Planner · Tuesday</p>
+      <p class="g-t">Short on everything</p>
+      <div class="g-row"><b data-a="1490" data-b="1750" data-k="kcal">1,490</b><span>kcal</span><em class="st short">Short 210</em></div>
+      <div class="g-row"><b data-a="58" data-b="89" data-k="p">58</b><span>g protein</span><em class="st short">Short 32 g</em></div>
+      <div class="g-row"><b data-a="21.5" data-b="30" data-k="f">21.5</b><span>g fiber</span><em class="st short">Short 8.5 g</em></div>
+    </div>
+  </div>
+
   <script src="/main.js"></script>
   <script>
-    // a project's preview plays by itself while it is on screen (never with reduced motion: then it rests on its poster)
-    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const previews = document.querySelectorAll('.projects video');
-    if (!still) {
-      const io = new IntersectionObserver(es => es.forEach(e => {
-        e.isIntersecting ? e.target.play().catch(() => {}) : e.target.pause();
-      }), { threshold: 0.3 });
-      previews.forEach(v => io.observe(v));
-    }
+    // Point at a name and its piece comes out and trails the cursor, easing behind it and leaning with the motion.
+    // Focus a name from the keyboard and the piece sits beside it. On touch screens each row shows its piece inline instead
+    (() => {
+      const peek = document.querySelector('.peek'), still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const kids = [...peek.children];
+      let x = innerWidth / 2, y = innerHeight / 2, tx = x, ty = y, live = false;
+      const show = k => {
+        kids.forEach(el => { const on = el.dataset.k === k; el.classList.toggle('on', on); const v = el.querySelector('video'); if (v) on ? v.play().catch(() => {}) : v.pause(); });
+        peek.classList.add('on');
+        document.dispatchEvent(new CustomEvent('peek', { detail: k }));
+      };
+      const hide = () => { document.dispatchEvent(new CustomEvent('peek', { detail: null })); peek.classList.remove('on'); kids.forEach(el => { const v = el.querySelector('video'); if (v) v.pause(); }); };
+      const loop = () => {
+        x += (tx - x) * (still ? 1 : 0.14); y += (ty - y) * (still ? 1 : 0.14);
+        const lean = Math.max(-10, Math.min(10, (tx - x) * 0.08));
+        peek.style.left = x + 'px'; peek.style.top = y + 'px'; peek.style.setProperty('--r', (-3 + lean) + 'deg');
+        if (live) requestAnimationFrame(loop);
+      };
+      document.querySelectorAll('.row').forEach(row => {
+        const a = row.querySelector('a');
+        a.addEventListener('mouseenter', e => { tx = e.clientX + 160; ty = e.clientY; if (!live) { x = tx; y = ty; live = true; requestAnimationFrame(loop); } show(row.dataset.peek); document.getElementById('cursor').className = 'on-link'; });
+        a.addEventListener('mousemove', e => { tx = e.clientX + 160; ty = e.clientY; });
+        a.addEventListener('mouseleave', () => { live = false; hide(); document.getElementById('cursor').className = ''; });
+        a.addEventListener('focus', () => { const r = a.getBoundingClientRect(); x = tx = r.right - 260; y = ty = r.top + r.height / 2; peek.style.left = x + 'px'; peek.style.top = y + 'px'; show(row.dataset.peek); });
+        a.addEventListener('blur', hide);
+        a.addEventListener('click', e => { if (a.getAttribute('href') === '#') e.preventDefault(); });
+      });
+      // on touch, inline clips play while they are on screen
+      if (matchMedia('(hover: none), (max-width: 680px)').matches) {
+        const io = new IntersectionObserver(es => es.forEach(en => { const v = en.target; if (en.isIntersecting) v.play().catch(() => {}); else v.pause(); }), { threshold: 0.4 });
+        document.querySelectorAll('.inline video').forEach(v => { v.preload = 'metadata'; io.observe(v); });
+      }
+    })();
+  </script>
+  <script src="/playground/cobo-visuals/set.js"></script>
+  <script>
+    // Cobo's piece: the five parts of the set, drawn live, one after another while it is out
+    (() => {
+      const SH = window.COBO_SET, cv = document.getElementById('pk-cv'), gl = cv && cv.getContext('webgl'), tag = document.querySelector('.pk-tag');
+      if (!SH || !gl) return;
+      const NAMES = ['Space', 'Organic', 'Rave', 'Salsa', 'Disco'], HOLD = 3.5;
+      const vs = 'attribute vec2 a;varying vec2 isf_FragNormCoord;void main(){isf_FragNormCoord=a*0.5+0.5;gl_Position=vec4(a,0,1);}';
+      const sh = (t, src) => { const o = gl.createShader(t); gl.shaderSource(o, src); gl.compileShader(o); return o; };
+      const vso = sh(gl.VERTEX_SHADER, vs);
+      const P = SH.map(S => { const pr = gl.createProgram(); gl.attachShader(pr, vso); gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, 'precision highp float;varying vec2 isf_FragNormCoord;uniform float TIME;uniform vec2 RENDERSIZE;' + S.decl + S.body));
+        gl.bindAttribLocation(pr, 0, 'a'); gl.linkProgram(pr); return gl.getProgramParameter(pr, gl.LINK_STATUS) ? pr : null; });
+      gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer()); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+      gl.enableVertexAttribArray(0); gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+      let on = false, T = 1500 + Math.random() * 600, last = 0, held = 0, k = Math.floor(Math.random() * SH.length);
+      const next = () => { do { k = (k + 1) % SH.length; } while (!P[k]); held = 0; if (tag) tag.textContent = NAMES[k] + ' · live'; };
+      const draw = () => { const pr = P[k], S = SH[k]; gl.useProgram(pr); gl.viewport(0, 0, cv.width, cv.height);
+        const u = (n, v) => { const l = gl.getUniformLocation(pr, n); if (l) gl.uniform1f(l, v); };
+        u('TIME', T); gl.uniform2f(gl.getUniformLocation(pr, 'RENDERSIZE'), cv.width, cv.height);
+        Object.keys(S.def).forEach(n => u(n, n === 'timeScale' ? 1 : S.def[n])); gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4); };
+      const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const tick = now => { if (!on || still) return; const dt = (now - last) / 1000; last = now; T += dt; held += dt; if (held > HOLD) next(); draw(); requestAnimationFrame(tick); };
+      next(); draw();
+      document.addEventListener('peek', e => { const was = on; on = e.detail === 'cobo'; if (on && !was) { next(); last = performance.now(); draw(); requestAnimationFrame(tick); } });
+    })();
+
+    // Good Measure's piece: the day arrives short, then fixes itself
+    (() => {
+      const card = document.querySelector('.pk-gm'); if (!card) return;
+      const t = card.querySelector('.g-t'), rows = [...card.querySelectorAll('.g-row')];
+      const fmt = (k, x) => k === 'kcal' ? Math.round(x).toLocaleString() : String(Math.round(x * 10) / 10);
+      let timer;
+      const reset = () => { clearTimeout(timer); t.textContent = 'Short on everything'; t.classList.remove('ok');
+        rows.forEach(r => { const b = r.querySelector('b'), st = r.querySelector('.st'); b.textContent = fmt(b.dataset.k, +b.dataset.a); st.className = 'st short'; st.textContent = st.dataset.short || (st.dataset.short = st.textContent); }); };
+      const fix = () => {
+        const t0 = performance.now();
+        const f = now => { const q = Math.min(1, (now - t0) / 700), e = 1 - Math.pow(1 - q, 3);
+          rows.forEach(r => { const b = r.querySelector('b'); b.textContent = fmt(b.dataset.k, +b.dataset.a + (+b.dataset.b - +b.dataset.a) * e); });
+          if (q < 1) requestAnimationFrame(f);
+          else { rows.forEach(r => { const st = r.querySelector('.st'); st.className = 'st ok'; st.textContent = 'On target'; }); t.textContent = 'On target, all three'; t.classList.add('ok'); } };
+        requestAnimationFrame(f);
+      };
+      document.addEventListener('peek', e => { reset(); if (e.detail === 'gm') timer = setTimeout(fix, 650); });
+    })();
+  </script>
+  <script>
+    // On a phone there is no pointing, so Uniform's and Good Measure's rows show their pieces inline: the closet drops in
+    // and the day fixes itself as each scrolls into view. Cobo's live piece moves into its row and plays while it is on screen
+    (() => {
+      if (!matchMedia('(hover: none), (max-width: 680px)').matches) return;
+      const cobo = document.querySelector('.peek .pk-cobo'), slot = document.querySelector('.row[data-peek="cobo"] .inline');
+      if (cobo && slot) { cobo.classList.add('inline-piece'); slot.append(cobo);
+        new IntersectionObserver(es => es.forEach(e => document.dispatchEvent(new CustomEvent('peek', { detail: e.isIntersecting ? 'cobo' : null }))), { threshold: 0.3 }).observe(cobo); }
+      [['un', '.pk-un'], ['gm', '.pk-gm']].forEach(([k, sel]) => {
+        const row = document.querySelector(`.row[data-peek="${k}"] .inline`), src = document.querySelector('.peek ' + sel);
+        if (!row || !src) return;
+        const c = src.cloneNode(true); c.classList.add('inline-piece'); row.replaceChildren(c);
+        new IntersectionObserver(es => es.forEach(e => {
+          if (!e.isIntersecting) return;
+          if (k === 'un') c.classList.add('on');
+          else { const t = c.querySelector('.g-t'), rows = [...c.querySelectorAll('.g-row')];
+            setTimeout(() => { rows.forEach(r => { const b = r.querySelector('b'); b.textContent = b.dataset.k === 'kcal' ? (+b.dataset.b).toLocaleString() : b.dataset.b; const st = r.querySelector('.st'); st.className = 'st ok'; st.textContent = 'On target'; }); t.textContent = 'On target, all three'; t.classList.add('ok'); }, 700); }
+        }), { threshold: 0.6 }).observe(c);
+      });
+    })();
   </script>
 </body>
 </html>
