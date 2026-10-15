@@ -17,68 +17,63 @@
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/playground.css">
   <style>
-    /* the header carries the facts, and the first section supplies the space below it */
-    .cs-title { margin-bottom: 0; }
+    /* the project page as the list's row opened up. The name at the size it had on the index, the facts as the
+       row's small labels, then the piece itself to play with across the whole window, then the story */
+    .top-nav { margin-bottom: 0; }
+    /* ── THE TOP ── one violet band: the name crosses into the picture, the facts sit in the left column,
+       and the controls it was played with run along under the picture */
+    /* the project's colours: the band, its light ink, its accent. The accent also takes over the page's labels below */
+    :root { --band: #0b0b0c; --ink: #f2f2f0; --lav: #b9a4ff; --accent: #6a4fd6; }
+    .band-top { position: relative; width: 100vw; left: 50%; transform: translateX(-50%); margin-top: calc(-1 * var(--space-56)); background: var(--band); color: var(--ink); padding: var(--space-56) 0 var(--space-80); }
+    .bt-in { max-width: 1200px; margin: 0 auto; padding: 0 var(--space-40); display: grid; grid-template-columns: var(--grid); column-gap: var(--gutter); align-items: start; }
+    .bt-nav { grid-column: 1 / -1; margin-bottom: var(--space-80); }
+    .bt-nav .wordmark { color: var(--ink); }
+    .bt-nav .crumb { color: var(--lav); }
+    .bt-nav .crumb::before { color: rgba(242,242,240,0.5); }
+    .bt-name { grid-column: 1 / 10; grid-row: 2; position: relative; z-index: 2; font-size: calc(clamp(3.2rem, 9vw, 8.5rem) * var(--h-scale)); font-weight: var(--h-weight); line-height: 0.92; letter-spacing: -0.045em; }
+    .bt-pic { grid-column: 4 / -1; grid-row: 2 / span 2; margin-top: calc(0.5 * clamp(3.2rem, 9vw, 8.5rem)); }
+    .bt-pic canvas { width: 100%; aspect-ratio: 16 / 9; display: block; background: #000; }
+    .bt-side { grid-column: 1 / 4; grid-row: 3; align-self: end; display: flex; flex-direction: column; gap: var(--space-28); padding-right: var(--space-12); }
+    .bt-side .n { font-family: var(--font-mono); font-size: var(--fs-label); letter-spacing: var(--mono-tracking); color: var(--lav); }
+    .bt-line { font-size: var(--fs-list); line-height: var(--s-lh); text-wrap: pretty; }   /* no one-word last line */
+    .bt-facts { display: flex; flex-direction: column; gap: var(--space-20); border-top: 1px solid rgba(242,242,240,0.2); padding-top: var(--space-20); }
+    .bt-facts dd { margin-top: var(--space-4); }
+    .bt-facts dt { font-family: var(--font-mono); font-size: var(--fs-label); letter-spacing: var(--mono-tracking); text-transform: uppercase; color: var(--lav); }
+    .bt-facts dd { font-size: var(--fs-list); }
+    .bt-inst { grid-column: 4 / -1; grid-row: 4; margin-top: var(--space-12); display: flex; flex-direction: column; gap: var(--space-20); }
+    .bt-row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-28); flex-wrap: wrap; }
+    .mono { font-family: var(--font-mono); font-size: var(--fs-mono); letter-spacing: var(--mono-tracking); text-transform: uppercase; }
+    .parts { display: flex; gap: var(--space-4); flex-wrap: wrap; }
+    .parts button, .hit { font: inherit; background: transparent; color: var(--ink); border: 1px solid rgba(242,242,240,0.3); padding: var(--space-4) var(--space-12); cursor: inherit; }
+    .parts button[aria-pressed="true"] { background: var(--ink); color: var(--band); border-color: var(--ink); }
+    .parts button:hover, .hit:hover { border-color: var(--ink); }
+    .clock { display: flex; gap: var(--space-12); color: var(--lav); font-variant-numeric: tabular-nums; }
+    .clock b { color: var(--ink); font-weight: 400; }
+    .knobs { flex: 1; display: grid; grid-template-columns: repeat(var(--n, 5), minmax(0, 1fr)); gap: var(--space-12) var(--space-20); }
+    .knob label { display: flex; justify-content: space-between; color: var(--lav); font-size: var(--fs-label); }
+    .knob output { color: var(--ink); font-variant-numeric: tabular-nums; }
+    .knob input { width: 100%; margin-top: var(--space-4); accent-color: var(--lav); }
+    /* Hit is the one control you play rather than set: a solid key in heavy type, square, the height of the slider row */
+    .hit { align-self: stretch; min-width: 4.5em; padding: 0 var(--space-20); background: var(--lav); border-color: var(--lav); color: var(--band);
+      font-family: var(--font-sans); font-weight: 700; font-size: calc(var(--fs-mono) * 1.35); letter-spacing: 0.06em; }
+    .hit:hover { background: var(--ink); border-color: var(--ink); }
+    .hit:active, .hit.flash { background: transparent; color: var(--lav); }
+    .band-top + .section { margin-top: var(--space-120); }
 
-    /* the night's footage takes the home page video's restart and pause, shown on hover or keyboard focus */
+    /* the story, in the page's usual sections */
     .night-wrap { position: relative; }
     .night-wrap:hover .vid-controls, .night-wrap:focus-within .vid-controls { opacity: 1; }
-
-    @media (prefers-reduced-motion: reduce) {
-      .media-grid video { cursor: pointer; }
+    @media (max-width: 680px) {
+      .band-top { padding: var(--space-28) 0 var(--space-56); margin-top: calc(-1 * var(--space-28)); }
+      .bt-in { grid-template-columns: 1fr; padding: 0 var(--space-28); row-gap: var(--space-20); }
+      .bt-nav { margin-bottom: var(--space-40); }
+      .bt-name, .bt-pic, .bt-side, .bt-inst { grid-column: 1 / -1; grid-row: auto; margin-top: 0; }
+      .bt-side { order: 4; }
+      .knobs { flex-basis: 100%; grid-template-columns: 1fr 1fr; }
+      .hit { flex-basis: 100%; padding: var(--space-8); }
+     
     }
-
-    /* ── THE FULL SET PLAYER ── mono controls in the page's label type, built from the shared tokens */
-    .player-bar {
-      display: flex; align-items: center; gap: var(--space-12) var(--space-16); flex-wrap: wrap;
-      margin-top: var(--space-12);
-      font-family: var(--font-mono); font-size: var(--fs-mono); letter-spacing: var(--mono-tracking); text-transform: uppercase;
-    }
-    .player-bar button {
-      font: inherit; color: var(--text); background: transparent; border: 1px solid var(--border);
-      padding: var(--space-8) var(--space-12); min-width: 7em; cursor: pointer; text-transform: uppercase;
-    }
-    .player-bar #setplay { border-color: var(--accent); color: var(--accent); }
-    .player-bar button:hover { border-color: var(--text); }
-    .player-bar output { min-width: 6ch; font-variant-numeric: tabular-nums; }
-    .player-bar .spd { display: flex; align-items: center; gap: var(--space-8); }
-
-    /* the scrubber: a flat block track that fills orange as the set plays, and a square handle */
-    .player-bar input[type=range] {
-      --p: 0%; --track: var(--space-8); --handle: var(--space-20);
-      flex: 1 1 calc(var(--space-120) * 2); height: var(--space-28); margin: 0; background: transparent; cursor: pointer;
-      -webkit-appearance: none; appearance: none;
-    }
-    .player-bar input[type=range]::-webkit-slider-runnable-track {
-      height: var(--track); border: 0; border-radius: 0;
-      background: linear-gradient(to right, var(--accent) var(--p), var(--border) var(--p));
-    }
-    .player-bar input[type=range]::-moz-range-track { height: var(--track); border: 0; border-radius: 0; background: var(--border); }
-    .player-bar input[type=range]::-moz-range-progress { height: var(--track); background: var(--accent); }
-    .player-bar input[type=range]::-webkit-slider-thumb {
-      -webkit-appearance: none; appearance: none; width: var(--space-12); height: var(--handle);
-      margin-top: calc((var(--track) - var(--handle)) / 2); border: 0; border-radius: 0; background: var(--text);
-    }
-    .player-bar input[type=range]::-moz-range-thumb { width: var(--space-12); height: var(--handle); border: 0; border-radius: 0; background: var(--text); }
-
-    /* the speed menu: a square box that opens a list in the page's own type, not the system menu */
-    .speed { position: relative; }
-    .speed > button { display: flex; align-items: center; justify-content: space-between; gap: var(--space-12); }
-    .speed > button::after {
-      content: ""; width: var(--space-4); height: var(--space-4); margin-bottom: var(--space-4);
-      border-right: 1px solid currentColor; border-bottom: 1px solid currentColor; transform: rotate(45deg);
-    }
-    .speed > button[aria-expanded="true"] { border-color: var(--text); }
-    .speed > button[aria-expanded="true"]::after { transform: rotate(-135deg); margin: var(--space-4) 0 0; }
-    .speed ul {
-      position: absolute; left: 0; right: 0; bottom: calc(100% - 1px); z-index: 5; list-style: none;
-      background: var(--bg); border: 1px solid var(--text);
-    }
-    .speed ul[hidden] { display: none; }
-    .speed li { padding: var(--space-8) var(--space-12); cursor: pointer; display: flex; align-items: center; justify-content: space-between; }
-    .speed li[aria-selected="true"] { color: var(--accent); }
-    .speed li[aria-selected="true"]::after { content: ""; width: var(--space-4); height: var(--space-4); background: currentColor; }
-    .speed li.active { background: var(--text); color: var(--bg); }
+    @media (prefers-reduced-motion: reduce) { .media-grid video { cursor: pointer; } }
   </style>
 </head>
 <body>
@@ -87,25 +82,43 @@
 
   <div class="page">
 
-    <header class="hero-grid cs-title">
-      <div class="hero-left">
-        <a href="/" class="wordmark" aria-label="Jen Murse — home">Jen Murse</a>
-        <a href="/playground/" class="crumb">Playground</a>
-      </div>
-      <div class="hero-right">
-        <div class="hero-title">
-          <h1 class="hero-primary">Cobo Visuals</h1>
-          <p class="hero-secondary">Two hours of generative visuals for James Cobo's DJ set</p>
+    <section class="band-top" aria-labelledby="p-name">
+      <div class="bt-in">
+        <nav class="bt-nav" aria-label="Breadcrumb">
+          <a href="/" class="wordmark" aria-label="Jen Murse — home">Jen Murse</a>
+          <a href="/playground/" class="crumb">Playground</a>
+        </nav>
+        <h1 class="bt-name" id="p-name">Cobo Visuals</h1>
+        <div class="bt-pic">
+          <canvas id="inst" role="img" aria-label="The current part of the set, drawn live"></canvas>
         </div>
-        <dl class="meta">
-          <div><dt class="list-label">For</dt><dd>James Cobo's DJ set</dd></div>
-          <div><dt class="list-label">Role</dt><dd>Design, direction, and build</dd></div>
-          <div><dt class="list-label">Length</dt><dd>2 hrs</dd></div>
-          <div><dt class="list-label">Medium</dt><dd>Real-time shaders in Resolume</dd></div>
-        </dl>
+        <div class="bt-side">
+          <p class="bt-line">Two hours of generative visuals for James Cobo's DJ set. Below the picture are the controls I played it with.</p>
+          <dl class="bt-facts">
+            <div><dt>For</dt><dd>James Cobo's DJ set</dd></div>
+            <div><dt>Role</dt><dd>Design, direction and build</dd></div>
+            <div><dt>Length</dt><dd>2 hrs</dd></div>
+            <div><dt>Medium</dt><dd>Real-time shaders in Resolume</dd></div>
+          </dl>
+        </div>
+        <div class="bt-inst" role="group" aria-label="The controls the visuals were played with">
+          <div class="bt-row">
+            <div class="parts mono" role="group" aria-label="Part of the set">
+              <button type="button" data-i="0" aria-pressed="true">Space</button>
+              <button type="button" data-i="1" aria-pressed="false">Organic</button>
+              <button type="button" data-i="2" aria-pressed="false">Rave</button>
+              <button type="button" data-i="3" aria-pressed="false">Salsa</button>
+              <button type="button" data-i="4" aria-pressed="false">Disco</button>
+            </div>
+            <p class="clock mono"><b id="inst-part">Space</b><span id="inst-clock">0:01:30</span></p>
+          </div>
+          <div class="bt-row">
+            <div class="knobs mono" id="knobs" role="group" aria-label="Controls for this part"></div>
+            <button type="button" class="hit mono" id="hit">Hit</button>
+          </div>
+        </div>
       </div>
-    </header>
-
+    </section>
 
     <section class="section" aria-labelledby="h-brief">
       <h2 class="list-label" id="h-brief">The brief</h2>
@@ -113,7 +126,6 @@
         <p>Create two hours of visuals for Cobo's DJ set, segmented into five parts that follow the musical arc. Open on space and momentum, then turn more organic to fill the room. Go dark and spacey for a ravey stretch. Transition to a salsa section driven by the hi-hats and bursts of color. End on disco, building to a visual peak that lands with the final musical high before the set winds down.</p>
       </div>
     </section>
-
 
     <section class="section" aria-labelledby="h-seq">
       <h2 class="list-label" id="h-seq">The sequence</h2>
@@ -136,7 +148,6 @@
         <li><figure><video data-src="/playground/cobo-visuals/16.mp4" poster="/playground/cobo-visuals/16.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="Soft light drifts and slows as the night winds down"></video><figcaption class="caption"><span class="t">Soft light drifts and slows as the night winds down</span></figcaption></figure></li>
       </ol>
     </section>
-
 
     <section class="section" aria-labelledby="h-night">
       <h2 class="list-label" id="h-night">On the night</h2>
@@ -162,26 +173,6 @@
       </div>
     </section>
 
-    <section class="section" aria-labelledby="h-set">
-      <h2 class="list-label" id="h-set">The full set</h2>
-      <figure class="media-wide">
-        <canvas id="setcv" width="1280" height="720" role="img" aria-label="The full set, drawn live"></canvas>
-        <div class="player-bar" role="group" aria-label="Full set player">
-          <button type="button" id="setplay">Play</button>
-          <input id="setscrub" type="range" min="0" max="7200" step="1" value="0" aria-label="Position in the set">
-          <output id="setclock" for="setscrub">0:00:00</output>
-          <div class="spd"><span id="setspeed-label">Speed</span>
-            <div class="speed">
-              <button type="button" id="setspeed" data-value="1" aria-haspopup="listbox" aria-expanded="false" aria-controls="setspeed-list" aria-labelledby="setspeed-label setspeed">1×</button>
-              <ul id="setspeed-list" role="listbox" aria-labelledby="setspeed-label" tabindex="-1" hidden>
-                <li role="option" id="spd-1" data-value="1" aria-selected="true">1×</li><li role="option" id="spd-4" data-value="4" aria-selected="false">4×</li><li role="option" id="spd-10" data-value="10" aria-selected="false">10×</li><li role="option" id="spd-30" data-value="30" aria-selected="false">30×</li><li role="option" id="spd-60" data-value="60" aria-selected="false">60×</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <figcaption class="caption"><span class="t">All two hours, drawn live in your browser</span></figcaption>
-      </figure>
-    </section>
 
     <footer>
       <span>© 2026 Jen Murse</span>
@@ -246,88 +237,85 @@
   </script>
   <script src="/playground/cobo-visuals/set.js"></script>
   <script>
-    // The full set, drawn live: the five sections back to back, each on its own clock from 0, as they ran on the night.
-    // Before Play it shows a still from 30 s in (the first seconds are near black); Play starts from 0:00 at 1x.
-    // It only runs while it is on screen and never plays by itself.
+    // The instrument: one part of the set at a time, drawn live. Speed and Hit were the live controls on the night;
+    // each part's other design values are opened up here as sliders. A part whose values will not open falls back to
+    // its fixed version. It only draws while on screen; with reduced motion time holds still and the sliders still work
     (() => {
-      const SH = window.COBO_SET, $ = id => document.getElementById(id);
-      const START = [0]; for (const S of SH) START.push(START[START.length - 1] + S.len);
-      const END = START[SH.length];
-      const cv = $('setcv'), gl = cv.getContext('webgl'), progs = [];
-      $('setscrub').max = Math.round(END);
-      if (!gl) { $('setplay').disabled = true; $('setclock').textContent = 'needs WebGL'; return; }
+      const SH = window.COBO_SET, cv = document.getElementById('inst'), gl = cv.getContext('webgl');
+      if (!gl) return;
+      const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const PARTS = ['Space', 'Organic', 'Rave', 'Salsa', 'Disco'];
+      // the design values each part opens up, with a range around the value it shipped with
+      const KNOBS = [
+        { shapeCount: [1, 14, 1], lineWeight: [0.3, 5, 0.1], colourAmt: [0, 2, 0.05], drift: [0, 3, 0.05] },
+        { blobCount: [1, 16, 1], edgeWobble: [0, 3, 0.05], tint: [-1, 1, 0.05] },
+        { glitch: [0, 3, 0.05], ringSize: [0.05, 0.7, 0.01], undulate: [0, 3, 0.05], redAmount: [0, 2, 0.05] },
+        { bloomSize: [0.2, 3, 0.05] },
+        { echo: [0, 3, 0.05], bokeh: [0, 3, 0.05], palette: [0, 4, 0.01], close: [0, 1, 0.01] }
+      ];
+      const LABEL = { shapeCount: 'Shapes', lineWeight: 'Line weight', colourAmt: 'Colour', drift: 'Drift', blobCount: 'Blobs', edgeWobble: 'Wobble', tint: 'Tint',
+        glitch: 'Glitch', ringSize: 'Ring size', undulate: 'Undulate', redAmount: 'Red', bloomSize: 'Bloom', echo: 'Echo', bokeh: 'Bokeh', palette: 'Palette', close: 'Close-up' };
       const vs = 'attribute vec2 a;varying vec2 isf_FragNormCoord;void main(){isf_FragNormCoord=a*0.5+0.5;gl_Position=vec4(a,0,1);}';
-      const prog = i => {
-        if (progs[i] !== undefined) return progs[i];
-        const sh = (t, src) => { const o = gl.createShader(t); gl.shaderSource(o, src); gl.compileShader(o); return gl.getShaderParameter(o, gl.COMPILE_STATUS) ? o : null; };
-        const v = sh(gl.VERTEX_SHADER, vs), f = sh(gl.FRAGMENT_SHADER, 'precision highp float;varying vec2 isf_FragNormCoord;uniform float TIME;uniform vec2 RENDERSIZE;' + SH[i].decl + SH[i].body);
-        let p = null;
-        if (v && f) { p = gl.createProgram(); gl.attachShader(p, v); gl.attachShader(p, f); gl.bindAttribLocation(p, 0, 'a'); gl.linkProgram(p); if (!gl.getProgramParameter(p, gl.LINK_STATUS)) p = null; }
-        return progs[i] = p;
+      const compile = (decl, body) => {
+        const sh = (t, s) => { const o = gl.createShader(t); gl.shaderSource(o, s); gl.compileShader(o); return gl.getShaderParameter(o, gl.COMPILE_STATUS) ? o : null; };
+        const v = sh(gl.VERTEX_SHADER, vs), f = sh(gl.FRAGMENT_SHADER, 'precision highp float;varying vec2 isf_FragNormCoord;uniform float TIME;uniform vec2 RENDERSIZE;' + decl + body);
+        if (!v || !f) return null;
+        const p = gl.createProgram(); gl.attachShader(p, v); gl.attachShader(p, f); gl.bindAttribLocation(p, 0, 'a'); gl.linkProgram(p);
+        return gl.getProgramParameter(p, gl.LINK_STATUS) ? p : null;
       };
-      const b = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, b);
+      // open a part: try every knob as a uniform, then whichever subset compiles, then the fixed shader
+      const parts = SH.map((S, i) => {
+        const vals = {};
+        let open = Object.keys(KNOBS[i]).filter(k => { const m = S.body.match(new RegExp('const float ' + k + '\\s*=\\s*([-\\d.]+);')); if (m) vals[k] = +m[1]; return !!m; });
+        const build = ks => { let b = S.body; ks.forEach(k => { b = b.replace(new RegExp('const float ' + k + '\\s*=\\s*[-\\d.]+;'), 'uniform float ' + k + ';'); }); return compile(S.decl, b); };
+        let prog = build(open);
+        if (!prog) { open = open.filter(k => build([k])); prog = build(open) || compile(S.decl, S.body); if (!prog) open = []; }
+        return { prog, open, vals: { ...vals } };
+      });
+      gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
       gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
       gl.enableVertexAttribArray(0); gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+      const fit = () => { const k = Math.min(1, 1600 / cv.clientWidth); cv.width = Math.round(cv.clientWidth * k); cv.height = Math.round(cv.clientHeight * k); };
       const fmt = t => { t = Math.floor(t); return Math.floor(t / 3600) + ':' + String(Math.floor(t / 60) % 60).padStart(2, '0') + ':' + String(t % 60).padStart(2, '0'); };
-      let T = 30, playing = false, last = 0, visible = false, poster = true;
-      function draw() {
-        let i = SH.length - 1; for (let k = 0; k < SH.length; k++) if (T < START[k + 1]) { i = k; break; }
-        const shown = poster ? 0 : T;
-        $('setscrub').value = shown; $('setclock').textContent = fmt(shown); $('setscrub').setAttribute('aria-valuetext', fmt(shown));
-        $('setscrub').style.setProperty('--p', shown / END * 100 + '%');
-        const p = prog(i); if (!p) return;
-        gl.useProgram(p); gl.viewport(0, 0, cv.width, cv.height);
-        gl.uniform1f(gl.getUniformLocation(p, 'TIME'), Math.min(T, END) - START[i]);
-        gl.uniform2f(gl.getUniformLocation(p, 'RENDERSIZE'), cv.width, cv.height);
-        for (const k in SH[i].def) { const l = gl.getUniformLocation(p, k); if (l) gl.uniform1f(l, k === 'timeScale' ? 1 : SH[i].def[k]); }
+      let cur = 0, T = 90, speed = 1, hitAt = -1e5, prevHit = -1e5, last = performance.now(), visible = false;
+      const draw = () => {
+        const P = parts[cur]; if (!P.prog) return;
+        gl.useProgram(P.prog); gl.viewport(0, 0, cv.width, cv.height);
+        const u = (n, v) => { const l = gl.getUniformLocation(P.prog, n); if (l) gl.uniform1f(l, v); };
+        u('TIME', T); gl.uniform2f(gl.getUniformLocation(P.prog, 'RENDERSIZE'), cv.width, cv.height);
+        u('timeScale', 1); u('speed', speed); u('hitAge', T - hitAt); u('hitPrevAge', T - prevHit);
+        P.open.forEach(k => u(k, P.vals[k]));
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-      }
-      function setPlaying(v) { playing = v; $('setplay').textContent = v ? 'Pause' : 'Play'; if (v) { last = performance.now(); requestAnimationFrame(tick); } }
-      function tick(now) {
-        if (!playing || !visible) return;
-        T += (now - last) / 1000 * parseFloat($('setspeed').dataset.value); last = now;
-        if (T >= END) { T = END; draw(); setPlaying(false); return; }
-        draw(); requestAnimationFrame(tick);
-      }
-      $('setplay').onclick = () => { if (poster || T >= END) { T = 0; poster = false; } setPlaying(!playing); };
-      $('setscrub').addEventListener('input', e => { poster = false; T = parseFloat(e.target.value); draw(); });
-      new IntersectionObserver(es => es.forEach(e => {
-        const was = visible; visible = e.isIntersecting;
-        if (visible && !was) { if (!progs.length) draw(); if (playing) { last = performance.now(); requestAnimationFrame(tick); } }
-      }), { threshold: 0.1 }).observe(cv);
-    })();
-
-    // The speed menu: a button that opens a listbox. Arrows move, Enter or Space picks, Escape or a click outside closes.
-    (() => {
-      const btn = document.getElementById('setspeed'), list = document.getElementById('setspeed-list');
-      const opts = [...list.children], cur = document.getElementById('cursor');
-      let at = 0;
-      const mark = i => { at = (i + opts.length) % opts.length; opts.forEach((o, k) => o.classList.toggle('active', k === at)); list.setAttribute('aria-activedescendant', opts[at].id); };
-      const open = () => { list.hidden = false; btn.setAttribute('aria-expanded', 'true'); mark(opts.findIndex(o => o.getAttribute('aria-selected') === 'true')); list.focus(); };
-      const close = (refocus = true) => { list.hidden = true; btn.setAttribute('aria-expanded', 'false'); if (refocus) btn.focus(); };
-      const pick = i => {
-        opts.forEach((o, k) => o.setAttribute('aria-selected', k === i));
-        btn.dataset.value = opts[i].dataset.value; btn.textContent = opts[i].textContent; close();
+        document.getElementById('inst-clock').textContent = fmt(T);
       };
-      btn.addEventListener('click', () => list.hidden ? open() : close());
-      btn.addEventListener('keydown', e => { if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); open(); } });
-      list.addEventListener('keydown', e => {
-        if (e.key === 'ArrowDown') mark(at + 1);
-        else if (e.key === 'ArrowUp') mark(at - 1);
-        else if (e.key === 'Home') mark(0);
-        else if (e.key === 'End') mark(opts.length - 1);
-        else if (e.key === 'Enter' || e.key === ' ') pick(at);
-        else if (e.key === 'Escape') close();
-        else if (e.key === 'Tab') { close(false); return; }
-        else return;
-        e.preventDefault();
-      });
-      opts.forEach((o, i) => {
-        o.addEventListener('click', () => pick(i));
-        o.addEventListener('mouseenter', () => { mark(i); cur.className = 'on-link'; });
-        o.addEventListener('mouseleave', () => cur.className = '');
-      });
-      document.addEventListener('pointerdown', e => { if (!list.hidden && !e.target.closest('.speed')) close(false); });
+      const knobs = document.getElementById('knobs');
+      const slider = (name, min, max, step, val, set, fmtv) => {
+        const id = 'k-' + name, d = document.createElement('div'); d.className = 'knob';
+        d.innerHTML = `<label for="${id}"><span>${name}</span><output for="${id}"></output></label><input id="${id}" type="range" min="${min}" max="${max}" step="${step}" value="${val}">`;
+        const inp = d.querySelector('input'), out = d.querySelector('output');
+        const sync = () => { out.textContent = fmtv(+inp.value); set(+inp.value); if (still || !visible) draw(); };
+        inp.addEventListener('input', sync); out.textContent = fmtv(val); knobs.appendChild(d);
+      };
+      const show = i => {
+        cur = i; T = 90; hitAt = prevHit = -1e5;
+        document.querySelectorAll('.parts button').forEach(b => b.setAttribute('aria-pressed', +b.dataset.i === i));
+        document.getElementById('inst-part').textContent = PARTS[i];
+        knobs.replaceChildren();
+        slider('Speed', 0.1, 3, 0.05, speed, v => speed = v, v => v.toFixed(2) + '×');
+        const P = parts[i];
+        knobs.style.setProperty('--n', 1 + P.open.length);
+        P.open.forEach(k => { const [a, b, s] = KNOBS[i][k]; slider(LABEL[k], a, b, s, P.vals[k], v => P.vals[k] = v, v => s >= 1 ? String(Math.round(v)) : v.toFixed(2)); });
+        draw();
+      };
+      document.querySelectorAll('.parts button').forEach(b => b.addEventListener('click', () => show(+b.dataset.i)));
+      const hit = document.getElementById('hit');
+      const fire = () => { prevHit = hitAt; hitAt = T; hit.classList.add('flash'); setTimeout(() => hit.classList.remove('flash'), 150); if (still) draw(); };
+      hit.addEventListener('click', fire);
+      addEventListener('keydown', e => { if (e.code === 'Space' && visible && !/INPUT|BUTTON|A/.test(document.activeElement.tagName)) { e.preventDefault(); fire(); } });
+      const tick = now => { if (!visible) return; if (!still) T += (now - last) / 1000; last = now; draw(); requestAnimationFrame(tick); };
+      new ResizeObserver(() => { fit(); draw(); }).observe(cv);
+      new IntersectionObserver(es => es.forEach(e => { const was = visible; visible = e.isIntersecting; if (visible && !was) { last = performance.now(); requestAnimationFrame(tick); } }), { threshold: 0.05 }).observe(cv);
+      fit(); show(0);
     })();
   </script>
 </body>

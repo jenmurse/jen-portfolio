@@ -29,6 +29,98 @@
     @media (prefers-reduced-motion: reduce) {
       .moments video { cursor: pointer; }
     }
+
+    /* the project page as its index row opened up, in Good Measure's own look: ink on paper, hairline rules, and
+       colour kept for status the way the app keeps it: green on target, amber short, red over. The name crosses into a
+       day that falls short; Fix the day searches its meals out loud and lands it */
+    :root { --band: #FFFFFF; --ink: #0A0A0A; --soft: #6E6E6E; --rule: #D8D8D6; --accent: #2F8B33;   /* the app's on-target green: the page's accent */
+      --ok: #2F8B33; --ok-t: #D8E8D5; --short: #C97A1A; --short-t: #F8E5C8; --over: #CC3823; --over-t: #F5D5CD; }
+    .band-top { position: relative; width: 100vw; left: 50%; transform: translateX(-50%); margin-top: calc(-1 * var(--space-56)); background: var(--band); color: var(--ink); padding: var(--space-56) 0 var(--space-120); }
+    .bt-in { max-width: 1200px; margin: 0 auto; padding: 0 var(--space-40); display: grid; grid-template-columns: var(--grid); column-gap: var(--gutter); align-items: start; }
+    .bt-nav { grid-column: 1 / -1; margin-bottom: var(--space-80); }
+    .bt-nav .crumb { color: var(--accent); }
+    .bt-name { grid-column: 1 / 10; grid-row: 2; position: relative; z-index: 3; font-size: calc(clamp(3.2rem, 9vw, 8.5rem) * var(--h-scale)); font-weight: var(--h-weight); line-height: 0.92; letter-spacing: -0.045em; pointer-events: none; }
+    .bt-pic { grid-column: 4 / -1; grid-row: 2 / span 2; margin-top: calc(0.5 * clamp(3.2rem, 9vw, 8.5rem)); }
+    .bt-side { grid-column: 1 / 4; grid-row: 3; align-self: end; display: flex; flex-direction: column; gap: var(--space-28); padding-right: var(--space-12); }
+    .bt-line { font-size: var(--fs-list); line-height: var(--s-lh); text-wrap: pretty; }   /* no one-word last line */
+    .bt-facts { display: flex; flex-direction: column; gap: var(--space-20); border-top: 1px solid var(--rule); padding-top: var(--space-20); }
+    .bt-facts dt { font-family: var(--font-mono); font-size: var(--fs-label); letter-spacing: var(--mono-tracking); text-transform: uppercase; color: var(--accent); }
+    .bt-facts dd { font-size: var(--fs-list); margin-top: var(--space-4); }
+    .bt-facts a { color: inherit; text-decoration: underline; text-underline-offset: 0.2em; }
+    .band-top + .section { margin-top: var(--space-120); }
+    .k { font-family: var(--font-mono); font-size: var(--fs-label); letter-spacing: var(--mono-tracking); text-transform: uppercase; color: var(--accent); }
+
+    /* ── THE CARD ── the day as a panel of the app: a header with the day and its goals, meals and numbers side by side,
+       the actions at its foot, and the three ways under them once it is fixed. The name crosses into its top-left */
+    .card { background: #FAFAF9;   /* barely off the page: a panel, not a colour */ margin-top: calc(0.5 * clamp(3.2rem, 9vw, 8.5rem)); padding: calc(0.55 * clamp(3.2rem, 9vw, 8.5rem)) var(--space-40) var(--space-40); }
+    .bt-pic { margin-top: 0 !important; }
+    .card-h { display: flex; justify-content: space-between; align-items: flex-end; gap: var(--space-20); flex-wrap: wrap; padding-bottom: var(--space-20); border-bottom: 1px solid var(--rule); }
+    .card-t { font-size: calc(var(--fs-list) * 1.5); letter-spacing: -0.01em; margin-top: var(--space-4); transition: color .3s; }
+    .card-t.ok { color: var(--ok); }
+    .card-b { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: var(--space-56); padding-top: var(--space-20); }
+    .card-f { display: flex; justify-content: flex-end; gap: var(--space-8); margin-top: var(--space-28); padding-top: var(--space-20); border-top: 1px solid var(--rule); }
+    .k { font-family: var(--font-mono); font-size: var(--fs-label); letter-spacing: var(--mono-tracking); text-transform: uppercase; color: var(--accent); }
+    .day { list-style: none; }
+    .day li { display: grid; grid-template-columns: 9ch 1fr; column-gap: var(--space-12); padding: var(--space-12) 0; border-bottom: 1px solid var(--rule); }
+    .day li:first-child { padding-top: 0; }
+    .day li:last-child { border-bottom: 0; }
+    .day .slot { grid-row: span 2; font-family: var(--font-mono); font-size: var(--fs-label); letter-spacing: var(--mono-tracking); text-transform: uppercase; color: var(--soft); padding-top: 3px; }
+    .day .meal { font-size: calc(var(--fs-list) * 1.15); line-height: 1.25; }
+    .day .mn { margin-top: 2px; font-family: var(--font-mono); font-size: var(--fs-label); color: var(--soft); font-variant-numeric: tabular-nums; }
+    .day li.roll .meal { animation: roll .3s cubic-bezier(.2,0,0,1); }
+    .day li.flick .meal { animation: flick .12s linear; }
+    @keyframes roll { 0% { opacity: 0; transform: translateY(35%); } 100% { opacity: 1; transform: none; } }
+    @keyframes flick { 0% { opacity: .2; } 100% { opacity: 1; } }
+    .searching .day .meal { color: var(--soft); }
+    .targets { display: flex; gap: var(--space-8); flex-wrap: wrap; }
+    .chip, .btn { font-family: var(--font-mono); font-size: var(--fs-label); letter-spacing: var(--mono-tracking); text-transform: uppercase; cursor: inherit; }
+    .chip { display: inline-flex; align-items: center; gap: var(--space-8); background: #fff; color: var(--soft); border: 1px solid var(--rule); padding: 5px var(--space-12); }
+    .chip::before { content: ""; width: 7px; height: 7px; border: 1px solid currentColor; }
+    .chip[aria-pressed="true"] { color: var(--ink); border-color: var(--ink); }
+    .chip[aria-pressed="true"]::before { background: currentColor; }   /* a filled square: this goal counts */
+    .btn { background: #fff; color: var(--ink); border: 1px solid var(--rule); padding: 8px var(--space-20); }
+    .btn:hover { border-color: var(--ink); }
+    .btn.go { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .btn.go:hover { background: #24702A; border-color: #24702A; }
+    .btn:disabled { opacity: .45; }
+    /* the day's three numbers, each with its status in the app's own colours */
+    .sp-out { display: flex; flex-direction: column; gap: var(--space-20); }
+    .sp-stat { display: grid; grid-template-columns: auto 1fr auto; column-gap: var(--space-12); align-items: end; }
+    .sp-stat b { font-size: calc(clamp(2.4rem, 4vw, 3.8rem) * var(--h-scale)); font-weight: var(--h-weight); letter-spacing: -0.04em; line-height: 0.85; font-variant-numeric: tabular-nums; }
+    .sp-stat span { font-size: var(--fs-list); line-height: 1.2; white-space: nowrap; }
+    .sp-stat em { display: block; font-style: normal; font-family: var(--font-mono); font-size: var(--fs-label); letter-spacing: var(--mono-tracking); text-transform: uppercase; color: var(--soft); margin-top: 2px; }
+    .st { justify-self: end; align-self: center; font-family: var(--font-mono); font-size: var(--fs-label); letter-spacing: var(--mono-tracking); text-transform: uppercase; padding: 3px 8px; border-radius: 99px; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; transition: background .3s, color .3s; }
+    .st::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+    .st.ok { color: var(--ok); background: var(--ok-t); } .st.short { color: var(--short); background: var(--short-t); } .st.over { color: var(--over); background: var(--over-t); }
+    .sp-stat i { grid-column: 1 / -1; display: block; height: 3px; background: #E6E6E3; margin-top: var(--space-8); position: relative; }
+    .sp-stat s { position: absolute; inset: 0 auto 0 0; width: 0; background: var(--short); transition: width .25s cubic-bezier(.2,0,0,1), background .3s; }
+    .sp-stat s.ok { background: var(--ok); } .sp-stat s.over { background: var(--over); }
+    .sp-stat i::after { content: ""; position: absolute; left: 71.43%; top: -3px; bottom: -3px; width: 1px; background: var(--ink); }   /* the goal: the line runs to 140% of it */
+    /* three ways, once the day is fixed */
+    .ways { margin-top: var(--space-28); padding-top: var(--space-20); border-top: 1px solid var(--rule); }
+    .ways-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-28); margin-top: var(--space-12); }
+    .way { text-align: left; font: inherit; color: var(--ink); background: #fff; border: 1px solid var(--rule); padding: var(--space-12); cursor: inherit; }
+    .way:hover { border-color: var(--ink); }
+    .way[aria-pressed="true"] { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+    .w-n { font-family: var(--font-mono); font-size: var(--fs-label); letter-spacing: var(--mono-tracking); text-transform: uppercase; color: var(--soft); }
+    .way[aria-pressed="true"] .w-n { color: var(--ink); }
+    .w-meals { margin-top: var(--space-8); font-size: var(--fs-list); line-height: 1.5; }
+    .w-tot { margin-top: var(--space-8); font-family: var(--font-mono); font-size: var(--fs-label); color: var(--soft); font-variant-numeric: tabular-nums; }
+    @media (max-width: 680px) {
+      .card { padding: var(--space-20); margin-top: 0; }
+      .card-b { grid-template-columns: 1fr; row-gap: var(--space-28); }
+      .ways-row { grid-template-columns: 1fr; }
+      .card-f { justify-content: stretch; } .card-f .btn { flex: 1; }
+    }
+
+    @media (prefers-reduced-motion: reduce) { .sp-stat s { transition: none; } }
+    @media (max-width: 680px) {
+      .band-top { padding: var(--space-28) 0 var(--space-56); margin-top: calc(-1 * var(--space-28)); }
+      .bt-in { grid-template-columns: 1fr; padding: 0 var(--space-28); row-gap: var(--space-20); }
+      .bt-nav { margin-bottom: var(--space-40); }
+      .bt-name, .bt-pic, .bt-side { grid-column: 1 / -1; grid-row: auto; margin-top: 0; }
+      .bt-side { order: 4; }
+    }
   </style>
 </head>
 <body>
@@ -37,25 +129,60 @@
 
   <div class="page">
 
-    <header class="hero-grid cs-title">
-      <div class="hero-left">
-        <a href="/" class="wordmark" aria-label="Jen Murse — home">Jen Murse</a>
-        <a href="/playground/" class="crumb">Playground</a>
-      </div>
-      <div class="hero-right">
-        <div class="hero-title">
-          <h1 class="hero-primary">Good Measure</h1>
-          <p class="hero-secondary">A nutrition tracker and meal planner for people who cook</p>
+    <section class="band-top" aria-labelledby="p-name">
+      <div class="bt-in">
+        <nav class="bt-nav" aria-label="Breadcrumb">
+          <a href="/" class="wordmark" aria-label="Jen Murse — home">Jen Murse</a>
+          <a href="/playground/" class="crumb">Playground</a>
+        </nav>
+        <h1 class="bt-name" id="p-name">Good Measure</h1>
+        <div class="bt-pic">
+          <div class="card" role="group" aria-label="A day of meals against its goals. Choose what the day should hit, then fix the day and pick one of three ways">
+            <header class="card-h">
+              <div>
+                <p class="k">Planner · Tuesday</p>
+                <p class="card-t" id="card-t" aria-live="polite">Short on everything</p>
+              </div>
+              <div class="targets" role="group" aria-label="What the day should hit">
+                <button type="button" class="chip" data-k="kcal" aria-pressed="true">Calories</button>
+                <button type="button" class="chip" data-k="p" aria-pressed="true">Protein</button>
+                <button type="button" class="chip" data-k="f" aria-pressed="true">Fiber</button>
+              </div>
+            </header>
+            <div class="card-b spread">
+              <ul class="day" id="day">
+                <li data-slot="Breakfast"><span class="slot">Breakfast</span><span class="meal"></span><span class="mn"></span></li>
+                <li data-slot="Lunch"><span class="slot">Lunch</span><span class="meal"></span><span class="mn"></span></li>
+                <li data-slot="Snack"><span class="slot">Snack</span><span class="meal"></span><span class="mn"></span></li>
+                <li data-slot="Dinner"><span class="slot">Dinner</span><span class="meal"></span><span class="mn"></span></li>
+              </ul>
+              <div class="sp-out" aria-live="polite">
+                <div class="sp-stat"><b id="o-kcal">0</b><span>kcal<em>of 1,700</em></span><span class="st" id="st-kcal"></span><i><s id="b-kcal"></s></i></div>
+                <div class="sp-stat"><b id="o-p">0</b><span>g protein<em>of 90 g</em></span><span class="st" id="st-p"></span><i><s id="b-p"></s></i></div>
+                <div class="sp-stat"><b id="o-f">0</b><span>g fiber<em>of 30 g</em></span><span class="st" id="st-f"></span><i><s id="b-f"></s></i></div>
+              </div>
+            </div>
+            <footer class="card-f">
+              <button type="button" class="btn" id="redo">A new day</button>
+              <button type="button" class="btn go" id="fix">Fix the day</button>
+            </footer>
+            <div class="ways" id="ways" hidden>
+              <p class="k">Three ways to fix it · the first is on the day</p>
+              <div class="ways-row" id="ways-row" role="group" aria-label="Three ways to fix the day"></div>
+            </div>
+          </div>
         </div>
-        <dl class="meta">
-          <div><dt class="list-label">For</dt><dd>Friends and family</dd></div>
-          <div><dt class="list-label">Role</dt><dd>Design and build</dd></div>
-          <div><dt class="list-label">URL</dt><dd><a href="https://withgoodmeasure.com" target="_blank" rel="noopener">withgoodmeasure.com <span class="s" aria-hidden="true">↗</span><span class="visually-hidden"> (opens in a new tab)</span></a></dd></div>
-          <div><dt class="list-label">Medium</dt><dd>Web app with MCP</dd></div>
-        </dl>
+        <div class="bt-side">
+          <p class="bt-line">A nutrition tracker and meal planner for people who cook. Here is a day that falls short: choose what it should hit and let it fix&nbsp;itself.</p>
+          <dl class="bt-facts">
+            <div><dt>For</dt><dd>Friends and family</dd></div>
+            <div><dt>Role</dt><dd>Design and build</dd></div>
+            <div><dt>URL</dt><dd><a href="https://withgoodmeasure.com" target="_blank" rel="noopener">withgoodmeasure.com <span class="s" aria-hidden="true">↗</span><span class="visually-hidden"> (opens in a new tab)</span></a></dd></div>
+            <div><dt>Medium</dt><dd>Web app with MCP</dd></div>
+          </dl>
+        </div>
       </div>
-    </header>
-
+    </section>
 
     <section class="section" aria-labelledby="h-idea">
       <h2 class="list-label" id="h-idea">The idea</h2>
@@ -63,7 +190,6 @@
         <p>Calorie apps are built for packaged food and barcode scanners. If you cook from scratch, there's no good way to see the nutrition of what you actually make, or to plan a week of real meals against your goals. Good Measure is for that, with a shared pantry, recipes with live nutrition, and a weekly plan for each person in the house against their own targets.</p>
       </div>
     </section>
-
 
     <section class="section" aria-labelledby="h-how">
       <h2 class="list-label" id="h-how">How it works</h2>
@@ -78,7 +204,6 @@
         <li class="moment"><figure><video data-src="/playground/good-measure/shopping.mp4" poster="/playground/good-measure/shopping.jpg" muted loop playsinline preload="none" tabindex="0" aria-label="A week of meals turned into one shopping list"></video><figcaption class="caption"><span class="n">08</span><div><h3>Shop the week</h3> <p>A week of meals becomes one shopping list, grouped by aisle.</p></div></figcaption></figure></li>
       </ol>
     </section>
-
 
     <section class="section" aria-labelledby="h-decisions">
       <h2 class="list-label" id="h-decisions">Decisions</h2>
@@ -98,6 +223,7 @@
         <p>Good Measure is invite-only, for my friends and family.</p>
       </div>
     </section>
+
 
     <dialog class="lightbox" id="lightbox" aria-label="Enlarged view">
       <div class="veil" id="lightbox-veil"></div>
@@ -200,6 +326,101 @@
         m.addEventListener('click', () => open(m));
         m.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(m); } });
       });
+    })();
+  </script>
+  <script>
+    // Fix the day, after the app's optimizer. A day of meals from the demo recipes falls short of its goals; each number
+    // carries its status in the app's colours. Choose what the day should hit and press Fix the day: it searches the
+    // combinations out loud, flicking through days that get closer and slowing as it homes in, lands the best one, and
+    // offers it with two other ways. Per-serving numbers are estimates from typical USDA values, except the
+    // Miso-Glazed Tofu, which is worked out from its own ingredients
+    (() => {
+      const M = {
+        Breakfast: [['Avocado & Soft Eggs on Toast', 420, 18, 9], ['Peanut Butter Overnight Oats', 430, 18, 7]],
+        Lunch: [['Tuna Poke Bowl', 520, 34, 5], ['Tuna & White Bean Salad', 410, 32, 9], ['Shrimp & Rice Noodle Bowl', 480, 28, 4], ['Ginger Carrot Soup', 220, 5, 6]],
+        Snack: [['Apple & Peanut Butter Plate', 280, 7, 6], ['Tahini Chocolate Chip Cookie', 190, 3, 1], ['Lemon Bar', 210, 3, 0.5]],
+        Dinner: [['Miso-Glazed Tofu', 284, 26.1, 4.5], ['Rigatoni Bolognese', 640, 32, 6], ['Beef & Kidney Bean Chili', 520, 36, 12], ['Lentil & Sweet Potato Curry', 480, 18, 16], ['Chickpea & Chard Stew', 420, 17, 14]]
+      };
+      const SLOTS = Object.keys(M), GOAL = { kcal: 1700, p: 90, f: 30 }, K = ['kcal', 'p', 'f'], IX = { kcal: 1, p: 2, f: 3 }, UNIT = { kcal: '', p: ' g', f: ' g' };
+      const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const rows = [...document.querySelectorAll('#day li')], shown = { kcal: 0, p: 0, f: 0 };
+      const spread = document.querySelector('.spread'), fixBtn = document.getElementById('fix'), redo = document.getElementById('redo');
+      let day = { Breakfast: 0, Lunch: 3, Snack: 2, Dinner: 1 };   // toast, carrot soup, lemon bar, bolognese: short on protein and fiber
+      const sum = d => { const t = { kcal: 0, p: 0, f: 0 }; SLOTS.forEach(sl => K.forEach(k => t[k] += M[sl][d[sl]][IX[k]])); return t; };
+      const fmt = (k, x) => k === 'kcal' ? Math.round(x).toLocaleString() : String(Math.round(x * 10) / 10);
+      const roll = (el, from, to, k, ms) => {
+        if (still || !ms) { el.textContent = fmt(k, to); return; }
+        const t0 = performance.now(); const f = now => { const q = Math.min(1, (now - t0) / ms); el.textContent = fmt(k, from + (to - from) * (1 - Math.pow(1 - q, 3))); if (q < 1) requestAnimationFrame(f); }; requestAnimationFrame(f);
+      };
+      const status = (k, v) => { const g = GOAL[k], d = v - g; return Math.abs(d) <= g * 0.1 ? ['ok', 'On target'] : d < 0 ? ['short', 'Short ' + fmt(k, -d) + UNIT[k]] : ['over', 'Over ' + fmt(k, d) + UNIT[k]]; };
+      const show = (prev, how) => {   // how: 'roll' when settling, 'flick' while searching
+        rows.forEach(li => {
+          const sl = li.dataset.slot, m = M[sl][day[sl]];
+          if (prev && prev[sl] !== day[sl] && !still && how) { li.classList.remove('roll', 'flick'); void li.offsetWidth; li.classList.add(how); }
+          li.querySelector('.meal').textContent = m[0];
+          li.querySelector('.mn').textContent = `${m[1]} kcal · ${m[2]} g protein · ${m[3]} g fiber`;
+        });
+        const t = sum(day);
+        K.forEach(k => {
+          roll(document.getElementById('o-' + k), shown[k], t[k], k, how === 'flick' ? 0 : 700); shown[k] = t[k];
+          const [cls, text] = status(k, t[k]);
+          const bar = document.getElementById('b-' + k); bar.style.width = Math.min(100, t[k] / (GOAL[k] * 1.4) * 100) + '%'; bar.className = cls === 'short' ? '' : cls;
+          const st = document.getElementById('st-' + k); st.className = 'st ' + cls; st.textContent = text;
+        });
+        // the card's title says what is wrong with the day, in words, or that it is fixed
+        const NAME = { kcal: 'calories', p: 'protein', f: 'fiber' }, by = { short: [], over: [] };
+        K.forEach(k => { const c = status(k, t[k])[0]; if (by[c]) by[c].push(NAME[k]); });
+        const list = a => a.length === 3 ? 'everything' : a.join(' and ');
+        const title = document.getElementById('card-t');
+        title.textContent = !by.short.length && !by.over.length ? 'On target, all three' : [by.short.length && 'Short on ' + list(by.short), by.over.length && 'over on ' + list(by.over)].filter(Boolean).join(', ');
+        title.textContent = title.textContent.charAt(0).toUpperCase() + title.textContent.slice(1);
+        title.classList.toggle('ok', !by.short.length && !by.over.length);
+      };
+      const chips = [...document.querySelectorAll('.chip')];
+      chips.forEach(c => c.addEventListener('click', () => {
+        const on = c.getAttribute('aria-pressed') === 'true';
+        if (on && chips.filter(x => x.getAttribute('aria-pressed') === 'true').length === 1) return;   // keep at least one
+        c.setAttribute('aria-pressed', !on);
+      }));
+      const all = () => { const out = []; const go = (i, d) => { if (i === SLOTS.length) return out.push({ ...d }); M[SLOTS[i]].forEach((_, j) => go(i + 1, { ...d, [SLOTS[i]]: j })); }; go(0, {}); return out; };
+      const ways = document.getElementById('ways'), row = document.getElementById('ways-row');
+      const wait = ms => new Promise(r => setTimeout(r, ms));
+      const offer = picks => {
+        row.replaceChildren(...picks.map((d, i) => {
+          const t = sum(d), b = document.createElement('button'); b.type = 'button'; b.className = 'way'; b.setAttribute('aria-pressed', i === 0);
+          b.innerHTML = `<span class="w-n">Way ${i + 1}</span><p class="w-meals">${SLOTS.map(sl => M[sl][d[sl]][0]).join('<br>')}</p><p class="w-tot">${fmt('kcal', t.kcal)} kcal · ${fmt('p', t.p)} g protein · ${fmt('f', t.f)} g fiber</p>`;
+          b.addEventListener('click', () => { const prev = day; day = { ...d }; row.querySelectorAll('.way').forEach(x => x.setAttribute('aria-pressed', x === b)); show(prev, 'roll'); });
+          return b;
+        }));
+        ways.hidden = false;
+      };
+      fixBtn.addEventListener('click', async () => {
+        const want = chips.filter(c => c.getAttribute('aria-pressed') === 'true').map(c => c.dataset.k);
+        const score = d => { const t = sum(d); return want.reduce((a, k) => a + Math.abs(t[k] - GOAL[k]) / GOAL[k], 0); };
+        const ranked = all().sort((a, b) => score(a) - score(b));
+        const picks = []; for (const d of ranked) { if (picks.every(p => SLOTS.filter(sl => p[sl] !== d[sl]).length >= 2)) picks.push(d); if (picks.length === 3) break; }
+        fixBtn.disabled = redo.disabled = true; ways.hidden = true; fixBtn.textContent = 'Searching';
+        if (!still) {
+          // the search, out loud: days drawn from the ranking, each a little better than the last, slowing as it closes in
+          spread.classList.add('searching');
+          const N = 14;
+          for (let i = 0; i < N; i++) {
+            const q = i / (N - 1), rank = Math.floor((1 - q) * (1 - q) * (ranked.length * 0.7) + Math.random() * 4);
+            const prev = day; day = { ...ranked[Math.min(ranked.length - 1, rank)] }; show(prev, 'flick');
+            await wait(55 + 170 * q * q);
+          }
+          spread.classList.remove('searching');
+        }
+        const prev = day; day = { ...picks[0] }; show(prev, 'roll');
+        offer(picks);
+        fixBtn.disabled = redo.disabled = false; fixBtn.textContent = 'Fix the day';
+      });
+      redo.addEventListener('click', () => {
+        const prev = day; let d, t;
+        do { d = {}; SLOTS.forEach(sl => d[sl] = Math.floor(Math.random() * M[sl].length)); t = sum(d); } while (K.filter(k => Math.abs(t[k] - GOAL[k]) <= GOAL[k] * 0.1).length > 1);   // a day that needs fixing
+        day = d; ways.hidden = true; show(prev, 'roll');
+      });
+      show();
     })();
   </script>
 </body>
