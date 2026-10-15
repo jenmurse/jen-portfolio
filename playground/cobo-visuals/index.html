@@ -62,6 +62,9 @@
     .band-top + .section { margin-top: var(--space-120); }
 
     /* the story, in the page's usual sections */
+    .notes-pair { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-28) var(--gutter); }
+    .notes-pair div { border-top: 1px solid var(--border); padding-top: var(--space-8); }
+    .notes-pair dd { margin-top: var(--space-4); font-size: var(--fs-list); line-height: var(--s-lh); }
     .night-wrap { position: relative; }
     .night-wrap:hover .vid-controls, .night-wrap:focus-within .vid-controls { opacity: 1; }
     @media (max-width: 680px) {
@@ -73,6 +76,7 @@
       .knobs { flex-basis: 100%; grid-template-columns: 1fr 1fr; }
       .hit { flex-basis: 100%; padding: var(--space-8); }
      
+      .notes-pair { grid-template-columns: 1fr; }
     }
     @media (prefers-reduced-motion: reduce) { .media-grid video { cursor: pointer; } }
   </style>
@@ -165,6 +169,13 @@
       </figure>
     </section>
 
+    <section class="section" aria-labelledby="h-learn">
+      <h2 class="list-label" id="h-learn">Testing and learned</h2>
+      <dl class="notes-pair">
+        <div><dt class="list-label">Testing</dt><dd>Whether shaders written with Claude Code could carry a live room for two hours, and be run on the night by someone who didn’t build them.</dd></div>
+        <div><dt class="list-label">Learned</dt><dd>That the five parts had to be judged as one set, not one at a time. Four early drafts were thrown out for being clean and geometric next to references that were photographic and physical.</dd></div>
+      </dl>
+    </section>
 
     <section class="section" aria-labelledby="h-made">
       <h2 class="list-label" id="h-made">How it was made</h2>

@@ -113,6 +113,9 @@
       .card-f { justify-content: stretch; } .card-f .btn { flex: 1; }
     }
 
+    .notes-pair { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-28) var(--gutter); }
+    .notes-pair div { border-top: 1px solid var(--border); padding-top: var(--space-8); }
+    .notes-pair dd { margin-top: var(--space-4); font-size: var(--fs-list); line-height: var(--s-lh); }
     @media (prefers-reduced-motion: reduce) { .sp-stat s { transition: none; } }
     @media (max-width: 680px) {
       .band-top { padding: var(--space-28) 0 var(--space-56); margin-top: calc(-1 * var(--space-28)); }
@@ -120,6 +123,7 @@
       .bt-nav { margin-bottom: var(--space-40); }
       .bt-name, .bt-pic, .bt-side { grid-column: 1 / -1; grid-row: auto; margin-top: 0; }
       .bt-side { order: 4; }
+      .notes-pair { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -215,6 +219,13 @@
       </div>
     </section>
 
+    <section class="section" aria-labelledby="h-learn">
+      <h2 class="list-label" id="h-learn">Testing and learned</h2>
+      <dl class="notes-pair">
+        <div><dt class="list-label">Testing</dt><dd>Whether a full meal planner, with real nutrition data, a day optimizer and its own MCP connector, could be designed and built by one person.</dd></div>
+        <div><dt class="list-label">Learned</dt><dd>Maintaining a database-driven app isn’t something I want to do at scale.</dd></div>
+      </dl>
+    </section>
 
     <section class="section" aria-labelledby="h-made">
       <h2 class="list-label" id="h-made">How it was made</h2>
