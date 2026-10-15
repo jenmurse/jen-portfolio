@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grid — mock</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,700&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/playground.css">
+  <style>
+    /* MOCK: one column grid under every page. Each option sets the column count, the gutter, and where the
+       label column ends; everything else is placed on those lines */
+    body[data-grid="12-4"] { --cols: 12; --gut: var(--space-28); --label: 1 / 5;  --content: 5 / -1; --half-a: 5 / 9;  --half-b: 9 / -1;  --tile: 1 / 9; --notes: 9 / -1; --phone: 5 / 8; --phone-cap: 8 / 11; }
+    body[data-grid="12-3"] { --cols: 12; --gut: var(--space-28); --label: 1 / 4;  --content: 4 / -1; --half-a: 4 / 8;  --half-b: 8 / -1;  --tile: 1 / 9; --notes: 9 / -1; --phone: 4 / 7; --phone-cap: 7 / 10; }
+    body[data-grid="9-3"]  { --cols: 9;  --gut: var(--space-40); --label: 1 / 4;  --content: 4 / -1; --half-a: 4 / 7;  --half-b: 7 / -1;  --tile: 1 / 7; --notes: 7 / -1; --phone: 4 / 6; --phone-cap: 6 / 9; }
+
+    .page { position: relative; }
+    .g { display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); column-gap: var(--gut); align-items: start; }
+    .at-label { grid-column: var(--label); }
+    .at-content { grid-column: var(--content); }
+    .at-half-a { grid-column: var(--half-a); }
+    .at-half-b { grid-column: var(--half-b); }
+    .at-tile { grid-column: var(--tile); }
+    .at-notes { grid-column: var(--notes); }
+    .at-phone { grid-column: var(--phone); }
+    .at-phone-cap { grid-column: var(--phone-cap); align-self: center; }
+
+    /* the column lines: the same grid, laid over the page's content box */
+    .lines { position: absolute; top: 0; bottom: 0; left: var(--space-40); right: var(--space-40); pointer-events: none; z-index: 50; align-items: stretch; }
+    .lines span { background: rgba(41, 97, 246, 0.07); border-left: 1px solid rgba(41, 97, 246, 0.25); border-right: 1px solid rgba(41, 97, 246, 0.25);
+      font-family: var(--font-mono); font-size: var(--fs-label); color: var(--accent); padding: var(--space-4); }
+    body:not(.show-lines) .lines { display: none; }
+
+    .switch { position: fixed; bottom: var(--space-12); right: var(--space-12); z-index: 60; display: flex; gap: var(--space-4);
+      font-family: var(--font-mono); font-size: var(--fs-mono); letter-spacing: var(--mono-tracking); text-transform: uppercase; }
+    .switch button { font: inherit; text-transform: inherit; background: var(--bg); color: var(--text); border: 1px solid var(--border); padding: var(--space-8) var(--space-12); cursor: pointer; }
+    .switch button[aria-pressed="true"] { background: var(--text); color: var(--bg); border-color: var(--text); }
+
+    .divider { margin: var(--space-120) 0 var(--space-56); padding-top: var(--space-12); border-top: 1px dashed var(--accent); color: var(--accent); }
+
+    .hero-left { padding-top: 0.1em; }
+    .lists { margin-top: var(--space-80); }
+    .vid-block img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block; }
+    .row { margin-top: var(--space-80); }
+    .row > .at-label { text-box: trim-start cap alphabetic; }
+    .meta { grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: var(--gut); }
+    .phone img { width: 100%; aspect-ratio: 1320 / 2868; object-fit: cover; display: block; border-radius: 13.6% / 6.3%; }
+    .tile img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block; }
+    .notes { display: flex; flex-direction: column; gap: var(--space-20); }
+    .notes div { border-top: 1px solid var(--border); padding-top: var(--space-8); }
+    .notes dd { font-size: var(--fs-list); line-height: var(--s-lh); margin-top: var(--space-4); }
+    .small { font-size: var(--fs-list); line-height: var(--s-lh); }
+  </style>
+</head>
+<body data-grid="12-4" class="show-lines">
+
+  <div id="cursor" aria-hidden="true"></div>
+
+  <div class="page">
+    <div class="lines g" aria-hidden="true"></div>
+
+    <!-- LANDING -->
+    <section class="g" aria-label="Landing page">
+      <div class="at-label hero-left"><a href="/" class="wordmark">Jen Murse</a></div>
+      <div class="at-content hero-right">
+        <p class="hero-primary">Jen is a multidisciplinary designer and creative leader whose work spans digital and physical mediums with a focus on brand, narrative, and technology. From hands-on designer to leader of high-performing teams, she has delivered everything from finely crafted objects to large-scale brand experiences. Most recently, she led brand creative and production at Block.</p>
+        <p class="hero-secondary">Outside of work, she enjoys a good cup of coffee, traveling the world, and tinkering on a range of projects with her husband, Garth.</p>
+      </div>
+    </section>
+    <nav class="g lists" aria-label="Site sections">
+      <div class="at-half-a">
+        <p class="list-label">Practice</p>
+        <hr class="div">
+        <a class="li" href="#"><span class="n">01</span><span class="t">Playground</span><span class="s">↗</span></a>
+        <a class="li" href="#"><span class="n">02</span><span class="t">Tiger Town Lab</span><span class="s">↗</span></a>
+      </div>
+      <div class="at-half-b">
+        <p class="list-label">Hello</p>
+        <hr class="div">
+        <a class="li" href="#"><span class="n">01</span><span class="t">LinkedIn</span><span class="s">↗</span></a>
+        <a class="li" href="#"><span class="n">02</span><span class="t">Email</span><span class="s">↗</span></a>
+      </div>
+    </nav>
+    <div class="vid-block row"><img src="/playground/cobo-visuals/15.jpg" alt="Stand-in for the landing video"></div>
+
+    <!-- PROJECT PAGE -->
+    <p class="list-label divider">Project page</p>
+    <header class="g">
+      <div class="at-label hero-left"><span class="wordmark">Jen Murse</span><span class="crumb">Playground</span></div>
+      <div class="at-content hero-right">
+        <div class="hero-title">
+          <h2 class="hero-primary">Uniform</h2>
+          <p class="hero-secondary">A closet app for wearing what you own and buying what you'll wear</p>
+        </div>
+        <dl class="meta">
+          <div><dt class="list-label">For</dt><dd>Myself</dd></div>
+          <div><dt class="list-label">Role</dt><dd>Design and build</dd></div>
+          <div><dt class="list-label">Development</dt><dd>One-shot with iterations</dd></div>
+          <div><dt class="list-label">Medium</dt><dd>iOS app</dd></div>
+        </dl>
+      </div>
+    </header>
+    <section class="g row" aria-label="The idea">
+      <h3 class="list-label at-label">The idea</h3>
+      <div class="at-content prose"><p>I save a lot of outfit inspiration, and my closet never quite catches up to it. The looks I save drift one way and the clothes I buy drift another, and the result is a closet full of things that felt right in the store and never get worn.</p></div>
+    </section>
+    <section class="g row" aria-label="How it works">
+      <h3 class="list-label at-label">How it works</h3>
+      <div class="at-phone phone"><img src="/playground/uniform/missing.jpg" alt=""></div>
+      <div class="at-phone-cap small"><p><b>03 What's missing.</b> Across everything you save, the pieces that keep coming back that you don't own, or own too few of.</p></div>
+    </section>
+
+    <!-- PLAYGROUND INDEX -->
+    <p class="list-label divider">Playground index</p>
+    <section class="g" aria-label="Playground index header">
+      <div class="at-label hero-left"><span class="wordmark">Jen Murse</span><span class="crumb">Playground</span></div>
+      <div class="at-content hero-right">
+        <div class="hero-title">
+          <h2 class="hero-primary">Playground</h2>
+          <p class="hero-secondary">Experiments and side projects to learn new mediums and tools</p>
+        </div>
+      </div>
+    </section>
+    <section class="g row" aria-label="Project">
+      <div class="at-tile tile"><img src="/playground/good-measure/tile.jpg" alt=""></div>
+      <div class="at-notes">
+        <div class="caption" style="margin-top:0"><span class="n">01</span><span class="t">Good Measure</span></div>
+        <p class="caption-line" style="color:var(--text)">A nutrition tracker and meal planner for people who cook</p>
+        <dl class="notes" style="margin-top:var(--space-20)">
+          <div><dt class="list-label">Testing</dt><dd>Whether a full web app with real data could be designed and built by one person.</dd></div>
+          <div><dt class="list-label">Learned</dt><dd>One honest sentence about what you learned.</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <footer><span>© 2026 Jen Murse</span></footer>
+  </div>
+
+  <div class="switch" role="group" aria-label="Grid option">
+    <button type="button" data-grid="12-4" aria-pressed="true">12 · label 4</button>
+    <button type="button" data-grid="12-3" aria-pressed="false">12 · label 3</button>
+    <button type="button" data-grid="9-3" aria-pressed="false">9 · label 3</button>
+    <button type="button" id="lines-btn" aria-pressed="true">Lines</button>
+  </div>
+
+  <script src="/main.js"></script>
+  <script>
+    // switch the grid; the column lines are rebuilt to match. G toggles the lines too
+    const lines = document.querySelector('.lines'), btns = document.querySelectorAll('.switch [data-grid]');
+    const draw = () => {
+      const n = +getComputedStyle(document.body).getPropertyValue('--cols');
+      lines.replaceChildren(...Array.from({ length: n }, (_, i) => Object.assign(document.createElement('span'), { textContent: i + 1 })));
+    };
+    const set = g => {
+      document.body.dataset.grid = g;
+      btns.forEach(b => b.setAttribute('aria-pressed', b.dataset.grid === g));
+      history.replaceState(null, '', '#' + g);
+      draw();
+    };
+    const linesBtn = document.getElementById('lines-btn');
+    const toggle = () => linesBtn.setAttribute('aria-pressed', document.body.classList.toggle('show-lines'));
+    btns.forEach(b => b.addEventListener('click', () => set(b.dataset.grid)));
+    linesBtn.addEventListener('click', toggle);
+    document.addEventListener('keydown', e => { if (e.key === 'g' && !e.metaKey && !e.ctrlKey) toggle(); });
+    set(['12-4', '12-3', '9-3'].includes(location.hash.slice(1)) ? location.hash.slice(1) : '12-4');
+  </script>
+</body>
+</html>

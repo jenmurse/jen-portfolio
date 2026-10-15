@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Playground — mock</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,700&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/playground.css">
+  <style>
+    /* MOCK: the index on the site's 12-column grid. Each project opens on its name in display type across the page,
+       then the tile on columns 1–8 with its line and notes on 9–12 */
+    :root { --fs-display: calc(clamp(2.75rem, 7vw, 6.5rem) * var(--h-scale)); }
+    .hero-grid { margin-bottom: 0; }
+    .intro { margin-top: var(--space-56); }
+    .intro .prose { grid-column: 4 / -1; }
+
+    .projects { list-style: none; display: flex; flex-direction: column; gap: 0; margin-top: var(--space-120); }   /* the bands meet edge to edge */
+    .projects li { display: grid; grid-template-columns: var(--grid); gap: var(--space-28) var(--gutter); align-items: start; }
+    .projects .name { grid-column: 1 / -1; }
+    .projects .info .n { font-family: var(--font-mono); font-size: var(--fs-label); letter-spacing: var(--mono-tracking); color: var(--accent); }
+    .projects .name h2 { font-size: var(--fs-display); font-weight: var(--h-weight); line-height: 0.95; letter-spacing: -0.035em; }
+    .projects .name a:hover h2 { opacity: 0.6; }
+    .projects .tile { grid-column: 1 / 9; }
+    .projects .frame video, .projects .frame img { object-position: center; }
+    .projects .info { grid-column: 9 / -1; display: flex; flex-direction: column; gap: var(--space-20); }
+    .projects .info .n { text-box: trim-start cap alphabetic; }
+    .projects .line { font-size: var(--fs-list); line-height: var(--s-lh); margin-top: calc(-1 * var(--space-12)); }
+    .notes { display: flex; flex-direction: column; gap: var(--space-20); }
+    .notes div { border-top: 1px solid var(--border); padding-top: var(--space-8); }
+    .notes dd { font-size: var(--fs-list); font-weight: var(--s-weight); line-height: var(--s-lh); text-wrap: pretty; margin-top: var(--space-4); }
+
+    .log-section { margin-top: var(--space-120); }
+    .log { list-style: none; }
+    .log li { display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); gap: var(--gutter); padding: var(--space-12) 0; border-top: 1px solid var(--border); font-size: var(--fs-list); }
+    .log li:last-child { border-bottom: 1px solid var(--border); }
+    .log .when { grid-column: 1 / 2; }
+    .log .nm { grid-column: 2 / 5; }
+    .log .what { grid-column: 5 / -1; }
+    .log .when, .log .what { font-family: var(--font-mono); font-size: var(--fs-mono); letter-spacing: var(--mono-tracking); text-transform: uppercase; }
+    .log .what { color: var(--accent); }
+    .ph { opacity: 0.45; }
+
+    @media (max-width: 680px) {
+      .intro .prose, .projects .name, .projects .tile, .projects .info { grid-column: 1 / -1; }
+      .projects li { grid-template-columns: 1fr; }
+      .projects { gap: var(--space-80); margin-top: var(--space-80); }
+      .log li { grid-template-columns: 7ch minmax(0, 1fr); gap: var(--space-4) var(--space-20); }
+      .log .when { grid-column: 1; } .log .nm, .log .what { grid-column: 2; }
+    }
+
+    /* ── BAND ── a project in its own colour, across the whole window. The live piece takes columns 4–12,
+       the name in display type crosses into it from column 1, and the notes sit under the name */
+    .band { display: block !important; position: relative; width: 100vw; left: 50%; transform: translateX(-50%);
+      background: var(--band-bg); color: var(--band-fg); padding: var(--space-120) 0; }
+    .band--cobo { --band-bg: #160c26; --band-fg: #efe6ff; --band-accent: #b9a4ff; }
+    .band-in { max-width: 1200px; margin: 0 auto; padding: 0 var(--space-40);
+      display: grid; grid-template-columns: var(--grid); column-gap: var(--gutter); align-items: start; }
+    .band-piece { grid-column: 4 / -1; grid-row: 1 / span 2; position: relative; }
+    .band-piece canvas { width: 100%; aspect-ratio: 16 / 9; display: block; background: #000; cursor: inherit; }
+    .band-name { grid-column: 1 / 10; grid-row: 1; position: relative; z-index: 2; margin-top: calc(-0.5 * var(--fs-display)); pointer-events: auto; }
+    .band-name h2 { font-size: var(--fs-display); font-weight: var(--h-weight); line-height: 0.92; letter-spacing: -0.035em; color: var(--band-fg); mix-blend-mode: difference; }
+    .band-name:hover h2 { opacity: 0.7; }
+    .band-info { grid-column: 1 / 4; grid-row: 2; align-self: end; display: flex; flex-direction: column; gap: var(--space-20); position: relative; z-index: 2; }
+    .band-info .n { font-family: var(--font-mono); font-size: var(--fs-label); letter-spacing: var(--mono-tracking); color: var(--band-accent); }
+    .band-info .line { font-size: var(--fs-list); line-height: var(--s-lh); }
+    .band .notes div { border-top-color: color-mix(in srgb, var(--band-fg) 20%, transparent); }
+    .band .list-label { color: var(--band-accent); }
+    .band-link { font-family: var(--font-mono); font-size: var(--fs-mono); letter-spacing: var(--mono-tracking); text-transform: uppercase; color: var(--band-accent); }
+    .band-link:hover { color: var(--band-fg); }
+    .band-clock { display: flex; gap: var(--space-12); margin-top: var(--space-12); font-family: var(--font-mono); font-size: var(--fs-mono);
+      letter-spacing: var(--mono-tracking); text-transform: uppercase; font-variant-numeric: tabular-nums; color: var(--band-accent); }
+    .band-clock #cobo-part { color: var(--band-fg); min-width: 6ch; }
+    .band-clock .of { opacity: 0.5; }
+    .projects li.band + li, .projects li + li.band { margin-top: 0; }
+    @media (max-width: 680px) {
+      .band { padding: var(--space-80) 0; }
+      .band-in { grid-template-columns: 1fr; padding: 0 var(--space-28); row-gap: var(--space-20); }
+      .band-name, .band-piece, .band-info { grid-column: 1 / -1; grid-row: auto; margin-top: 0; }
+    }
+
+    .band--gm { --band-bg: #2f6b43; --band-fg: #f4f1e6; --band-accent: #bfe0b0; --card: #24573a; }
+    /* Uniform in the app's own colours: ink on paper, the closet on its pale grey ground */
+    .band--un { --band-bg: #FFFFFF; --band-fg: #0A0A0A; --band-accent: #6E6E6A; }
+    /* every name crosses into the top-left of its piece; each piece keeps that corner clear */
+    .band--un .band-name h2, .band--gm .band-name h2 { mix-blend-mode: normal; }
+
+    /* Good Measure: a real recipe from the app. Servings rescale every amount; dragging an amount moves the nutrition per serving */
+    .gm-piece { display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); column-gap: var(--gutter); background: var(--card); color: var(--band-fg); padding: calc(0.5 * var(--fs-display) + var(--space-28)) var(--space-28) var(--space-28); align-items: start; }
+    .gm-photo { grid-column: 1 / 4; margin: 0; }
+    .gm-photo img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; display: block; }
+    .gm-recipe { grid-column: 4 / 7; display: flex; flex-direction: column; gap: var(--space-12); }
+    .gm-piece .list-label { color: var(--band-accent); margin: 0; }
+    .gm-title { font-size: calc(var(--fs-primary) * 0.8); font-weight: var(--h-weight); letter-spacing: -0.02em; line-height: 1.1; }
+    .gm-serv { display: flex; align-items: center; gap: var(--space-12); }
+    .gm-serv output { font-size: var(--fs-primary); font-variant-numeric: tabular-nums; min-width: 2ch; text-align: center; }
+    .gm-step { width: var(--space-28); height: var(--space-28); border: 1px solid var(--band-accent); background: transparent; color: var(--band-fg); font: inherit; cursor: inherit; }
+    .gm-step:hover { background: var(--band-fg); color: var(--card); }
+    .gm-ing { list-style: none; font-size: var(--fs-list); }
+    .gm-ing li { display: grid; grid-template-columns: 7ch 1fr; gap: var(--space-12); padding: var(--space-4) 0; border-top: 1px solid rgba(244,241,230,0.14); }
+    .gm-ing .amt { font-variant-numeric: tabular-nums; cursor: ew-resize; color: var(--band-accent); touch-action: none; user-select: none; }
+    .gm-ing .amt:hover, .gm-ing .amt:focus-visible, .gm-ing .amt.drag { background: var(--band-accent); color: var(--card); outline: none; }
+    .gm-hint, .gm-goal { font-family: var(--font-mono); font-size: var(--fs-label); letter-spacing: var(--mono-tracking); text-transform: uppercase; color: rgba(244,241,230,0.55); }
+    .gm-totals { grid-column: 7 / -1; display: flex; flex-direction: column; gap: var(--space-20); }
+    .gm-row p { display: flex; align-items: baseline; gap: var(--space-8); font-size: var(--fs-list); flex-wrap: wrap; }
+    .gm-row p span { font-family: var(--font-mono); font-size: var(--fs-label); letter-spacing: var(--mono-tracking); text-transform: uppercase; width: 100%; }
+    .gm-row b { font-size: calc(var(--fs-primary) * 1.1); font-weight: var(--h-weight); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+    .gm-row i { display: block; height: var(--space-8); background: rgba(244,241,230,0.14); margin-top: var(--space-8); position: relative; }
+    .gm-row em { position: absolute; inset: 0 auto 0 0; width: 0; background: var(--band-accent); transition: width .4s cubic-bezier(.2,0,0,1), background .3s; }
+    .gm-row.over em { background: #ff9a7a; }
+
+    /* Uniform: the closet as a pile on the table; drag a piece, or focus it and use the arrow keys */
+    .u-stage { position: relative; aspect-ratio: 16 / 9; background: #F4F4F2; overflow: hidden; touch-action: none; }
+    .u-piece { position: absolute; width: var(--w, 10%); padding: 0; border: 0; background: none; cursor: grab; transform: translate(-50%, -50%) rotate(var(--r, 0deg)) scale(var(--s, 1)); transition: transform .25s cubic-bezier(.2,0,0,1), filter .25s; }
+    .u-piece img { width: 100%; display: block; pointer-events: none; }
+    .u-piece[hidden] { display: none; }
+    .u-stage.placing .u-piece { transition: none; }
+    .u-piece.lift { transition: none; cursor: grabbing; filter: drop-shadow(0 14px 18px rgba(10,10,10,0.18)); transform: translate(-50%, -50%) rotate(var(--r, 0deg)) scale(1.06); }
+    .u-piece:focus-visible { outline: 1px solid var(--band-fg); outline-offset: var(--space-4); }
+    .u-shuffle { font: inherit; text-transform: inherit; letter-spacing: inherit; background: none; border: 1px solid currentColor; color: inherit; padding: var(--space-4) var(--space-8); cursor: inherit; margin-left: auto; }
+    @media (prefers-reduced-motion: reduce) { .u-piece, .gm-row em { transition: none; } }
+    @media (max-width: 680px) {
+      .gm-piece { grid-template-columns: 1fr; padding: var(--space-20); row-gap: var(--space-28); }
+      .gm-photo, .gm-recipe, .gm-totals { grid-column: 1 / -1; }
+      .gm-photo img { aspect-ratio: 4 / 3; }
+    }
+
+    /* MOCK ONLY: column lines, press G */
+    .lines { position: absolute; top: 0; bottom: 0; left: var(--space-40); right: var(--space-40); display: grid; grid-template-columns: var(--grid); column-gap: var(--gutter); pointer-events: none; z-index: 50; }
+    .lines i { background: rgba(41, 97, 246, 0.07); }
+    body:not(.show-lines) .lines { display: none; }
+    .page { position: relative; }
+    .mock-note { position: fixed; bottom: var(--space-12); right: var(--space-12); background: var(--text); color: var(--bg); z-index: 60;
+      font-family: var(--font-mono); font-size: var(--fs-mono); text-transform: uppercase; padding: var(--space-8) var(--space-12); }
+  </style>
+</head>
+<body>
+
+  <div id="cursor" aria-hidden="true"></div>
+
+  <div class="page">
+    <div class="lines" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+
+    <header class="hero-grid">
+      <div class="hero-left">
+        <a href="/" class="wordmark" aria-label="Jen Murse — home">Jen Murse</a>
+        <span class="crumb" aria-current="page">Playground</span>
+      </div>
+      <div class="hero-right">
+        <div class="hero-title">
+          <h1 class="hero-primary">Playground</h1>
+          <p class="hero-secondary">Experiments and side projects to learn new mediums and tools</p>
+        </div>
+      </div>
+    </header>
+
+    <section class="section intro" aria-label="Why I play">
+      <span aria-hidden="true"></span>
+      <div class="prose">
+        <p>Draft intro. I learn a new medium by making a real thing in it, start to finish: an iPhone app I use every day, a planner my household cooks from, two hours of visuals for a room full of people. Claude Code is the main tool, and each project is a test of how far a designer can take an idea alone, from the first sketch to something that ships.</p>
+      </div>
+    </section>
+
+    <ol class="projects" aria-label="Projects">
+      <li class="band band--gm">
+        <div class="band-in">
+          <a href="/playground/good-measure/" class="band-name"><h2>Good Measure</h2></a>
+          <div class="band-piece gm-piece" role="group" aria-label="Dial in a recipe: change the servings, or drag any amount and watch the nutrition per serving move">
+            <figure class="gm-photo"><img src="/playground/_mock/food-dinner-tofu.jpg" alt="Miso-glazed tofu on greens"></figure>
+            <div class="gm-recipe">
+              <p class="list-label">Recipe</p>
+              <h3 class="gm-title">Miso-Glazed Tofu</h3>
+              <div class="gm-serv">
+                <span class="list-label">Serves</span>
+                <button type="button" class="gm-step" data-d="-1" aria-label="One fewer serving">−</button>
+                <output id="gm-serv" aria-live="polite">3</output>
+                <button type="button" class="gm-step" data-d="1" aria-label="One more serving">+</button>
+              </div>
+              <ul class="gm-ing">
+                <li data-g="400" data-kcal="144" data-p="17.3" data-f="2.3"><span class="amt" tabindex="0" role="slider" aria-label="Tofu, firm, grams" aria-valuemin="0" aria-valuemax="1600" aria-valuenow="400"><b>400</b> g</span><span class="nm">Tofu, firm</span></li>
+                <li data-g="45" data-kcal="198" data-p="12.8" data-f="5.4"><span class="amt" tabindex="0" role="slider" aria-label="Miso paste, grams" aria-valuemin="0" aria-valuemax="180" aria-valuenow="45"><b>45</b> g</span><span class="nm">Miso paste</span></li>
+                <li data-g="21" data-kcal="304" data-p="0.3" data-f="0.2"><span class="amt" tabindex="0" role="slider" aria-label="Honey, grams" aria-valuemin="0" aria-valuemax="84" aria-valuenow="21"><b>21</b> g</span><span class="nm">Honey</span></li>
+                <li data-g="15" data-kcal="60" data-p="10.5" data-f="0.8"><span class="amt" tabindex="0" role="slider" aria-label="Soy sauce, grams" aria-valuemin="0" aria-valuemax="60" aria-valuenow="15"><b>15</b> g</span><span class="nm">Soy sauce</span></li>
+                <li data-g="12" data-kcal="80" data-p="1.8" data-f="2.0"><span class="amt" tabindex="0" role="slider" aria-label="Ginger, grams" aria-valuemin="0" aria-valuemax="48" aria-valuenow="12"><b>12</b> g</span><span class="nm">Ginger</span></li>
+                <li data-g="7" data-kcal="884" data-p="0" data-f="0"><span class="amt" tabindex="0" role="slider" aria-label="Sesame oil, grams" aria-valuemin="0" aria-valuemax="28" aria-valuenow="7"><b>7</b> g</span><span class="nm">Sesame oil</span></li>
+                <li data-g="6" data-kcal="573" data-p="17.7" data-f="11.8"><span class="amt" tabindex="0" role="slider" aria-label="Sesame seeds, grams" aria-valuemin="0" aria-valuemax="24" aria-valuenow="6"><b>6</b> g</span><span class="nm">Sesame seeds</span></li>
+                <li data-g="25" data-kcal="32" data-p="1.8" data-f="2.6"><span class="amt" tabindex="0" role="slider" aria-label="Spring onions, grams" aria-valuemin="0" aria-valuemax="100" aria-valuenow="25"><b>25</b> g</span><span class="nm">Spring onions</span></li>
+              </ul>
+              <p class="gm-hint">Drag an amount, or focus it and use the arrow keys</p>
+            </div>
+            <div class="gm-totals" aria-live="polite">
+              <p class="list-label">Per serving</p>
+              <div class="gm-row" data-k="kcal" data-goal="600"><p><span>Calories</span><b>0</b> / 600</p><i><em></em></i></div>
+              <div class="gm-row" data-k="p" data-goal="35"><p><span>Protein</span><b>0</b> / 35 g</p><i><em></em></i></div>
+              <div class="gm-row" data-k="f" data-goal="10"><p><span>Fiber</span><b>0</b> / 10 g</p><i><em></em></i></div>
+              <p class="gm-goal">Against a dinner's share of the day's goals</p>
+            </div>
+          </div>
+          <div class="band-info">
+            <span class="n">01</span>
+            <p class="line">A nutrition tracker and meal planner for people who cook. Change the servings or drag an amount, and the nutrition follows.</p>
+            <dl class="notes">
+              <div><dt class="list-label">Testing</dt><dd>Draft: whether a full web app with real data, a USDA lookup and an optimizer could be designed and built by one person.</dd></div>
+              <div><dt class="list-label">Learned</dt><dd class="ph">One honest sentence about what you learned.</dd></div>
+            </dl>
+            <a class="band-link" href="/playground/good-measure/">See the project <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+      </li>
+      <li class="band band--un">
+        <div class="band-in">
+          <a href="/playground/uniform/" class="band-name"><h2>Uniform</h2></a>
+          <div class="band-piece u-piece-wrap">
+            <div class="u-stage" role="group" aria-label="A closet to play with: drag the pieces around, scroll over one to turn it, or focus one and use the arrow keys (R turns it)">
+              <button type="button" class="u-piece"><img src="/playground/_mock/cutouts/bottoms__336a5d2def03f2a949bc2369cf087726.png" alt="Trousers" draggable="false"></button>
+              <button type="button" class="u-piece"><img src="/playground/_mock/cutouts/bottoms__4af5c5ec8ea03848cb6d5dd5fbfb3d7e.png" alt="Trousers" draggable="false"></button>
+              <button type="button" class="u-piece"><img src="/playground/_mock/cutouts/bottoms__5a1ac27f2dc56a70efdf9a3cf5260c10.png" alt="Trousers" draggable="false"></button>
+              <button type="button" class="u-piece"><img src="/playground/_mock/cutouts/bottoms__720e6fbe76c1270118e33700042cef51.png" alt="Trousers" draggable="false"></button>
+              <button type="button" class="u-piece"><img src="/playground/_mock/cutouts/bottoms__9718d84b273841ff8b5ad107c6745186.png" alt="Trousers" draggable="false"></button>
+              <button type="button" class="u-piece"><img src="/playground/_mock/cutouts/bottoms__af5903fdcef52f6d6ed3e1d082856d09.png" alt="Trousers" draggable="false"></button>
+              <button type="button" class="u-piece"><img src="/playground/_mock/cutouts/bottoms__b8ecf1047ea87c49825beb8abcc9b512.png" alt="Trousers" draggable="false"></button>
+              <button type="button" class="u-piece"><img src="/playground/_mock/cutouts/bottoms__f8d5f73757936cbbcf76be751dcb7459.png" alt="Trousers" draggable="false"></button>
+              <button type="button" class="u-piece"><img src="/playground/_mock/cutouts/outerwear__4d34b4b8202c8f76d08c00aa0d40228a.png" alt="Blazer" draggable="false"></button>
+              <button type="button" class="u-piece"><img src="/playground/_mock/cutouts/shoes__28295671f3dc60a983c00268f6da9ebf.png" alt="Shoes" draggable="false"></button>
+              <button type="button" class="u-piece"><img src="/playground/_mock/cutouts/shoes__4a8f7824f2c5f292824fb1ddba9e5b1d.png" alt="Shoes" draggable="false"></button>
+              <button type="button" class="u-piece"><img src="/playground/_mock/cutouts/shoes__65d145b5b89d54bff914fb364f2599c7.png" alt="Shoes" draggable="false"></button>
+              <button type="button" class="u-piece"><img src="/playground/_mock/cutouts/shoes__77c7536ae6075b6a3aa12e782f1af6dd.png" alt="Shoes" draggable="false"></button>
+              <button type="button" class="u-piece"><img src="/playground/_mock/cutouts/shoes__a3ec65e5dd6c9468f13cecaba595aa5e.png" alt="Shoes" draggable="false"></button>
+              <button type="button" class="u-piece"><img src="/playground/_mock/cutouts/shoes__f3145f012e57be31123b1b321132e3dd.png" alt="Shoes" draggable="false"></button>
+              <button type="button" class="u-piece"><img src="/playground/_mock/cutouts/shoes__lilac.png" alt="Shoes" draggable="false"></button>
+              <button type="button" class="u-piece"><img src="/playground/_mock/cutouts/tops__02d58de73dbcbb4b20c54f18be2ea444.png" alt="Top" draggable="false"></button>
+              <button type="button" class="u-piece"><img src="/playground/_mock/cutouts/tops__162c028d97d04a0e82566bbcd5eaf956.png" alt="Top" draggable="false"></button>
+              <button type="button" class="u-piece"><img src="/playground/_mock/cutouts/tops__249a164a596ae007449d9750dd787c61.png" alt="Top" draggable="false"></button>
+              <button type="button" class="u-piece"><img src="/playground/_mock/cutouts/tops__aaae6a6a327b45533b74f173043dda71.png" alt="Top" draggable="false"></button>
+              <button type="button" class="u-piece"><img src="/playground/_mock/cutouts/tops__ccb91492541a70d8291c6ce2595c469e.png" alt="Top" draggable="false"></button>
+            </div>
+            <p class="band-clock"><span>Drag it, scroll to turn it</span><button type="button" class="u-shuffle">New outfit</button></p>
+          </div>
+          <div class="band-info">
+            <span class="n">02</span>
+            <p class="line">A closet app for wearing what you own and buying what you'll wear. These are pieces from my closet, each one a cutout the app made from a single photo.</p>
+            <dl class="notes">
+              <div><dt class="list-label">Testing</dt><dd>Draft: how well a one-shot build could carry out a detailed vision, with image models running on the phone.</dd></div>
+              <div><dt class="list-label">Learned</dt><dd class="ph">One honest sentence about what you learned.</dd></div>
+            </dl>
+            <a class="band-link" href="/playground/uniform/">See the project <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+      </li>
+      <li class="band band--cobo">
+        <div class="band-in">
+          <a href="/playground/cobo-visuals/" class="band-name"><h2>Cobo Visuals</h2></a>
+          <div class="band-piece">
+            <canvas id="cobo" width="960" height="540" role="img" aria-label="Cobo Visuals, drawn live: move across it to travel through the two-hour set"></canvas>
+            <p class="band-clock" aria-live="off"><span id="cobo-part">Space</span><span id="cobo-time">0:00:30</span><span class="of">/ 2:00:00</span></p>
+          </div>
+          <div class="band-info">
+            <span class="n">03</span>
+            <p class="line">Two hours of generative visuals for James Cobo's DJ set. Move across the picture to travel through the night.</p>
+            <dl class="notes">
+              <div><dt class="list-label">Testing</dt><dd>Draft: whether real-time shaders written with Claude Code could hold a live room for two hours.</dd></div>
+              <div><dt class="list-label">Learned</dt><dd class="ph">One honest sentence about what you learned.</dd></div>
+            </dl>
+            <a class="band-link" href="/playground/cobo-visuals/">See the project <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+      </li>
+    </ol>
+
+    <section class="section log-section" aria-labelledby="h-log">
+      <h2 class="list-label" id="h-log">Also tried</h2>
+      <ol class="log">
+        <li><span class="when">2026</span><span class="nm">Experiment name</span><span class="what ph">Medium · tool · one line</span></li>
+        <li><span class="when">2026</span><span class="nm">Experiment name</span><span class="what ph">Medium · tool · one line</span></li>
+        <li><span class="when">2026</span><span class="nm">Experiment name</span><span class="what ph">Medium · tool · one line</span></li>
+        <li><span class="when">2025</span><span class="nm">Experiment name</span><span class="what ph">Medium · tool · one line</span></li>
+        <li><span class="when">2025</span><span class="nm">Experiment name</span><span class="what ph">Medium · tool · one line</span></li>
+        <li><span class="when">2025</span><span class="nm">Experiment name</span><span class="what ph">Medium · tool · one line</span></li>
+        <li><span class="when">2024</span><span class="nm">Experiment name</span><span class="what ph">Medium · tool · one line</span></li>
+        <li><span class="when">2024</span><span class="nm">Experiment name</span><span class="what ph">Medium · tool · one line</span></li>
+      </ol>
+    </section>
+
+    <footer>
+      <span>© 2026 Jen Murse</span>
+    </footer>
+
+  </div>
+  <p class="mock-note">Mock — draft copy · G for columns</p>
+  <script src="/main.js"></script>
+  <script>
+    // Good Measure: the Miso-Glazed Tofu from the app, nutrition from USDA values per 100 g. Servings rescale every amount
+    // (the amount per serving holds); dragging an amount, or the arrow keys on it, moves the nutrition per serving
+    (() => {
+      const lis = [...document.querySelectorAll('.gm-ing li')], rows = [...document.querySelectorAll('.gm-row')];
+      if (!lis.length) return;
+      const out = document.getElementById('gm-serv'), shown = {};
+      let serv = 3;
+      lis.forEach(li => li.g = +li.dataset.g);
+      const roll = (el, from, to, fmt) => { const t0 = performance.now(); const f = now => { const q = Math.min(1, (now - t0) / 350); el.textContent = fmt(from + (to - from) * (1 - Math.pow(1 - q, 3))); if (q < 1) requestAnimationFrame(f); }; requestAnimationFrame(f); };
+      const run = () => {
+        lis.forEach(li => { const b = li.querySelector('b'), a = li.querySelector('.amt'); b.textContent = Math.round(li.g); a.setAttribute('aria-valuenow', Math.round(li.g)); });
+        rows.forEach(r => {
+          const k = r.dataset.k, goal = +r.dataset.goal;
+          const v = lis.reduce((a, li) => a + li.g * li.dataset[k] / 100, 0) / serv;
+          roll(r.querySelector('b'), shown[k] || 0, v, x => k === 'kcal' ? Math.round(x) : x.toFixed(1)); shown[k] = v;
+          r.querySelector('em').style.width = Math.min(100, v / goal * 100) + '%';
+          r.classList.toggle('over', v > goal);
+        });
+      };
+      document.querySelectorAll('.gm-step').forEach(b => b.addEventListener('click', () => {
+        const next = Math.max(1, Math.min(8, serv + +b.dataset.d)); if (next === serv) return;
+        lis.forEach(li => { const from = li.g; li.g = li.g * next / serv; roll(li.querySelector('b'), from, li.g, x => Math.round(x)); });
+        serv = next; out.textContent = serv;
+        rows.forEach(r => r.classList.toggle('over', shown[r.dataset.k] > +r.dataset.goal));
+      }));
+      lis.forEach(li => {
+        const a = li.querySelector('.amt'), base = +li.dataset.g;
+        a.addEventListener('pointerdown', e => {
+          e.preventDefault(); a.setPointerCapture(e.pointerId); a.classList.add('drag');
+          const x0 = e.clientX, g0 = li.g;
+          const move = ev => { li.g = Math.max(0, g0 + (ev.clientX - x0) * base / 120); run(); };
+          const up = () => { a.classList.remove('drag'); a.removeEventListener('pointermove', move); a.removeEventListener('pointerup', up); };
+          a.addEventListener('pointermove', move); a.addEventListener('pointerup', up);
+        });
+        a.addEventListener('keydown', e => {
+          const d = { ArrowRight: 1, ArrowUp: 1, ArrowLeft: -1, ArrowDown: -1 }[e.key]; if (!d) return;
+          e.preventDefault(); li.g = Math.max(0, li.g + d * base * 0.1); run();
+        });
+      });
+      run();
+    })();
+
+    // Uniform: five outfits hang in columns (a top over trousers, shoes beneath) with the blazer in a sixth, each a little tilted.
+    // Pieces are sized by height, so trousers run about twice a top. Spare pieces wait off the table and come in on New outfit.
+    // Drag a piece; scroll over it to turn it; with it focused, the arrow keys move it and R / Shift-R turn it
+    (() => {
+      const stage = document.querySelector('.u-stage'); if (!stage) return;
+      const pieces = [...stage.querySelectorAll('.u-piece')];
+      const HEIGHT = { tops: 22, bottoms: 46, shoes: 9, outerwear: 40 };   // share of the table's height
+      pieces.forEach(el => { el.cat = el.querySelector('img').src.split('/').pop().split('__')[0]; });
+      const size = el => {
+        const img = el.querySelector('img'), r = stage.getBoundingClientRect();
+        if (!img.naturalWidth || !r.width) return;
+        const h = el.cat === 'shoes' ? 9 * r.width / 100 * img.naturalHeight / img.naturalWidth / r.height * 100 : HEIGHT[el.cat];
+        el.style.setProperty('--w', (h / 100 * r.height * img.naturalWidth / img.naturalHeight) / r.width * 100 + '%');
+      };
+      const shuffle = a => a.map(v => [Math.random(), v]).sort((x, y) => x[0] - y[0]).map(v => v[1]);
+      // what each piece is: a print, a colour, or a neutral. Every outfit pairs a print with a colour
+      const KIND = {
+        '02d58de': 'print', 'ccb9149': 'print', '249a164': 'colour', '162c028': 'neutral', 'aaae6a6': 'neutral',
+        'b8ecf10': 'print', 'f8d5f73': 'print', '4af5c5e': 'print', '336a5d2': 'colour', '5a1ac27': 'colour', '720e6fb': 'neutral', '9718d84': 'neutral', 'af5903f': 'neutral',
+        '77c7536': 'print', '65d145b': 'colour', 'f3145f0': 'colour', 'lilac.p': 'colour', '4a8f782': 'neutral', 'a3ec65e': 'neutral', '2829567': 'neutral'
+      };
+      pieces.forEach(el => { const id = el.querySelector('img').src.split('__').pop().slice(0, 7); el.kind = KIND[id] || 'neutral'; });
+      const of = c => shuffle(pieces.filter(el => el.cat === c));
+      let z = 1;
+      const jit = n => Math.random() * 2 * n - n;
+      const put = (el, x, y, tilt) => { el.hidden = false; x = Math.max(9, Math.min(91, x)); el.style.left = x + '%'; el.style.top = y + '%'; el.rot = +jit(tilt).toFixed(1); el.style.setProperty('--r', el.rot + 'deg'); el.style.zIndex = ++z; };
+      const take = (list, kinds) => { for (const k of kinds) { const i = list.findIndex(el => el.kind === k); if (i > -1) return list.splice(i, 1)[0]; } return list.shift(); };
+      const COLS = [13, 28, 43, 58, 73, 87];
+      const dress = () => {
+        pieces.forEach(el => { el.hidden = true; });
+        const tops = of('tops'), bottoms = of('bottoms'), shoes = of('shoes'), jacket = of('outerwear')[0];
+        const jacketCol = 1 + Math.floor(Math.random() * 4);
+        COLS.forEach((x0, i) => {
+          const x = x0 + jit(5), lift = jit(9);
+          if (i === jacketCol) { put(jacket, x + jit(6), 36 + lift, 26); put(take(shoes, ['print', 'colour']), x + jit(8), 86 + jit(5), 45); return; }
+          const top = tops.shift();
+          // a print top wants a colour below it; a colour or a neutral top wants a print
+          const bottom = take(bottoms, top.kind === 'print' ? ['colour', 'print'] : ['print', 'colour']);
+          const shoe = take(shoes, top.kind === 'print' || bottom.kind === 'print' ? ['colour', 'print'] : ['print', 'colour']);
+          put(bottom, x + jit(4), 60 + lift, 18);
+          put(top, x + jit(8), 22 + lift + jit(4), 24);
+          put(shoe, x + jit(9), 89 + jit(5), 45);
+        });
+        settle();
+      };
+      // pieces may overlap a little, never cover each other: any pair sharing more than a quarter of the smaller piece
+      // is pushed apart along the shorter way out, a few rounds until nothing does
+      const settle = () => {
+        stage.classList.add('placing');
+        const r = stage.getBoundingClientRect(), on = pieces.filter(el => !el.hidden);
+        for (let round = 0; round < 40; round++) {
+          let moved = false;
+          const box = on.map(el => el.getBoundingClientRect());
+          for (let i = 0; i < on.length; i++) for (let j = i + 1; j < on.length; j++) {
+            const a = box[i], b = box[j];
+            const ox = Math.min(a.right, b.right) - Math.max(a.left, b.left), oy = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top);
+            if (ox <= 0 || oy <= 0 || ox * oy < 0.25 * Math.min(a.width * a.height, b.width * b.height)) continue;
+            moved = true;
+            const [dx, dy] = ox < oy ? [Math.sign((a.left + a.right) - (b.left + b.right)) || 1, 0] : [0, Math.sign((a.top + a.bottom) - (b.top + b.bottom)) || 1];
+            const step = (ox < oy ? ox : oy) / 2 + 2;
+            [[on[i], 1], [on[j], -1]].forEach(([el, s]) => {
+              el.style.left = Math.max(7, Math.min(93, parseFloat(el.style.left) + s * dx * step / r.width * 100)) + '%';
+              el.style.top = Math.max(8, Math.min(94, parseFloat(el.style.top) + s * dy * step / r.height * 100)) + '%';
+            });
+          }
+          if (!moved) break;
+        }
+        requestAnimationFrame(() => stage.classList.remove('placing'));
+      };
+      pieces.forEach(el => {
+        el.querySelector('img').complete ? size(el) : el.querySelector('img').addEventListener('load', () => size(el));
+        el.addEventListener('pointerdown', e => {
+          e.preventDefault(); el.setPointerCapture(e.pointerId); el.classList.add('lift'); el.style.zIndex = ++z;
+          const r = stage.getBoundingClientRect(), ox = e.clientX - el.offsetLeft - r.left, oy = e.clientY - el.offsetTop - r.top;
+          const move = ev => { el.style.left = (ev.clientX - r.left - ox) / r.width * 100 + '%'; el.style.top = (ev.clientY - r.top - oy) / r.height * 100 + '%'; };
+          const up = () => { el.classList.remove('lift'); el.removeEventListener('pointermove', move); el.removeEventListener('pointerup', up); };
+          el.addEventListener('pointermove', move); el.addEventListener('pointerup', up);
+        });
+        el.addEventListener('wheel', e => { e.preventDefault(); el.rot = (el.rot || 0) + Math.sign(e.deltaY) * 4; el.style.setProperty('--r', el.rot + 'deg'); }, { passive: false });
+        el.addEventListener('keydown', e => {
+          if (e.key === 'r' || e.key === 'R') { e.preventDefault(); el.rot = (el.rot || 0) + (e.shiftKey ? -5 : 5); el.style.setProperty('--r', el.rot + 'deg'); return; }
+          const d = { ArrowLeft: [-2, 0], ArrowRight: [2, 0], ArrowUp: [0, -3], ArrowDown: [0, 3] }[e.key]; if (!d) return;
+          e.preventDefault(); el.style.zIndex = ++z;
+          el.style.left = parseFloat(el.style.left) + d[0] + '%'; el.style.top = parseFloat(el.style.top) + d[1] + '%';
+        });
+      });
+      addEventListener('resize', () => pieces.forEach(size));
+      document.querySelector('.u-shuffle').addEventListener('click', dress);
+      // the opening table, as Jen laid it out: [piece, left %, top %, turn°]. A degree or two of wobble each load
+      const START = [
+        ['249a164', 11.3, 24.2, 5], ['b8ecf10', 15.2, 58.4, -8], ['65d145b', 20.5, 91, 8],
+        ['02d58de', 27.7, 21, -3], ['5a1ac27', 27.4, 54.6, 4], ['lilac.p', 32.4, 88.3, 25],
+        ['aaae6a6', 38.8, 21.2, 4], ['f8d5f73', 42.7, 60.5, -6],
+        ['ccb9149', 55.3, 20.3, 5], ['336a5d2', 60.4, 61.6, 2], ['77c7536', 59.9, 91, -5],
+        ['4d34b4b', 74.8, 28.5, -8], ['f3145f0', 75.1, 66.2, -15], ['4a8f782', 74.4, 90.1, 0],
+        ['162c028', 91, 23.7, 3], ['4af5c5e', 88, 58.1, -8], ['2829567', 90, 91, 15]
+      ];
+      const opening = () => {
+        pieces.forEach(el => { el.hidden = true; });
+        START.forEach(([id, x, y, r]) => {
+          const el = pieces.find(p => p.querySelector('img').src.includes('__' + id)); if (!el) return;
+          el.hidden = false; el.style.left = x + jit(0.8) + '%'; el.style.top = y + jit(0.8) + '%';
+          el.rot = +(r + jit(2)).toFixed(1); el.style.setProperty('--r', el.rot + 'deg'); el.style.zIndex = ++z;
+        });
+        settle();
+      };
+      Promise.all(pieces.map(el => el.querySelector('img').decode().catch(() => {}))).then(() => { pieces.forEach(size); opening(); });
+    })();
+  </script>
+  <script src="/playground/cobo-visuals/set.js"></script>
+  <script>
+    // The Cobo band: the full set drawn live. On its own it runs through the night at 20× speed; move across the
+    // picture and the left edge is the first minute, the right edge the last. With reduced motion it holds one frame
+    // until the pointer moves it. It only draws while it is on screen.
+    (() => {
+      const SH = window.COBO_SET, cv = document.getElementById('cobo'), gl = cv && cv.getContext('webgl');
+      if (!gl) return;
+      const PARTS = ['Space', 'Organic', 'Rave', 'Salsa', 'Disco'];
+      const START = [0]; for (const S of SH) START.push(START[START.length - 1] + S.len);
+      const END = START[SH.length], progs = [];
+      const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const vs = 'attribute vec2 a;varying vec2 isf_FragNormCoord;void main(){isf_FragNormCoord=a*0.5+0.5;gl_Position=vec4(a,0,1);}';
+      const prog = i => {
+        if (progs[i] !== undefined) return progs[i];
+        const sh = (t, src) => { const o = gl.createShader(t); gl.shaderSource(o, src); gl.compileShader(o); return gl.getShaderParameter(o, gl.COMPILE_STATUS) ? o : null; };
+        const v = sh(gl.VERTEX_SHADER, vs), f = sh(gl.FRAGMENT_SHADER, 'precision highp float;varying vec2 isf_FragNormCoord;uniform float TIME;uniform vec2 RENDERSIZE;' + SH[i].decl + SH[i].body);
+        let p = null;
+        if (v && f) { p = gl.createProgram(); gl.attachShader(p, v); gl.attachShader(p, f); gl.bindAttribLocation(p, 0, 'a'); gl.linkProgram(p); if (!gl.getProgramParameter(p, gl.LINK_STATUS)) p = null; }
+        return progs[i] = p;
+      };
+      gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+      gl.enableVertexAttribArray(0); gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+      const fmt = t => { t = Math.floor(t); return Math.floor(t / 3600) + ':' + String(Math.floor(t / 60) % 60).padStart(2, '0') + ':' + String(t % 60).padStart(2, '0'); };
+      const part = document.getElementById('cobo-part'), clock = document.getElementById('cobo-time');
+      let T = 30, last = 0, visible = false, hover = false;
+      const draw = () => {
+        let i = SH.length - 1; for (let k = 0; k < SH.length; k++) if (T < START[k + 1]) { i = k; break; }
+        part.textContent = PARTS[i]; clock.textContent = fmt(T);
+        const p = prog(i); if (!p) return;
+        gl.useProgram(p); gl.viewport(0, 0, cv.width, cv.height);
+        gl.uniform1f(gl.getUniformLocation(p, 'TIME'), T - START[i]);
+        gl.uniform2f(gl.getUniformLocation(p, 'RENDERSIZE'), cv.width, cv.height);
+        for (const k in SH[i].def) { const l = gl.getUniformLocation(p, k); if (l) gl.uniform1f(l, k === 'timeScale' ? 1 : SH[i].def[k]); }
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      };
+      const tick = now => {
+        if (!visible) return;
+        if (!hover && !still) { T += (now - last) / 1000 * 20; if (T >= END) T = 30; }
+        last = now; draw(); requestAnimationFrame(tick);
+      };
+      cv.addEventListener('pointermove', e => {
+        const r = cv.getBoundingClientRect(); hover = true;
+        T = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)) * (END - 1);
+        if (still) draw();
+      });
+      cv.addEventListener('pointerleave', () => { hover = false; });
+      cv.addEventListener('mouseenter', () => document.getElementById('cursor').className = 'on-link');
+      cv.addEventListener('mouseleave', () => document.getElementById('cursor').className = '');
+      new IntersectionObserver(es => es.forEach(e => {
+        const was = visible; visible = e.isIntersecting;
+        if (visible && !was) { last = performance.now(); draw(); if (!still) requestAnimationFrame(tick); }
+      }), { threshold: 0.1 }).observe(cv);
+    })();
+  </script>
+  <script>document.addEventListener('keydown', e => { if (e.key === 'g' && !e.metaKey && !e.ctrlKey) document.body.classList.toggle('show-lines'); });</script>
+</body>
+</html>
