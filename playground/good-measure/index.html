@@ -35,15 +35,16 @@
        day that falls short; Fix the day searches its meals out loud and lands it */
     :root { --band: #FFFFFF; --ink: #0A0A0A; --soft: #6E6E6E; --rule: #D8D8D6; --accent: #2F8B33;   /* the app's on-target green: the page's accent */
       --ok: #2F8B33; --ok-t: #D8E8D5; --short: #C97A1A; --short-t: #F8E5C8; --over: #CC3823; --over-t: #F5D5CD; }
+    .band-top { --line-rule: #D8D8D6; }
     .band-top { position: relative; width: 100vw; left: 50%; transform: translateX(-50%); margin-top: calc(-1 * var(--space-56)); background: var(--band); color: var(--ink); padding: var(--space-56) 0 var(--space-120); }
     .bt-in { max-width: 1200px; margin: 0 auto; padding: 0 var(--space-40); display: grid; grid-template-columns: var(--grid); column-gap: var(--gutter); align-items: start; }
     .bt-nav { grid-column: 1 / -1; margin-bottom: var(--space-80); }
     .bt-nav .crumb { color: var(--accent); }
     .bt-name { grid-column: 1 / 10; grid-row: 2; position: relative; z-index: 3; font-size: calc(clamp(3.2rem, 9vw, 8.5rem) * var(--h-scale)); font-weight: var(--h-weight); line-height: 0.92; letter-spacing: -0.045em; pointer-events: none; }
-    .bt-pic { grid-column: 4 / -1; grid-row: 2 / span 2; margin-top: calc(0.5 * clamp(3.2rem, 9vw, 8.5rem)); }
-    .bt-side { grid-column: 1 / 4; grid-row: 3; align-self: end; display: flex; flex-direction: column; gap: var(--space-28); padding-right: var(--space-12); }
+    .bt-pic { grid-column: 4 / -1; grid-row: 2 / span 2; margin-top: calc(0.92 * clamp(3.2rem, 9vw, 8.5rem) + var(--space-28)); }   /* the piece starts below the name, not under it */
+    .bt-side { grid-column: 1 / 4; grid-row: 2 / span 2; align-self: stretch; margin-top: calc(0.92 * clamp(3.2rem, 9vw, 8.5rem) + var(--space-28)); display: flex; flex-direction: column; justify-content: flex-end; gap: var(--space-28); padding-right: var(--space-12); }   /* the description, a hairline, then the facts, sitting on the foot of the piece */
     .bt-line { font-size: var(--fs-list); line-height: var(--s-lh); text-wrap: pretty; }   /* no one-word last line */
-    .bt-facts { display: flex; flex-direction: column; gap: var(--space-20); border-top: 1px solid var(--rule); padding-top: var(--space-20); }
+    .bt-facts { display: flex; flex-direction: column; gap: var(--space-20); border-top: 1px solid var(--line-rule); padding-top: var(--space-20); }
     .bt-facts dt { font-family: var(--font-mono); font-size: var(--fs-label); letter-spacing: var(--mono-tracking); text-transform: uppercase; color: var(--accent); }
     .bt-facts dd { font-size: var(--fs-list); margin-top: var(--space-4); }
     .bt-facts a { color: inherit; text-decoration: underline; text-underline-offset: 0.2em; }
@@ -52,8 +53,7 @@
 
     /* ── THE CARD ── the day as a panel of the app: a header with the day and its goals, meals and numbers side by side,
        the actions at its foot, and the three ways under them once it is fixed. The name crosses into its top-left */
-    .card { background: #FAFAF9;   /* barely off the page: a panel, not a colour */ margin-top: calc(0.5 * clamp(3.2rem, 9vw, 8.5rem)); padding: calc(0.55 * clamp(3.2rem, 9vw, 8.5rem)) var(--space-40) var(--space-40); }
-    .bt-pic { margin-top: 0 !important; }
+    .card { background: #FAFAF9;   /* barely off the page: a panel, not a colour */ padding: var(--space-40); }
     .card-h { display: flex; justify-content: space-between; align-items: flex-end; gap: var(--space-20); flex-wrap: wrap; padding-bottom: var(--space-20); border-bottom: 1px solid var(--rule); }
     .card-t { font-size: calc(var(--fs-list) * 1.5); letter-spacing: -0.01em; margin-top: var(--space-4); transition: color .3s; }
     .card-t.ok { color: var(--ok); }

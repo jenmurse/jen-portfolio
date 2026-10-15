@@ -24,6 +24,7 @@
        and the controls it was played with run along under the picture */
     /* the project's colours: the band, its light ink, its accent. The accent also takes over the page's labels below */
     :root { --band: #0b0b0c; --ink: #f2f2f0; --lav: #b9a4ff; --accent: #6a4fd6; }
+    .band-top { --line-rule: rgba(242,242,240,0.2); }
     .band-top { position: relative; width: 100vw; left: 50%; transform: translateX(-50%); margin-top: calc(-1 * var(--space-56)); background: var(--band); color: var(--ink); padding: var(--space-56) 0 var(--space-80); }
     .bt-in { max-width: 1200px; margin: 0 auto; padding: 0 var(--space-40); display: grid; grid-template-columns: var(--grid); column-gap: var(--gutter); align-items: start; }
     .bt-nav { grid-column: 1 / -1; margin-bottom: var(--space-80); }
@@ -33,10 +34,10 @@
     .bt-name { grid-column: 1 / 10; grid-row: 2; position: relative; z-index: 2; font-size: calc(clamp(3.2rem, 9vw, 8.5rem) * var(--h-scale)); font-weight: var(--h-weight); line-height: 0.92; letter-spacing: -0.045em; }
     .bt-pic { grid-column: 4 / -1; grid-row: 2 / span 2; margin-top: calc(0.5 * clamp(3.2rem, 9vw, 8.5rem)); }
     .bt-pic canvas { width: 100%; aspect-ratio: 16 / 9; display: block; background: #000; }
-    .bt-side { grid-column: 1 / 4; grid-row: 3; align-self: end; display: flex; flex-direction: column; gap: var(--space-28); padding-right: var(--space-12); }
+    .bt-side { grid-column: 1 / 4; grid-row: 2 / span 2; align-self: stretch; margin-top: calc(0.92 * clamp(3.2rem, 9vw, 8.5rem) + var(--space-28)); display: flex; flex-direction: column; justify-content: flex-end; gap: var(--space-28); padding-right: var(--space-12); }   /* the description, a hairline, then the facts, sitting on the foot of the piece */
     .bt-side .n { font-family: var(--font-mono); font-size: var(--fs-label); letter-spacing: var(--mono-tracking); color: var(--lav); }
     .bt-line { font-size: var(--fs-list); line-height: var(--s-lh); text-wrap: pretty; }   /* no one-word last line */
-    .bt-facts { display: flex; flex-direction: column; gap: var(--space-20); border-top: 1px solid rgba(242,242,240,0.2); padding-top: var(--space-20); }
+    .bt-facts { display: flex; flex-direction: column; gap: var(--space-20); border-top: 1px solid var(--line-rule); padding-top: var(--space-20); }
     .bt-facts dd { margin-top: var(--space-4); }
     .bt-facts dt { font-family: var(--font-mono); font-size: var(--fs-label); letter-spacing: var(--mono-tracking); text-transform: uppercase; color: var(--lav); }
     .bt-facts dd { font-size: var(--fs-list); }

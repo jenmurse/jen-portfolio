@@ -3,3 +3,9 @@ mockups/
 Portfolio - OLD/
 .DS_Store
 *.ai
+
+# design mocks: kept on this machine, never published
+grid-mock.html
+playground/_mock/
+playground/mock*.html
+playground/*/mock*.html
