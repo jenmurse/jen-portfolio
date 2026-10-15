@@ -126,24 +126,24 @@
 
     <ol class="index" aria-label="Projects">
       <li class="row" data-peek="cobo"><a href="/playground/cobo-visuals/">
-        <div class="side"><span class="n">01</span><span class="kind">Real-time shaders</span><span class="kind">2026</span></div><h2 style="view-transition-name: p-cobo">Cobo Visuals</h2>
+        <div class="side"><span class="n">01</span><span class="kind">Real-time shaders</span><span class="kind">2026</span></div><h2>Cobo Visuals</h2>
         <div class="inline" aria-hidden="true"></div>
       </a></li>
       <li class="row" data-peek="un"><a href="/playground/uniform/">
-        <div class="side"><span class="n">02</span><span class="kind">iOS app</span><span class="kind">2026</span></div><h2 style="view-transition-name: p-uniform">Uniform</h2>
-        <div class="inline" aria-hidden="true"><img src="/playground/uniform/tile.jpg" alt=""></div>
+        <div class="side"><span class="n">02</span><span class="kind">iOS app</span><span class="kind">2026</span></div><h2>Uniform</h2>
+        <div class="inline" aria-hidden="true"></div>
       </a></li>
       <li class="row" data-peek="gm"><a href="/playground/good-measure/">
-        <div class="side"><span class="n">03</span><span class="kind">Web app</span><span class="kind">2026</span></div><h2 style="view-transition-name: p-gm">Good Measure</h2>
-        <div class="inline" aria-hidden="true"><video src="/playground/good-measure/tile.mp4" poster="/playground/good-measure/tile.jpg" muted loop playsinline preload="none"></video></div>
+        <div class="side"><span class="n">03</span><span class="kind">Web app</span><span class="kind">2026</span></div><h2>Good Measure</h2>
+        <div class="inline" aria-hidden="true"></div>
       </a></li>
     </ol>
 
     <section class="also" aria-labelledby="h-also">
       <h2 class="list-label" id="h-also">Smaller builds</h2>
       <ol class="log">
-        <li><span class="when">2026</span><span class="nm">Dieline Tool</span><span class="what">Browser tool · a box’s size in, a cut-ready dieline and a 3D fold out</span></li>
-        <li><span class="when">2026</span><span class="nm">Booth Planner</span><span class="what">iOS app, one-shot · a maker’s fair season, down to the booth plan</span></li>
+        <li><span class="when">2026</span><span class="nm">Dieline Tool</span><span class="what">Browser tool · a cut-ready dieline and a 3D fold out</span></li>
+        <li><span class="when">2026</span><span class="nm">Booth Planner</span><span class="what">iOS app, one-shot · craft show modular booth plans</span></li>
         <li><span class="when">2026</span><span class="nm">HQ App</span><span class="what">Local web app · one screen for running my studio</span></li>
       </ol>
     </section>
@@ -157,11 +157,11 @@
   <div class="peek" aria-hidden="true">
     <div class="pk-cobo" data-k="cobo"><canvas id="pk-cv" width="640" height="360"></canvas><span class="pk-tag" aria-hidden="true">Disco · live</span></div>
     <div class="pk-un" data-k="un">
-      <img src="/playground/uniform/closet/tops__249a164a596ae007449d9750dd787c61.png" alt="" style="left:30%; top:20%; width:30%; --t:-8deg">
-      <img src="/playground/uniform/closet/bottoms__b8ecf1047ea87c49825beb8abcc9b512.png" alt="" style="left:70%; top:42%; width:24%; --t:6deg">
-      <img src="/playground/uniform/closet/shoes__f3145f012e57be31123b1b321132e3dd.png" alt="" style="left:26%; top:78%; width:26%; --t:-16deg">
-      <img src="/playground/uniform/closet/tops__ccb91492541a70d8291c6ce2595c469e.png" alt="" style="left:58%; top:84%; width:26%; --t:10deg">
-      <img src="/playground/uniform/closet/bottoms__5a1ac27f2dc56a70efdf9a3cf5260c10.png" alt="" style="left:46%; top:50%; width:22%; --t:-3deg">
+      <img src="/playground/uniform/closet/tops__249a164a596ae007449d9750dd787c61.webp" alt="" style="left:30%; top:20%; width:30%; --t:-8deg">
+      <img src="/playground/uniform/closet/bottoms__b8ecf1047ea87c49825beb8abcc9b512.webp" alt="" style="left:70%; top:42%; width:24%; --t:6deg">
+      <img src="/playground/uniform/closet/shoes__f3145f012e57be31123b1b321132e3dd.webp" alt="" style="left:26%; top:78%; width:26%; --t:-16deg">
+      <img src="/playground/uniform/closet/tops__ccb91492541a70d8291c6ce2595c469e.webp" alt="" style="left:58%; top:84%; width:26%; --t:10deg">
+      <img src="/playground/uniform/closet/bottoms__5a1ac27f2dc56a70efdf9a3cf5260c10.webp" alt="" style="left:46%; top:50%; width:22%; --t:-3deg">
     </div>
     <div class="pk-gm" data-k="gm">
       <p class="g-k">Planner · Tuesday</p>
@@ -211,7 +211,7 @@
   <script src="/playground/cobo-visuals/set.js"></script>
   <script>
     // Cobo's piece: the five parts of the set, drawn live, one after another while it is out
-    (() => {
+    afterFade(() => {
       const SH = window.COBO_SET, cv = document.getElementById('pk-cv'), gl = cv && cv.getContext('webgl'), tag = document.querySelector('.pk-tag');
       if (!SH || !gl) return;
       const NAMES = ['Space', 'Organic', 'Rave', 'Salsa', 'Disco'], HOLD = 3.5;
@@ -251,12 +251,12 @@
         requestAnimationFrame(f);
       };
       document.addEventListener('peek', e => { reset(); if (e.detail === 'gm') timer = setTimeout(fix, 650); });
-    })();
+    });
   </script>
   <script>
     // On a phone there is no pointing, so Uniform's and Good Measure's rows show their pieces inline: the closet drops in
     // and the day fixes itself as each scrolls into view. Cobo's live piece moves into its row and plays while it is on screen
-    (() => {
+    afterFade(() => {
       if (!matchMedia('(hover: none), (max-width: 680px)').matches) return;
       const cobo = document.querySelector('.peek .pk-cobo'), slot = document.querySelector('.row[data-peek="cobo"] .inline');
       if (cobo && slot) { cobo.classList.add('inline-piece'); slot.append(cobo);
@@ -272,7 +272,7 @@
             setTimeout(() => { rows.forEach(r => { const b = r.querySelector('b'); b.textContent = b.dataset.k === 'kcal' ? (+b.dataset.b).toLocaleString() : b.dataset.b; const st = r.querySelector('.st'); st.className = 'st ok'; st.textContent = 'On target'; }); t.textContent = 'On target, all three'; t.classList.add('ok'); }, 700); }
         }), { threshold: 0.6 }).observe(c);
       });
-    })();
+    });
   </script>
 </body>
 </html>

@@ -342,17 +342,12 @@ footer span {
 }
 
 /* ── PAGE TO PAGE ──
-   Moving between pages crossfades instead of cutting. What both pages share travels on its own: the wordmark stays put,
-   Playground rises from the landing list into the crumb, and a project's name glides from its row to the top of its page
-   (each pair carries the same view-transition-name). Browsers without it just load the page */
+   Moving between pages fades out to the background and the next page fades in, instead of cutting. Nothing moves. Browsers without it just load the page */
 @view-transition { navigation: auto; }
-.wordmark { view-transition-name: wordmark; }
-.crumb { view-transition-name: pg-word; }
-::view-transition-old(root) { animation: vt-out .25s cubic-bezier(.4,0,1,1) both; }
-::view-transition-new(root) { animation: vt-in .45s cubic-bezier(.2,0,0,1) .05s both; }
-::view-transition-group(*) { animation-duration: .55s; animation-timing-function: cubic-bezier(.2,0,0,1); }
+::view-transition-old(root) { animation: vt-out .25s ease-in both; }
+::view-transition-new(root) { animation: vt-in .4s ease-out .25s both; }   /* in only once the old page is gone, so the fade reads even between pages that look alike */
 @keyframes vt-out { to { opacity: 0; } }
-@keyframes vt-in { from { opacity: 0; transform: translateY(12px); } }
+@keyframes vt-in { from { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) {
-  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+  ::view-transition-old(root), ::view-transition-new(root) { animation: none !important; }
 }

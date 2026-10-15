@@ -1,3 +1,13 @@
+// ── AFTER THE FADE ──────────────────────────────────
+// Pages fade into each other (styles.css). Heavy starts, like compiling shaders, wait until the new page has faded
+// in, so the fade plays smoothly instead of stalling. Without a fade they start on the next frame
+window.afterFade = (() => {
+  let go; const ready = new Promise(r => { go = r; });
+  addEventListener('pagereveal', e => { e.viewTransition ? e.viewTransition.finished.then(go, go) : go(); }, { once: true });
+  setTimeout(go, 1000);   // in case the reveal came and went before this script ran
+  return fn => ready.then(() => setTimeout(fn));
+})();
+
 // ── CURSOR ──────────────────────────────────────────
 const cur = document.getElementById('cursor');
 

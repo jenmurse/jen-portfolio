@@ -93,7 +93,7 @@
           <a href="/" class="wordmark" aria-label="Jen Murse — home">Jen Murse</a>
           <a href="/playground/" class="crumb">Playground</a>
         </nav>
-        <h1 class="bt-name" id="p-name" style="view-transition-name: p-cobo">Cobo Visuals</h1>
+        <h1 class="bt-name" id="p-name">Cobo Visuals</h1>
         <div class="bt-pic">
           <canvas id="inst" role="img" aria-label="The current part of the set, drawn live"></canvas>
         </div>
@@ -252,7 +252,7 @@
     // The instrument: one part of the set at a time, drawn live. Speed and Hit were the live controls on the night;
     // each part's other design values are opened up here as sliders. A part whose values will not open falls back to
     // its fixed version. It only draws while on screen; with reduced motion time holds still and the sliders still work
-    (() => {
+    afterFade(() => {
       const SH = window.COBO_SET, cv = document.getElementById('inst'), gl = cv.getContext('webgl');
       if (!gl) return;
       const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -328,7 +328,7 @@
       new ResizeObserver(() => { fit(); draw(); }).observe(cv);
       new IntersectionObserver(es => es.forEach(e => { const was = visible; visible = e.isIntersecting; if (visible && !was) { last = performance.now(); requestAnimationFrame(tick); } }), { threshold: 0.05 }).observe(cv);
       fit(); show(0);
-    })();
+    });
   </script>
 </body>
 </html>
