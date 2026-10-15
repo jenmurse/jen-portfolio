@@ -337,6 +337,9 @@
         const order = [...pieces].sort((a, b) => { const [aw, ah] = size(a), [bw, bh] = size(b); return bw * bh - aw * ah; });
         const side = {}; let flip = Math.random() < 0.5;
         ['bottoms', 'tops', 'shoes'].forEach(c => order.filter(el => el.dataset.cat === c).forEach(el => { side[el.dataset.cat + order.indexOf(el)] = flip; el.left = flip; flip = !flip; }));
+        // the word itself is off limits: pieces sit around and below it, never behind the letters
+        const word = (() => { const t = document.querySelector('.bt-name').firstChild, g = document.createRange(); g.selectNodeContents(t); const b = g.getBoundingClientRect();
+          return [(b.left - r.left) / r.width * 100, (b.top - r.top) / r.height * 100, (b.right - r.left) / r.width * 100, (b.bottom - r.top) / r.height * 100]; })();
         const hit = (a, b) => Math.max(0, Math.min(a[2], b[2]) - Math.max(a[0], b[0])) * Math.max(0, Math.min(a[3], b[3]) - Math.max(a[1], b[1]));
         const under = order.filter(el => el.dataset.cat === 'tops')[Math.floor(Math.random() * order.filter(el => el.dataset.cat === 'tops').length)];
         // it hangs from the word: its top touches the foot of the letters, somewhere under the part of the name inside the room
@@ -352,6 +355,7 @@
             const x0 = el.left ? 2 + w / 2 : 66 + w / 2, x1 = el.left ? 34 - w / 2 : 98 - w / 2;
             const x = x0 + Math.random() * Math.max(0, x1 - x0), y = 2 + h / 2 + Math.random() * Math.max(0, 96 - h);
             const box = [x - w / 2 - pad, y - h / 2 - pad, x + w / 2 + pad, y + h / 2 + pad];
+            if (hit(box, word) > 0) continue;
             const cost = boxes.reduce((a, b) => a + hit(box, b), 0);
             if (cost < bestCost) { bestCost = cost; best = [x, y, box]; if (cost === 0 && t > 20) break; }
           }
