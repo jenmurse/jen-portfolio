@@ -35,8 +35,8 @@ footer { margin-top: auto; padding-top: var(--space-80); }
 .section > :first-child, .section .prose > :first-child { text-box: trim-start cap alphabetic; }
 .prose { display: flex; flex-direction: column; gap: var(--space-28); }
 .prose p { max-width: var(--measure); }
-.prose a { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
-.prose a:hover, .prose a:focus-visible { color: var(--accent); }
+.prose a, .caption a { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+.prose a:hover, .prose a:focus-visible, .caption a:hover, .caption a:focus-visible { color: var(--accent); }
 
 /* ── FACTS ── For / Role / Length / Medium: the homepage's list label, rule, and list type */
 .meta {
@@ -78,15 +78,28 @@ footer { margin-top: auto; padding-top: var(--space-80); }
 /* a single wide piece after a section: same frame, same gap above it */
 .media-wide { margin: var(--space-28) 0 0; }
 
+/* inside a section the media take the prose column, so the label sits beside the first piece */
+.section > .media-grid { margin-top: 0; gap: var(--space-40) var(--space-28); }
+.section > .media-wide { margin: 0; }
+.section > .media-wide > .caption { margin-top: var(--space-12); }
+
 /* ── MOMENTS ── app pages: one moment per row, the screen beside its text, in the prose column.
-   A phone screen sits at a fixed width; a wide screen (.wide) takes the larger share of the row */
+   A phone screen sits at a fixed width beside its text; a wide screen (.wide) takes the whole column, its text a caption beneath */
 .moments {
   list-style: none;
   display: flex; flex-direction: column; gap: var(--space-80);
   margin: var(--space-56) 0 0 calc(var(--col-left) + var(--col-gap));
 }
+/* inside a section the moments take the prose column, so the label sits beside the first screen */
+.section > .moments { margin: 0; }
 .moment { display: grid; grid-template-columns: var(--moment-media, 300px) minmax(0, 1fr); gap: 0 var(--space-56); align-items: center; }
-.moments.wide .moment { --moment-media: minmax(0, 3fr); grid-template-columns: var(--moment-media) minmax(0, 2fr); }
+.moments.wide { gap: var(--space-56); }
+.moments.wide .moment { display: block; }
+.moment .caption { font-size: var(--fs-list); }
+.moment .caption div { max-width: var(--measure); text-wrap: pretty; }
+.moment .caption h3, .moment .caption p { display: inline; font-size: inherit; }
+.moment .caption h3 { font-weight: var(--list-weight); }
+.moment .caption h3::after { content: "."; }
 .moment figure { margin: 0; }
 .moment img, .moment video {
   width: 100%; aspect-ratio: var(--frame-ratio); display: block; object-fit: cover;
@@ -98,7 +111,7 @@ footer { margin-top: auto; padding-top: var(--space-80); }
 /* the note beside a screen sits a step below the prose: it's a caption, not a paragraph */
 .moment-text p { font-size: var(--fs-list); font-weight: var(--s-weight); line-height: var(--s-lh); text-wrap: pretty; }
 @media (max-width: 1080px) {
-  .moment, .moments.wide .moment { grid-template-columns: 1fr; gap: var(--space-20) 0; }
+  .moment { grid-template-columns: 1fr; gap: var(--space-20) 0; }
   .moments:not(.wide) .moment figure { width: min(100%, 300px); }
   .moment-text { max-width: var(--measure); }
 }
