@@ -104,9 +104,10 @@ One scale on `:root`, used by every page. Never a loose px value: pick the neare
 - Desktop padding: `56 40 28`
 - Mobile breakpoint: **680px**
 - Mobile padding: `28 28 40`
-- Hero grid: `--col-left` (240px) label column, `--col-gap` (80px), then content. Playground sections repeat the same grid
+- Grid: **12 columns** (`--grid`), `--gutter` 28px. Labels take columns 1–3, content 4–12. Everything is placed on these lines (`grid-column: 1 / 4`, `4 / -1`, …), never by a loose width. Below 680px every grid collapses to one column
+- Hero and Playground sections use the grid directly; the landing lists split the content 4 + 5 (`4 / 8`, `8 / -1`)
+- Inside a section's nine content columns, a phone moment takes 3 for the screen and 3 for its text; the Playground index takes 5 for the tile and 4 for its name
 - Playground pages load `playground.css` on top: breadcrumb, sections, facts row, media grid
-- List grid: `1fr 1fr` (2 col) or `1fr 1fr 1fr` (3 col with Select Work)
 
 ### Cursor
 Custom cursor replaces system cursor sitewide.

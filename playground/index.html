@@ -17,21 +17,22 @@
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/playground.css">
   <style>
-    /* the projects start where the title does: past the label column and its gap.
-       One project per row, the thumbnail beside its name and line, like the moments on a project page */
-    .projects { margin: 0 0 0 calc(var(--col-left) + var(--col-gap)); grid-template-columns: 1fr; gap: var(--space-56) 0; }
-    .projects a { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: var(--space-8) var(--space-56); }
-    .projects .frame { grid-row: 1 / span 2; }
+    /* the projects take the title's nine columns, one per row: the thumbnail on the first five, its name and line on the last four */
+    .projects { grid-template-columns: var(--grid); gap: var(--space-56) var(--gutter); margin-top: 0; }
+    .projects > li { grid-column: 4 / -1; }
+    .projects a { display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); gap: var(--space-8) var(--gutter); }
+    .projects .frame { grid-column: 1 / 6; grid-row: 1 / span 2; }
+    .projects .caption, .projects .caption-line { grid-column: 6 / -1; }
     .projects .caption { align-self: end; margin-top: 0; }
     .projects .caption-line { align-self: start; max-width: 24ch; }
     .projects a:hover .t, .projects a:hover .n { opacity: 0.6; }
     @media (max-width: 1080px) {
       .projects a { grid-template-columns: 1fr; gap: 0; }
-      .projects .frame { grid-row: auto; }
+      .projects .frame, .projects .caption, .projects .caption-line { grid-column: 1 / -1; grid-row: auto; }
       .projects .caption { margin-top: var(--space-12); }
       .projects .caption-line { max-width: none; }
     }
-    @media (max-width: 680px) { .projects { margin-left: 0; gap: var(--space-40) 0; } }
+    @media (max-width: 680px) { .projects { grid-template-columns: 1fr; gap: var(--space-40) 0; } .projects > li { grid-column: 1 / -1; } }
   </style>
 </head>
 <body>
