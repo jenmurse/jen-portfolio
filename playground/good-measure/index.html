@@ -268,7 +268,7 @@
     }
     // Every piece opens the lightbox, so stills and clips both grow the cursor dot.
     document.querySelectorAll('.moments img, .moments video').forEach(m => {
-      m.addEventListener('mouseenter', () => document.getElementById('cursor').className = 'on-link');
+      m.addEventListener('mouseenter', () => { const d = document.getElementById('cursor'); d.className = 'on-view'; d.dataset.word = 'View'; });
       m.addEventListener('mouseleave', () => document.getElementById('cursor').className = '');
     });
 
@@ -326,6 +326,8 @@
       box.addEventListener('cancel', e => { e.preventDefault(); close(); });   // Escape
       box.addEventListener('close', () => { const dot = document.getElementById('cursor'); dot.className = ''; document.body.prepend(dot); stage.replaceChildren(); [veil, btn, cap.parentElement].forEach(el => el.getAnimations().forEach(a => a.cancel())); if (from) from.focus({ preventScroll: true }); });
       veil.addEventListener('click', close);
+      veil.addEventListener('mouseenter', () => { const d = document.getElementById('cursor'); d.className = 'on-view'; d.dataset.word = 'Close'; });
+      veil.addEventListener('mouseleave', () => document.getElementById('cursor').className = '');
       btn.addEventListener('click', close);
       document.querySelectorAll('.moments img, .moments video').forEach(m => {
         m.dataset.label = m.alt || m.getAttribute('aria-label');
